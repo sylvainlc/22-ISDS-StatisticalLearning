@@ -1,0 +1,218 @@
+\documentclass[12pt,graybox,envcountchap,envcountsame,sectrefs]{svmono}
+\usepackage[Lenny]{fncychap}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx,helvet,type1cm,xargs,srcltx,latexsym,bm,wrapfig,subfigure,multicol,stmaryrd,fancybox}
+\usepackage{cancel,a4wide,bbm,graphicx,ushort,amssymb,amsmath,ntheorem,ifthen,amsfonts,bbm,graphicx,twoopt,verbatimbook,color,framed,marvosym,phaistos}
+\usepackage[bottom]{footmisc} % places footnotes at page bottom
+\usepackage[shortlabels]{enumitem}
+\usepackage[title,titletoc,header]{appendix}          % % %  appendices % % % % %
+\usepackage{leftidx} % permet les subscript a gauche avec la commande \leftidx{-A}{P}{^k}
+\usepackage{tikz}
+%\usepackage{a4wide}
+\usepackage{answers}
+\usepackage{listings}
+\usepackage{fancyvrb} 
+\lstset{% setup listings 
+        language=R,% set programming language 
+        basicstyle=\small,% basic font style 
+        keywordstyle=\bfseries,% keyword style 
+        commentstyle=\ttfamily\itshape,% comment style 
+        numbers=left,% display line numbers on the left side 
+        numberstyle=\scriptsize,% use small line numbers 
+        numbersep=10pt,% space between line numbers and code 
+        tabsize=3,% sizes of tabs 
+        showstringspaces=false,% do not replace spaces in strings by a certain character 
+        captionpos=b,% positioning of the caption below 
+        breaklines=true,% automatic line breaking 
+        escapeinside={(*}{*)},% escaping to LaTeX 
+        fancyvrb=true,% verbatim code is typset by listings 
+        extendedchars=false,% prohibit extended chars (chars of codes 128--255) 
+        literate={"}{{\texttt{"}}}1{<-}{{$\leftarrow$}}1{<<-}{{$\twoheadleftarrow$}}1 
+        {~}{{$\sim$}}1{<=}{{$\le$}}1{>=}{{$\ge$}}1{!=}{{$\neq$}}1{^}{{$^\wedge$}}1,% item to replace, text, length of chars 
+        alsoletter={.<-},% becomes a letter 
+        alsoother={$},% becomes other 
+        otherkeywords={!=, ~, $, *, \&, \%/\%, \%*\%, \%\%, <-, <<-, /},% other keywords 
+        deletekeywords={c}% remove keywords 
+} 
+\Newassociation{solexo}{Solution}{ans}
+
+\usetikzlibrary{automata}
+\usetikzlibrary{patterns}
+
+
+%\usepackage{courier}
+%\usepackage{algpseudocode}
+%\usepackage[comma]{natbib}
+%\usepackage{algorithm}
+%\usepackage{algorithmicx}
+
+\usepackage{pdfpages}
+
+\usepackage{minitoc}
+
+\usepackage{makeidx}
+
+%\usepackage{index} %%%% pour faire deux index
+%\newindex{models}{otx}{otd}{List of models}  %%%% pour faire un index des modeles étudiés
+                                                   %%%% entrer les cles d'index sous la forme \index[models]{le-modele}
+%%% \newindex{not}{notx}{notd}{List of notation}  %%%% pour l'index des notations; inutile
+%%%% makeindex mainMC-tome1.otx -t mainMC-tome1.otg -s svind.ist -o mainMC-tome1.otd %%% pour compiler en ligne de commande
+
+\makeindex             % used for the subject index
+                       % please use the style svind.ist with your makeindex program
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%  COMMENT THESE OUT AT FINAL COMPLIE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% pdfsync manual says to comment it out at final version because it can change the page breaks
+\usepackage[novbox]{pdfsync}           %  [novbox] helps
+%\usepackage[notref,notcite]{showkeys}  %  comment out for final version
+%\renewcommand*\showkeyslabelformat[1]{\fbox{\normalfont\scriptsize\sffamily#1}}   % comment for the final version
+%\usepackage{showidx}                   % use to check the index - comment out for final version  %%%%%%%%%
+
+% [disable] shuts it off:
+%\usepackage[disable]{todonotes}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand\qedsymbol{\hfill \ensuremath{\Box}}
+\spnewtheorem*{proof_duplicate}{Proof}{\itshape}{\rmfamily}
+\renewenvironment{proof}{\begin{proof_duplicate}}{\qedsymbol\end{proof_duplicate}}
+\renewcommandx\prob[2][1=,2=]{\ensuremath{{\mathbb P}_{#1}^{#2}}}
+
+
+\definecolor{dblue}{rgb}{0,.1,.6}  % used for dark blue hyperrefs
+\definecolor{dblue2}{RGB}{0,75,90}  % used for R output in listings
+
+%\usepackage{hyperref}
+\usepackage[hyperindex=true]{hyperref}
+
+\usepackage{aliascnt}
+\usepackage{cleveref}
+
+
+
+
+\newtheorem{kwd}{Keywords}[chapter]
+\newaliascnt{lemma}{theorem}
+\renewtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\crefname{lemma}{Lemma}{lemmas}
+\Crefname{Lemma}{Lemma}{Lemmas}
+
+\renewtheorem{claim}{Claim}[chapter]
+\crefname{claim}{Claim}{Claims}
+\Crefname{claim}{Claim}{Claims}
+
+
+\newaliascnt{proposition}{theorem}
+\renewtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\crefname{proposition}{Proposition}{Propositions}
+\Crefname{Proposition}{Proposition}{Propositions}
+
+\newaliascnt{corollary}{theorem}
+\renewtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+\crefname{corollary}{corollary}{corollaries}
+\Crefname{Corollary}{Corollary}{Corollaries}
+
+%\newtheoremstyle{styledef}
+%  {6pt}% space above
+%  {6pt}% space below
+%  {\sffamily}%body font
+%  {0em}%indent amount
+%  {\bfseries}%Theorem head
+%  {}%punctuation
+%  {1.5em}%space after theorem head
+%  {}
+%
+%\theoremstyle{styledef}
+\newaliascnt{definition}{theorem}
+%\renewtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+\crefname{definition}{definition}{definitions}
+\Crefname{Definition}{Definition}{Definitions}
+
+\theoremstyle{exercise}
+
+\newaliascnt{remark}{theorem}
+\renewtheorem{remark}[remark]{Remark}
+\aliascntresetthe{remark}
+\crefname{remark}{remark}{remarks}
+\Crefname{remark}{Remark}{Remarks}
+% \renewenvironment{remark}{\stepcounter{theorem} \noindent {\bf Remark
+% \arabic{chapter}.\arabic{theorem}}\begin{rm} }{\end{rm}\hfill $\triangleleft$}
+
+\newaliascnt{example}{theorem}
+\renewtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+\crefname{example}{example}{examples}
+\Crefname{example}{Example}{Examples}
+
+
+
+\newtheorem{assumption}[theorem]{\textbf{H}}
+\Crefname{assumption}{\textbf{H}}{\textbf{H}}
+\crefname{assumption}{\textbf{H}}{\textbf{H}}
+
+\newaliascnt{xmpl}{theorem}
+\spnewtheorem{xmpl}[xmpl]{Example}{\bf}{}
+\aliascntresetthe{xmpl}
+\crefname{xmpl}{example}{examples}
+\Crefname{xmpl}{Example}{Examples}
+
+
+
+\newaliascnt{rmrk}{theorem}
+\spnewtheorem{rmrk}[rmrk]{Remark}{\bf}{}
+\aliascntresetthe{rmrk}
+\crefname{rmrk}{remark}{remarks}
+\Crefname{rmrk}{Remark}{Remarks}
+
+%\newcommand\enxmpl{\hfill\ensuremath{\PHrosette}\end{xmpl}}
+\newcommand\enxmpl{\hfill\ensuremath{\blacktriangleleft}\end{xmpl}}
+\newcommand\enrmrk{\hfill\ensuremath{\triangle}\end{remark}}
+\newcommand\begrmrkk{\begin{rmrk}}
+\newcommand\enrmrkkk{\hfill\ensuremath{\blacktriangle}\end{rmrk}}
+
+% \newcommand\boxendxmpl{\hfill \ensuremath{\blacksquare}}
+% \spnewtheorem{xmpl_duplicate}[theorem]{Example}{\bf}{\rmfamily}
+% \renewenvironment{xmpl}{\begin{xmpl_duplicate}}{\boxendxmpl\end{xmpl_duplicate}}
+
+\crefname{theorem}{Theorem}{Theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{corollary}{Corollary}{Corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\Crefname{chapter}{Chapter}{Chapters}
+\crefname{chapter}{Chapter}{Chapters}
+
+
+\setcounter{tocdepth}{1}
+
+% choisir l une des deux lignes ci dessous suivant qu on veuille voir les commentaires ou non
+\usepackage[textsize=footnotesize]{todonotes} % pour voir les commentaires
+%\usepackage[disable]{todonotes} % pour ne pas voir les commentaires.
+
+% \usepackage[textwidth=3cm, textsize=footnotesize]{todonotes}
+% \setlength{\marginparwidth}{3cm} % this goes with todonotes
+
+
+
+
+\theoremseparator{.}
+\theorembodyfont{\upshape}
+
+\newcounter{exo}
+\newaliascnt{exercise}{exo}
+\renewtheorem{exercise}{Exercise}[chapter]
+ \crefname{exercise}{Exercise}{Exercises}
+ \Crefname{exercise}{Exercise}{Exercises}
+
+\renewenvironment{proof}%
+ {\noindent \small {\textsc{Proof}.} }%
+ { \hfill$\blacksquare$\\}               % Not needed if using AMSART style
+
+
+
+
+
+

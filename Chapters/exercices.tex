@@ -1,0 +1,1200 @@
+\chapter{Exercices}
+\minitoc
+
+\section{Order of a kernel}
+Let $(\phi_k)_{k\geqslant 0}$ be a family of polynomials such that
+\begin{enumerate}[-]
+\item for all $k\geqslant 0$, $\phi_k$ has degree $k$ ;
+\item for all  $k,k'\geqslant 0$, $\int_{-1}^{1}\phi_k(u)\phi_{k'}(u)\mathrm{d} u = \delta_{k,k'}$.
+\end{enumerate}
+
+\begin{enumerate}
+\item Write $\phi_0$, $\phi_1$ and $\phi_2$.
+
+\vspace{.2cm}
+
+{\em
+It is straightforward to show that  $\phi_0: x\mapsto 1/\sqrt{2}$, $\phi_1: x\mapsto \sqrt{3/2}x$ and $\phi_2: x\mapsto \sqrt{5/8}(3 x^2-1) $.
+}
+
+\item Show that for all $\ell\geqslant 0$, $K: u\mapsto\sum_{m=0}^{\ell}\phi_m(0)\phi_m(u)\1_{[-1,1]}(u)$ is a kernel of order $\ell$.
+
+\vspace{.2cm}
+
+{\em
+The  $(\phi_k)_{k\geqslant 0}$ provide an orthonormal basis of $\mathrm{L}^2([-1,1])$. For all $0\leqslant j\leqslant \ell$, there exist $(a_{j,k})_{0\leqslant k\leqslant j}$ such that $X^j = \sum_{k=0}^{j}a_{j,k}\phi_k(X)$. Then,
+$$
+\int u^jK(u)\rmd u = \sum_{k=0}^{j}\sum_{m=0}^{\ell}\int \phi_m(0)\phi_m(u)\1_{[-1,1]}(u)a_{j,k}\phi_k(u)\rmd u = \sum_{k=0}^{j}a_{j,k}\phi_k(0) = 0^j\eqsp.
+$$
+}
+\end{enumerate}
+
+\section{Estimate of the integratred mean square error for bandwith selection}
+Let $(X_1\ldots,X_n)$ be i.i.d. random variables with probability density function $p_{\star}$ with respect to the Lebesgue measure. For all $h>0$, an unbiased estimator $J_n^h$ of $\overline{\mathcal{E}} - \int_\rset (p_\star(x))^2\rmd x$ is given by:
+\[
+J_n^h = \int_{\mathbb{R}} p_{\star}^2(x)\rmd x + \int_{\mathbb{R}} (\widehat{p}^h_{n})^2(x)\rmd x - \frac{2}{n(n-1)h}\sum_{i=1}^n\sum_{j\neq i}^n K\left(\frac{X_i-X_j}{h}\right)\,,
+\]
+where
+\[
+\widehat{p}^h_n:x\mapsto \frac{1}{nh}\sum_{i=1}^nK\left(\frac{X_i-x}{h}\right)\,.
+\]
+Evaluate $J_n^h$ with the Gaussian kernel $K: u\mapsto (2\pi)^{-1/2}\mathrm{e}^{-u^2/2}$.
+
+\vspace{.2cm}
+
+{\em
+It is enough to compute $\int_{\mathbb{R}} (\widehat{p}^h_{n})^2(x)\rmd x$. In the case of the Gaussian kernel,
+$$
+\int_{\mathbb{R}} (\widehat{p}^h_{n})^2(x)\rmd x =\frac{1}{n^2h^2}\sum_{i=1}^{n}\int_{\mathbb{R}} K\left(\frac{X_i-x}{h}\right)^2\rmd x + \frac{1}{n^2h^2}\sum_{i=1}^{n}\sum_{i=1\,;j\neq i}^{n}\int_{\mathbb{R}} K\left(\frac{X_i-x}{h}\right) K\left(\frac{X_j-x}{h}\right)\rmd x\eqsp.
+$$
+For all $1\leqslant i \leqslant n$,
+$$
+\int_{\mathbb{R}} K\left(\frac{X_i-x}{h}\right)^2\rmd x = \frac{1}{2\pi}\int \rme^{-(X_i-x)^2/h^2}\rmd x = \frac{h}{2\sqrt{\pi}}\frac{1}{\sqrt{2\pi(h/\sqrt{2})^2}}\int \rme^{-(X_i-x)^2/2(h/\sqrt{2})^2}\rmd x = \frac{h}{2\sqrt{\pi}}\eqsp.
+$$ 
+For all $1\leqslant i\neq j \leqslant n$,
+\begin{align*}
+\int_{\mathbb{R}} K\left(\frac{X_i-x}{h}\right) K\left(\frac{X_j-x}{h}\right)\rmd x &= \frac{1}{2\pi}\int \rme^{-(X_i-x)^2/2h^2-(X_j-x)^2/2h^2}\rmd x\eqsp,\\
+&=\frac{1}{2\pi}\rme^{-X_i^2/2h^2}\rme^{-X_j^2/2h^2}\rme^{(X_i+X_j)^2/4h^2}\int \rme^{-(x - (X_i+X_j)/2)^2/h^2}\rmd x\eqsp,\\
+&= \frac{h}{2\sqrt{\pi}}\rme^{-(X_i-X_j)^2/4h^2}\eqsp,
+\end{align*}
+which concludes the proof.
+}
+
+\section{Moving window based kernel density estimate}
+Let $(X_1\ldots,X_n)$ be i.i.d. random variables with probability density function $p_{\star}$ with respect to the Lebesgue measure. The unknown density  $p_{\star}$ is estimated by:
+\[
+\widehat{p}^{h_n}_n:x\mapsto \frac{1}{2nh_n}\sum_{i=1}^n \1_{(x-h_n,x+h_n)}(X_i)\,.
+\]
+\begin{enumerate}
+\item Write the bias-variance decompostion for this estimator.
+
+\vspace{.2cm}
+
+{\em
+For all $x\in\rset$,
+$$
+\mathbb{E}\left[\left|\widehat{p}^{h_n}_n(x) - p_{\star}(x)\right|^2\right] = \left(\mathbb{E}\left[\widehat{p}^{h_n}_n(x)\right] - p_{\star}(x) \right)^2 + \mathbb{V}\left[\widehat{p}^{h_n}_n(x)\right] \eqsp.
+$$
+}
+\item Show that when  $h_n \to 0$ and $nh_n \to +\infty$ then for almost all $x$, $\widehat{p}^{h_n}_n(x)$ converges in $\mathrm{L}^2$ (and therefore in probability) to $p_{\star}(x)$.
+
+\vspace{.2cm}
+
+{\em
+For all $x\in\rset$,
+$$
+\widehat{p}^{h_n}_n(x) =  \frac{1}{2nh_n}Z_{j,n}(x)\eqsp,
+$$
+where $Z_{j,n}(x)$ has a binomial distribution with parameters $n$ and $\tilde q_n(x) = F(x+h_n) - F(x-h_n)$, $F$ being the distribution function of $X_1$. Therefore,
+$$
+\mathbb{V}\left[\widehat{p}^{h_n}_n(x)\right]  = \frac{1}{4n^2h^2_n}n \tilde q_n(x) (1-\tilde q_n(x) ) \leqslant \frac{1}{2nh_n} \frac{\tilde q_n(x)}{2h_n} 
+$$
+and the variance of the estimate converges to $0$ for almost all $x$ as $\tilde q_n(x)/(2h_n)$ converges to $p_{\star}(x)$. In addition,
+$$
+\mathbb{E}\left[\widehat{p}^{h_n}_n(x)\right]  = \frac{1}{2nh_n} n\tilde q_n(x) 
+$$
+and the bias converges to 0 for almost all $x$. The bias-variance decomposition completes the proof.
+}
+\item Let $(S_n)_{n\geqslant 1}$ be a sequence of i.i.d. random variables with binomial distribution with parameters $n$ and $p_n$ with $n p_n \to +\infty$ et $\mathrm{limsup}\, p_n <1$. For all $t\in\mathbb{R}$, noting that 
+\[
+p_n\frac{t^2}{np_n(1-p_n)} = O\left(\frac{1}{n}\right) \quad\mbox{et}\quad p^2_n\frac{t^2}{np_n(1-p_n)} = O\left(\frac{1}{n}\right)\,,
+\]
+provide the asymptotic behavior of  $\mathbb{E}[\mathrm{e}^{itZ_n}]$ where
+\[
+Z_n = \frac{S_n-np_n}{\sqrt{np_n(1-p_n)}}\,.
+\]
+
+\vspace{.2cm}
+
+{\em
+For all $t\in\rset$,
+\begin{align*}
+\mathbb{E}[\mathrm{e}^{itZ_n}] = \mathrm{e}^{-itnp_n/\sqrt{np_n(1-p_n)}}\mathbb{E}\left[\mathrm{e}^{-itS_n/\sqrt{np_n(1-p_n)}}\right]
+\end{align*}
+and, using that $S_n$ is the sum of independent Bernoulli random variables,
+\begin{align*}
+\mathbb{E}[\mathrm{e}^{itZ_n}] &= \mathrm{e}^{-itnp_n/\sqrt{np_n(1-p_n)}}\left(1-p_n + p_n\mathrm{e}^{-it/\sqrt{np_n(1-p_n)}}\right)^n\eqsp,\\
+&= \left(1 - \frac{itp_n}{\sqrt{np_n(1-p_n)}} - \frac{t^2p^2_n}{2np_n(1-p_n)} +  O\left(\frac{1}{n}\right)\right)^n\\
+&\hspace{3cm}\times \left(1- \frac{itp_n}{\sqrt{np_n(1-p_n)}} - \frac{t^2p_n}{2np_n(1-p_n)}  + O\left(\frac{1}{n}\right)\right)^n\eqsp,\\
+&=\left(1 - \frac{t^2p^2_n}{np_n(1-p_n)} - \frac{t^2p^2_n}{2np_n(1-p_n)} - \frac{t^2p_n}{2np_n(1-p_n)} +  O\left(\frac{1}{n}\right)\right)^n\eqsp,\\
+&=\left(1 - \frac{t^2}{2n} + O\left(\frac{1}{n}\right)\right)^n\eqsp.
+\end{align*}
+}
+\item Show that $(Z_n)_{n\geqslant 1}$ converges in distribution to $\mathcal{N}(0,1)$.
+
+\vspace{.2cm}
+
+{\em
+By the previous question, for all $t\in\rset$,
+$$
+\mathbb{E}[\mathrm{e}^{itZ_n}] \underset{n\to +\infty}{\longrightarrow} \mathrm{e}^{-t^2/2}\eqsp,
+$$ 
+which completes the proof.
+}
+\item Let $x\in\rset$ be such that $p_{\star}(x)>0$ and such that $p_{\star}$ is differentiable on a neighborhood $V(x)$ of $x$, with a bounded derivative on $V(x)$. Show that if $n h_n \to +\infty$ and $n h_n^3\to 0$, then
+\[
+\sqrt{\frac{2nh_n}{\widehat{p}^{h_n}_n(x)}}\left(\widehat{p}^{h_n}_n(x)-p_{\star}(x)\right)\Rightarrow \mathcal{N}(0,1)\,.
+\] 
+
+\vspace{.2cm}
+
+{\em
+By the previous lemma,
+\[
+\frac{2nh_n}{\sqrt{n\tilde q_n(x)(1-\tilde q_n(x))}}\left(\widehat{p}^{h_n}_n(x) - \mathbb{E}\left[\widehat{p}^{h_n}_n(x)\right]\right)\Rightarrow \mathcal{N}(0,1)\,.
+\] 
+By Slutsky's lemma,
+\[
+\sqrt{\frac{2nh_n}{p_{\star}(x)}}\left(\widehat{p}^{h_n}_n(x) - \mathbb{E}\left[\widehat{p}^{h_n}_n(x)\right]\right)\Rightarrow \mathcal{N}(0,1)\,.
+\] 
+Then,
+$$
+\left|\mathbb{E}\left[\widehat{p}^{h_n}_n(x)\right] - p_{\star}(x)\right| = \left|\frac{1}{2h_n}\int_{x-h_n}^{x+h_n}p_{\star}(u)\rmd u- p_{\star}(x)\right|\leqslant \frac{1}{2h_n}\int_{x-h_n}^{x+h_n}\left|p_{\star}(u)-p_{\star}(x)\right|\rmd u
+$$
+For all sufficiently large $n$, $(x-h_n,x+h_n)$ is included in the neighborhood of $x$ on which $p_{\star}$ has a bounded derivative. Write $M_x$ the bound of $p'_\star$ on this neighborhood. By the meanvalue theorem,
+$$
+\left|\mathbb{E}\left[\widehat{p}^{h_n}_n(x)\right] - p_{\star}(x)\right| \leqslant \frac{M_xh_n}{2}\eqsp.
+$$
+Puisque $nh_n^3\to +\infty$, 
+\[
+\sqrt{\frac{2nh_n}{p_{\star}(x)}}\left(\widehat{p}^{h_n}_n(x) - p_{\star}(x)\right)\Rightarrow \mathcal{N}(0,1)\,.
+\] 
+The proof is completed with Sutsky's lemma.
+}
+\end{enumerate}
+
+
+\section{Linear discriminant analysis}
+Linear discriminant analysis assumes that the random variables $(X,Y)\in \rset^p\times\{0,1\}$ has the following distribution. For all $A\in \mathcal{B}(\mathbb{R}^p)$ and all $y\in\{0,1\}$,
+\[
+\bP\left(X\in A;Y=y\right) = \pi_y \int_A g_y(x) \rmd x\eqsp,
+\]
+where $\pi_{0}$ and $\pi_1$ are positive real numbers such that $\pi_0+\pi_{1}=1$ and $g_0$ (resp. $g_1$) is the probability density of a Gaussian random variable with mean $\mu_0\in\rset^d$ (resp. $\mu_1)$ and positive definite covariance matrix $\Sigma_0\in \rset^{d\times d}$ (resp. $\Sigma_1$).  The Bayes classifier $h_{*}:\mathbb{R}^p\to\{0,1\}$ is defined by
+\[
+h_{*}:x \mapsto \1_{\{\pi_{1}g_{1}(x)>\pi_{0}g_{0}(x)\}}\eqsp.
+\]
+\begin{enumerate}
+\item Give the distribution of the random variable $X$ and prove that 
+\[
+\bP(h_{*}(X)\neq Y)=\min_{h:\rset^p\to \{0,1\}}\left\{\bP(h(X)\neq Y)\right\}\eqsp.
+\]
+
+\vspace{.2cm}
+
+{\em
+For all $A\in \mathcal{B}(\rset^p)$,
+\begin{align*}
+\bP(X \in A) & = \bP (Y = 0) \bP(X \in A | Y=0) + \bP (Y = 1) \bP(X \in A | Y=1)\eqsp, \\
+& = \pi_0 \int_A g_0 (x)\rmd x + \pi_1 \int_A g_1(x)\rmd x\eqsp.
+\end{align*}
+The probability density of the random variable $X$ is given, for all $x\in\rset^d$, by
+\[
+g(x) = \pi_0 g_0 (x) + \pi_1  g_1(x)\eqsp.
+\]
+Then, note that for all $x\in\rset^d$,
+\begin{align*}
+\eta(x) = \bP(Y=1|X)|_{X=x} = \frac{\bP(X| Y=1)|_{X=x}\eqsp \bP(Y=1)}{g(x)} =  \frac{\pi_1 g_1(x)}{\pi_0 g_0(x) + \pi_1 g_1(x)}\eqsp,
+\end{align*}
+and the condition $\eta(x) \leqslant 1/2$ can be rewritten as
+\[
+\frac{\pi_1 g_1(x)}{\pi_0 g_0(x) + \pi_1 g_1(x)} \leqslant 1/2\eqsp,
+\]
+that is $\pi_1 g_1(x) \leqslant \pi_0 g_0(x)$.
+}
+\item Assume that  $\mu_0\ne\mu_1$. Prove that when $\Sigma_0=\Sigma_1=\Sigma$, for all $x\in\rset^p$,
+\[
+h_{*}(x) = 1 \Leftrightarrow (\mu_{1}-\mu_{0})^T\Sigma^{-1}\left(x-{\mu_{1}+\mu_{0}\over2}\right)>\log(\pi_{0}/\pi_{1})\eqsp.
+\]
+Provide a geometrical interpretation.
+
+\vspace{.2cm}
+
+{\em 
+For all $x\in\rset^d$, 
+\begin{align*}
+ \pi_1 g_1(x) > \pi_0 g_0(x) &\Leftrightarrow  \log(\pi_1 g_1(x)) > \log(\pi_0 g_0(x))\eqsp,\\
+&\Leftrightarrow  -{1\over 2}(x-\mu_1)^T\Sigma^{-1}(x-\mu_1) + {1\over 2}(x-\mu_0)^T\Sigma^{-1}(x-\mu_0) > \log(\pi_0/ \pi_1)\eqsp,\\
+&\Leftrightarrow  -{1\over 2}\Big(  -\mu_1^T\Sigma^{-1}x + \mu_1^T\Sigma^{-1}\mu_1  - x^T\Sigma^{-1}\mu_1  +\mu_0^T\Sigma^{-1}x - \mu_0^T\Sigma^{-1}\mu_0 + x^T\Sigma^{-1}\mu_0\Big)> \log(\pi_0/ \pi_1)\eqsp,\\
+&\Leftrightarrow x^T\Sigma^{-1}\mu_1 - x^T\Sigma^{-1}\mu_0 - \frac{1}{2} \mu_1^T\Sigma^{-1}\mu_1 + \frac{1}{2} \mu_0^T\Sigma^{-1}\mu_0  > \log(\pi_0/ \pi_1)\eqsp,\\
+&\Leftrightarrow  (\mu_1 - \mu_0)^T \Sigma^{-1} \left(x - \frac{\mu_1 + \mu_0}{2}\right)  > \log(\pi_0/ \pi_1)\eqsp.
+\end{align*}
+Therefore, all $x\in\rset^d$ is classified according to its position with respect to an affine hyperplane orthogonal to $\Sigma^{-1}(\mu_1-\mu_{-1})$.
+}
+\item Prove that when $\pi_{1}=\pi_{0}$, 
+\[
+\bP(h_{*}(X)=1|Y=0)=\Phi(-d(\mu_{1},\mu_{0})/2)\eqsp,
+\] 
+where $\Phi$ is the cumulative distribution function of a standard Gaussian random variable  and 
+\[
+d(\mu_{1},\mu_{0})^2=(\mu_{1}-\mu_{0})^T\Sigma^{-1}(\mu_{1}-\mu_{0})\eqsp.
+\]
+
+\vspace{.2cm}
+
+{\em
+Let $Z_0$ be a Gaussian random variable with mean $\mu_0$ and variance $\Sigma$. Note that 
+\begin{align*}
+\bP (h_*(X) = 1 | Y = 0) = \bP \Big( \underbrace{(\mu_1 - \mu_0)^T \Sigma^{-1} (Z_0 - \frac{\mu_1 + \mu_0}{2})}_{Z} > 0 \Big)\eqsp,
+\end{align*}
+where, using $\delta = d(\mu_{1},\mu_{0})$,   
+\begin{align*}
+\bE[Z] = (\mu_1 - \mu_0)^T \Sigma^{-1} (\frac{\mu_0 - \mu_1 }{2})= - \frac{\delta^2}{2}
+\end{align*}
+and 
+\begin{align*}
+\mathbb{V}[Z] = \mathbb{V} \left[ (\mu_1 - \mu_0)^T \Sigma^{-1} X \right] = \left( (\mu_1 - \mu_0)^T \Sigma^{-1}\right) \Sigma \left( \Sigma^{-1} (\mu_1 - \mu_0)\right) = \delta^2.
+\end{align*}
+Hence, 
+\begin{align*}
+\bP (h_*(X) = 1 | Y = 0) = \bP \Big( - \frac{\delta^2}{2} + \delta \varepsilon >0 \Big)= \bP\Big(\varepsilon > \frac{\delta}{2}\Big) = \Phi \Big(-\frac{\delta}{2}\Big).
+\end{align*}
+}
+\item When $\Sigma_{1}\neq \Sigma_{0}$, what is the nature of the frontier between $\{x\eqsp;\eqsp h_{*}(x)=1\}$ and $\{x\eqsp;\eqsp h_{*}(x)=0\}$?
+
+\vspace{.2cm}
+
+{\em
+In this case, for all $x\in\rset^d$, 
+\begin{align*}
+ \pi_1 g_1(x) > \pi_0 g_0(x) &\Leftrightarrow  \log(\pi_1 g_1(x)) > \log(\pi_0 g_0(x))\eqsp,\\
+&\Leftrightarrow  -{1\over 2}(x-\mu_1)^T\Sigma_1^{-1}(x-\mu_1) + {1\over 2}(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0) > \log(\pi_0/ \pi_1)\eqsp,\\
+&\Leftrightarrow	\frac{1}{2}x'\Sigma_0^{-1}x  -\frac{1}{2}x'\Sigma_1^{-1}x +	 x^T\Sigma_1^{-1}\mu_1 - x^T\Sigma_0^{-1}\mu_0 - \frac{1}{2} \mu_1^T\Sigma^{-1}\mu_1 + \frac{1}{2} \mu_0^T\Sigma^{-1}\mu_0  > \log(\pi_0/ \pi_1)\eqsp.
+\end{align*}
+As the quadratic term does not vanish anymore, the frontier between $\{x\eqsp;\eqsp h_{*}(x)=1\}$ and $\{x\eqsp;\eqsp h_{*}(x)=0\}$ is a quadric.
+}
+\end{enumerate}
+
+\section{Plug-in classifier}
+Let $(X,Y)$ be random variables defined on the same probability space $(\Omega,\calF,\bP)$.
+For any classifier $h:\mathcal{X}\to \{-1,1\}$, define its classification error by
+\[
+R(h)=\bP(Y\neq h(X))\eqsp.
+\]
+The best classifier in terms of the classification error $R$ is the Bayes classifier
+\[
+h_{*}(x)={\rm sign}(\eta(x)-1/2)\eqsp,
+\]
+where
+\[
+\eta:x \mapsto\bP(Y=1|X)_{|X=x}\eqsp.\eqsp.
+\]
+Given $n$ independent couples $\{(X_i,Y_i)\}_{1\leqslant i \leqslant n}$ with the same distribution as $(X,Y)$, an empirical surrogate for $h_{*}$ is obtained from a possibly nonparametric estimator $\widehat \eta_n$ of $\eta$:
+\[
+\widehat h_n: x\mapsto {\rm sign}(\widehat \eta_n(x)-1/2)\eqsp.
+\]
+\begin{enumerate}
+\item Prove that for any classifier $h:\mathcal{X}\to \{-1,1\}$,
+\[
+\bP(Y\neq h(X)|X) = (2\eta(X)-1)\1_{h(X)=-1}+1-\eta(X)
+\]
+and
+\[
+R(h)-R(h_{*})=2\bE \left[\left|\eta(X)-\frac{1}{2}\right|\eqsp\1_{h(X)\neq h_*(X)}\right]\eqsp.
+\]
+
+\vspace{.2cm}
+
+{\em
+For all $x\in\xset$,
+\begin{align*}
+\bP\left(Y \neq h(X) | X\right) & = \bP\left(Y=-1, h(X) = 1 |X\right) + \bP\left(Y=1, h(X) = -1 |X\right)\eqsp,\\
+& = \1_{h(X) = 1} \bP\left(Y=-1 |X\right) + \1_{h(X) = -1} \bP\left(Y=1 |X\right)\eqsp,\\
+& = \1_{h(X) = -1} (2\eta(X) - 1) + 1 - \eta(X)\eqsp.
+\end{align*}
+On the other hand,
+\begin{align*}
+R(h) - R(h_*) & = \bE\left[\bE\left[\bP\left(Y \neq h(X) | X\right) - \bP\left(Y \neq h_*(X) | X\right)\middle|X\right]\right]\eqsp,\\
+& =  \bE\left[(2\eta(X)-1) \left(\1_{h(X) = -1} - \1_{h_*(X) = -1} \right)\middle|X\right]\eqsp,\\
+& =  \bE\left[\1_{h_*(X) \neq h(X)} \left( (2\eta(X)-1) \1_{h_*(X)=1} - (2\eta(X)-1) \1_{h_*(X)=-1} \right)\middle|X\right]\eqsp,\\
+& = 2\bE\left[\left| \eta(X) - 1/2 \right| \1_{h_*(X) \neq h(X)}\right]\eqsp.
+\end{align*}
+}
+\item Prove that 
+\[
+|\eta(x)-1/2|\1_{\widehat h_n(x)\neq h_{*}(x)}\leqslant |\eta(x)-\widehat \eta_n(x)|\1_{\widehat h_n(x)\neq h_{*}(x)}\eqsp,
+\]
+where
+\[
+\widehat h_n:x \mapsto{\rm sign}(\widehat \eta_n(x)-1/2)\eqsp.
+\]
+Deduce that 
+\[
+R(\widehat h_n)-R(h_*)\leqslant 2\|\widehat \eta_n-\eta\|_{\mathrm{L}^2(\bP_X)}\eqsp,
+\]
+where $\bP_X$ is the distribution of $X$.
+\vspace{.2cm}
+
+{\em
+Note that 
+\[
+\{x\in\xset\eqsp;\eqsp \widehat h_n(x) \neq h_*(x)\} =  \{x\in\xset\eqsp;\eqsp \eta(x) \geqslant 1/2\eqsp,\eqsp\widehat\eta_n(x) \leqslant 1/2\}\cup\{x\in\xset\eqsp;\eqsp \eta(x) \leqslant 1/2\eqsp,\eqsp\widehat \eta_n(x) \geqslant 1/2\}\eqsp.
+\]
+For all $x\in \{x\in\xset\eqsp;\eqsp \eta(x) \geqslant 1/2\eqsp,\eqsp\widehat\eta_n(x) \leqslant 1/2\}$,
+\begin{align*}
+|\eta(x) - \widehat\eta_n(x)| = \eta(x) - \widehat\eta_n(x) \geqslant \eta(x) -1/2\eqsp
+\end{align*}
+On the other hand, for all $x\in\{x\in\xset\eqsp;\eqsp \eta(x) \leqslant 1/2\eqsp,\eqsp\widehat \eta_n(x) \geqslant 1/2\}$,
+\begin{align*}
+|\eta(x) - \widehat\eta_n(x)| = \widehat\eta_n(x) - \eta(x) \geqslant 1/2 - \eta(x)\eqsp.
+\end{align*}
+Therefore, for all $x\in\xset$,
+\begin{align*}
+|\eta(x) - 1/2| \1_{\widehat h_n(x) \neq h_*(x)}\leq |\eta(x) - \widehat \eta_n(x)| \1_{\widehat h_n(x) \neq h_*(x)}.
+\end{align*}
+By the first question and Cauchy-Schwarz inequality, 
+\begin{align*}
+R(\widehat h_n) - R(h_*) & = 2  \bE \left[ \left| \eta(X) - 1/2 \right| \1_{h_*(X) = \widehat h_n(X)}  \right] \leqslant 2 \bE \left[ \left|\eta(X) - \widehat \eta_n(X) \right| \1_{\widehat h_n(X) \neq h_*(X)}  \right] \leqslant 2 \|\eta - \widehat \eta_n \|_{\mathrm{L}^2(\bP_X)}\eqsp.
+\end{align*}
+}
+\end{enumerate}
+
+\section{Logistic Regression}
+The \emph{logistic model} assumes that the random variables  $(X,Y)\in \rset^p\times\{0,1\}$ are such that
+\begin{equation}\label{eq:logistic}
+\bP(Y=1|X)={\exp\left(\langle \beta^*,X\rangle\right)\over 1+\exp\left(\langle \beta^*,X\rangle\right)}\eqsp,
+\end{equation}
+with $\beta^*\in\mathbb{R}^d$. In this case, for all $x\in\rset^d$, $\bP(Y=1|X)|_{X=x}>1/2$ if and only if $\langle \beta^*,x\rangle>0$, so
+the frontier between $\left\{x\eqsp;\eqsp h_{*}(x)=1\right\}$ and $\left\{x\eqsp ;\eqsp h_{*}(x)=0\right\}$ is an hyperplane, with orthogonal
+direction $\beta^*$. The unknown parameter $\beta^*$ may be estimated  by maximizing the conditional likelihood of $Y$ given $X$
+\begin{align*}
+\widehat \beta_n\in\mathrm{argmax}_{\beta\in\mathbb{R}^{d}}
+\prod_{i=1}^n \left[ \left( \frac{\exp\left(\langle
+	\beta,x_{i}\rangle\right)}{1+\exp\left(\langle
+	\beta,x_{i}\rangle\right)}\right)^{Y_{i}}
+\left(\frac{1}{1+\exp\left(\langle
+	\beta,x_{i}\rangle\right)}\right)^{1- Y_{i}} \right] ,
+\end{align*}
+to define the empirical classifier
+\[
+\widehat h_{n}: x \mapsto \1_{\langle \widehat\beta_n,x\rangle>0}\eqsp.
+\]
+\begin{enumerate}
+\item Compute the gradient and the Hessian $H_{n}$ of
+\[
+\ell_{n}:\beta \mapsto -\sum_{i=1}^n\left[Y_{i}\langle x_{i},\beta\rangle-\log(1+\exp(\langle x_{i},\beta\rangle))\right]\eqsp.
+\]
+%are given by
+%\begin{align*}
+%\nabla\ell_{n}(\beta)= -\sum_{i=1}^n\left(Y_{i}- \frac{
+%	e^{\langle x_{i},\beta\rangle}}{1+e^{\langle
+%		x_{i},\beta\rangle}}\right)x_{i} \quad\textrm{and} \quad
+%H_{n}(\beta)=\sum_{i=1}^n\frac{e^{\langle
+%		x_{i},\beta\rangle}}{\left(1+e^{\langle
+%		x_{i},\beta\rangle}\right)^2}\,x_{i}x_{i}^T\eqsp.
+%\end{align*}
+What can be said about the function $\ell_{n}$ when for all $\beta\in\rset^d$, $H_{n}(\beta)$ is nonsingular? This assumption is supposed to hold in the following questions.
+
+\vspace{.2cm}
+
+{\em
+Since for all $u\in\rset^d$, $\nabla_{\beta} \langle u, \beta \rangle = u$, 
+\[
+\nabla \ell_n(\beta) = - \sum_{i=1}^n Y_i x_i + \sum_{i=1}^n \frac{\exp(\langle x_{i},\beta\rangle)}{1  + \exp(\langle x_{i},\beta\rangle)} x_i\eqsp.
+\]
+On the other hand, for all $1\leqslant i \leqslant n$ and all $1 \leqslant j \leqslant d$,
+\[
+\partial_j \left( \frac{\exp(\langle x_{i},\beta\rangle)}{1  + \exp(\langle x_{i},\beta\rangle)} x_i \right) = \frac{\exp(\langle x_{i},\beta\rangle)}{(1  + \exp(\langle x_{i},\beta\rangle))^2} x_{ij}x_i\eqsp,
+\]
+where $x_{ij}$ is the $j$th component of $x_i$. Then
+\[
+\big(H_n(\beta)\big)_{\ell j} = \sum_{i=1}^n \frac{\exp(\langle x_{i},\beta\rangle)}{(1  + \exp(\langle x_{i},\beta\rangle))^2} x_{ij}x_{i \ell}\eqsp,
+\]
+that is,
+\[
+H_n(\beta) = \sum_{i=1}^n \frac{\exp(\langle x_{i},\beta\rangle)}{(1  + \exp(\langle x_{i},\beta\rangle))^2} x_{i} x_{i}'\eqsp.
+\]
+%Note that $H_n(\beta)$ is the Gram matrix 
+%\[
+%H_n(\beta)   = \langle \tilde{x}_i, \tilde{x}_j \rangle,
+%\]
+%where 
+%\[
+%\tilde{x}_i = x_i \frac{\exp(\langle x_{i},\beta\rangle/2)}{1  + \exp(\langle x_{i},\beta\rangle)}\eqsp.
+%\]
+$H_n(\beta)$ is a semi positive definite matrix, which implies that $\ell_n(\beta)$ is convex. If we assume that $H_n$ is nonsingular, $\ell_n$  is strictly convex.
+}
+\item Prove that there exists $\widetilde \beta_n\in\rset^d$ such that $\|\widetilde \beta_n-\beta^*\|\leq \|\widehat \beta_n-\beta^*\|$ and
+\[
+\widehat \beta_n-\beta^*=-H_{n}(\widetilde \beta_n)^{-1}\nabla \ell_{n}(\beta^*)\eqsp.
+\]
+
+\vspace{.2cm}
+
+{\em
+Using a Taylor expansion between $\beta^{\star}$ and $\widehat{\beta}_n$, there exists $\tilde{\beta}_n \in B(\beta^{\star}, \|\widehat{\beta}_n - \beta^{\star}\|)$ such that 
+\[
+\nabla \ell_n(\widehat{\beta}_n) = \nabla \ell_n(\beta^{\star}) + H_n(\tilde{\beta}_n) ( \hat{\beta}_n - \beta^{\star})\eqsp. 
+\]
+By definition, $\ell_n(\widehat{\beta}_n) = 0$. Therefore, 
+\[
+\widehat{\beta}_n - \beta^{\star} = - H_n(\tilde{\beta}_n)^{-1} \nabla \ell_n(\beta^{\star})\eqsp,
+\]
+where $H_n(\tilde{\beta}_n)^{-1}$ exists since $H_n(\tilde{\beta})$ is assumed to be non-singular for all $\beta$.
+}
+\end{enumerate}
+In the following it is assumed that the $(x_{i})_{1\leqslant i\leqslant n}$ are uniformly bounded, $\widehat \beta_n\to \beta^*$ a.s. and that there exists a continuous and nonsingular function $H$ such that $n^{-1}H_{n}(\beta)$ converges to $H(\beta)$, uniformly in a ball around $\beta^*$.
+\begin{enumerate}  \setcounter{enumi}{2}
+\item Define for all $1\leqslant i \leqslant n$, $p_{i}(\beta)=e^{\langle x_{i},\beta\rangle}/ \left(1+e^{\langle x_{i},\beta\rangle}\right)$. Check that
+\begin{align*}
+\bE \left[e^{-n^{-1/2}\langle t,\nabla\ell_{n}(\beta^*)\rangle}\right]& =\prod_{i=1}^n \left({1-p_{i}(\beta^*)+p_{i}(\beta^*)e^{\langle t,x_{i}\rangle/\sqrt{n}}}\right) e^{-p_{i}(\beta^*)\langle t,x_{i}\rangle/\sqrt{n}}\eqsp, \\
+&=\exp\left(\frac{1}{2}t^T\left(n^{-1}H_{n}(\beta^*)\right)t+O(n^{-1/2})\right)\eqsp.
+\end{align*}
+
+\vspace{.2cm}
+
+{\em For all $t\in\rset^d$,
+\begin{align*}
+ \bE \left[ \exp\left( - \frac{1}{\sqrt{n}} \langle t, \nabla \ell_n(\beta^{\star}) \rangle \right) \right] = & \prod_{i=1}^n \bE \left[ \exp\left( \frac{1}{\sqrt{n}} (Y_i - p_i(\beta^{\star}) )\langle x_i, t \rangle \right) \right]\eqsp,\\
+= & \prod_{i=1}^n \left[ \left( 1 - p_i(\beta^{\star}) +  p_i(\beta^{\star}) \exp\left( \frac{1}{\sqrt{n}} \langle x_i, t \rangle \right) \right) \exp \left( - \frac{ p_i(\beta^{\star})}{\sqrt{n}} \langle x_i, t \rangle \right) \right]\eqsp.
+\end{align*}
+Note that 
+\[
+\log \left( 1 - p_i + p_i \exp(u/\sqrt{n}) \right) =  \log\left( 1 + p_i \frac{u}{\sqrt{n}} + p_i \frac{u^2}{2n} + \textrm{O} \left( n^{-3/2} \right)\right)\\
+ = p_i \frac{u}{\sqrt{n}} + \frac{p_i u^2}{2n} - \frac{p_i^2 u^2}{2n} + \textrm{O} \left( n^{-3/2} \right)\eqsp.
+\]
+Finally, 
+\[
+\bE \left[ \exp\left( - \frac{1}{\sqrt{n}} \langle t, \nabla \ell_n(\beta^{\star}) \rangle \right) \right] = 
+\exp\Bigg( \frac{1}{2n} \underbrace{\sum_{i=1}^n p_i(\beta^{\star}) (1 - p_i(\beta^{\star})) \langle t, x_i \rangle^2}_{t^T H_n(\beta^{\star}) t} + \textrm{O}(n^{-1/2})\Bigg)\eqsp.
+\]
+}
+\item What is the asymptotic distribution of $-n^{-1/2}\nabla\ell_{n}(\beta^*)$ and of $\sqrt{n}(\widehat \beta_n-\beta^*)$?
+
+\vspace{.2cm}
+
+{\em
+% Recall that for a vector-valued random variable X, the moment-generating function is defined as 
+%\begin{align*}%
+%M_X(t) = \bE \left[ \exp\left( \langle t, X \rangle \right) \right].
+%\end{align*}
+%In particular, we know that if $X \sim \mathcal{N}(\mu, \Sigma)$ then 
+%\begin{align*}
+%M_X(t) = \bE \left[ \exp \left( \langle t, \mu + \frac{1}{2} \Sigma t \rangle \right) \right].
+%\end{align*}
+%A convergence theorem states that if, for all $t$, $M_{X_n}(t) \to M_X(t)$ then $X_n \to X$ in distribution. 
+For all $t\in\rset^d$, since $n^{-1} H_n(\beta^{\star}) \to_{n\to \infty} H(\beta^{\star})$,
+\[
+\bE \left[ \exp\left( - \frac{1}{\sqrt{n}} \langle t, \nabla \ell_n(\beta^{\star}) \rangle \right) \right] \to_{n\to \infty}  \exp\Bigg( \frac{1}{2} t^T H(\beta^{\star}) t \Bigg)\eqsp.
+\]
+Therefore, $-\nabla \ell_n(\beta^{\star}) / \sqrt{n}$ converges in distribution to  $Z \sim \mathcal{N}(0, H(\beta^{\star}))$. On the other hand, 
+\begin{align*}
+\sqrt{n} (\widehat{\beta}_n - \beta^{\star}) = - \left( \frac{1}{n} H_n(\tilde{\beta}_n) \right)^{-1} \frac{1}{\sqrt{n}} \nabla \ell_n(\beta^{\star})\eqsp.
+\end{align*}
+As for all $n\geqslant 1$, $\tilde{\beta}_n \in B(\beta^{\star}, \|\widehat{\beta}_n - \beta^{\star}\|)$, $\tilde{\beta}_n$ converges to  $\beta^{\star}$ almost surely as $n$ grows to infinity. Hence, almost surely
+\[
+\left( \frac{1}{n} H_n(\tilde{\beta}_n) \right)^{-1} \to H(\beta^{\star})^{-1}
+\]
+and, by Slutsky lemma, $\sqrt{n} (\widehat{\beta}_n - \beta^{\star})$  converges in distribution to  $Z \sim \mathcal{N}(0,  H(\beta^{\star})^{-1})$.
+}
+\item For all $1\leqslant j \leqslant d$ and all $\alpha\in(0,1)$, propose a confidence interval $\mathcal{I}_{n,\alpha}$ such that $\beta^*_{j}\in \mathcal{I}_{n,\alpha}$ with asymptotic probability $1-\alpha$.
+
+\vspace{.2cm}
+
+{\em
+According to the last question, $\sqrt{n} ( \widehat{\beta}_j - \beta^{\star}_j) $ converges in distribution to a centered Gaussian random variable with variance $(H(\beta^{\star})^{-1})_{jj}$. On the other hand, almost surely,
+\begin{align*}
+\widehat{\sigma}_{n,j}^2 = (n H_n(\widehat{\beta}_n)^{-1})_{jj} \to_{n\to \infty} (H(\beta^{\star})^{-1})_{jj}\eqsp.
+\end{align*}
+Then, 
+\begin{align*}
+\sqrt{\frac{n}{\widehat{\sigma}_{n,j}^2}} (\widehat{\beta}_{n,j} - \beta^{\star}_j ) \to_{n\to \infty} \mathcal{N}(0,1).
+\end{align*}
+An asymptotic confidence interval $\mathcal{I}_{n,\alpha}$ of level $1-\alpha$ is then given by
+\begin{align*}
+\mathcal{I}_{n,\alpha} = \left[ \widehat{\beta}_{n,j} - z_{1-\alpha/2} \sqrt{\frac{\widehat{\sigma}^2_{n,j}}{n}}\eqsp,\eqsp \widehat{\beta}_{n,j} + z_{1-\alpha/2} \sqrt{\frac{\widehat{\sigma}^2_{n,j}}{n}}  \right],
+\end{align*}
+where $z_{1- \alpha/2}$ is the quantile of order $1- \alpha/2$ of $\mathcal{N}(0, 1)$.
+}
+\item  Propose a confidence ellipsoid $\mathcal{E}_{n,\alpha}$ such that the probability that $\beta^*\in \mathcal{E}_{n,\alpha}$ is asymptotically $1-\alpha$.
+%
+%\vspace{.2cm}
+%
+%{\em 
+%Similarly to the previous question, we have
+%\begin{align*}
+%\sqrt{n} \left( \frac{1}{n} H_n(\widehat{\beta})\right)^{1/2} (\widehat{\beta} - \beta^{\star}) \to \mathcal{N}(0,I), 
+%\end{align*}
+%which leads to the following confidence ellipsoid of level $1-\alpha$
+%\begin{align*}
+%\mathcal{E}_{n,\alpha} = \widehat{\beta} + \frac{1}{\sqrt{n}} \left( \frac{1}{n} H_n(\widehat{\beta})\right)^{-1/2} B(0, r_{1 - \alpha}),
+%\end{align*}
+%where $B(0, r_{1 - \alpha})$ is the confidence ball of level $1-\alpha$ for the multivariate Gaussian $\mathcal{N}(0, I)$.
+%}
+\end{enumerate}
+
+\section{K-means algorithm}
+The K-means algorithm is a procedure which aims at partitioning a data set into $K$ distinct, non-overlapping clusters.
+Consider $n\geqslant 1$ observations $(X_{1},\ldots,X_{n})$ taking values in $\mathbb{R}^p$.
+The $K$-means algorithm seeks to minimize over all partitions $C = (C_{1},\ldots,C_{K})$ of $\{1,\ldots,n\}$ the following criterion
+\[
+\textrm{crit}(C)=\sum_{k=1}^K{1\over |C_{k}|}\sum_{a,b\in C_{k}} \|X_{a}-X_{b}\|^2\,,
+\]
+where for all $1\leqslant i\leqslant n$, $1\leqslant k\leqslant K$, $i\in C_k$ if and only if $X_i$ is in the $k$-th cluster.
+\begin{enumerate}
+\item Define the distance between two clusters $1\leqslant i,j\leqslant K$ as 
+\[
+d(C_i,C_j) = \sum_{a\in C_i\cup C_j}\|X_{a}-\bar{X}_{C_{i}\cup C_j}\|^2 - \sum_{a\in C_i}\|X_{a}-\bar{X}_{C_i}\|^2 -\sum_{a\in  C_j}\|X_{a}-\bar{X}_{C_j}\|^2\,.
+\]
+Prove that for all $1\leqslant i,j\leqslant K$,
+\[
+d(C_i,C_j) = \frac{|C_i||C_j|}{|C_i|+|C_j|}\|\bar{X}_{C_{i}}-\bar{X}_{C_{j}}\|^2\,.
+\]
+
+\vspace{.2cm}
+
+{\em
+ For all $1\leqslant i,j\leqslant K$, note tthat
+\[
+\bar{X}_{C_{i}\cup C_j} = \frac{|C_i|}{|C_i|+|C_j|}\bar{X}_{C_{i}} + \frac{|C_j|}{|C_i|+|C_j|}\bar{X}_{C_j}\,,
+\]
+so that
+\begin{align*}
+ \sum_{a\in C_i}\|X_{a}-\bar{X}_{C_{i}\cup C_j}\|^2 & =\sum_{a\in C_i}\left\|X_{a}-\bar{X}_{C_{i}} + \frac{|C_j|}{|C_i|+|C_j|}(\bar{X}_{C_{i}} -\bar{X}_{C_{j}} )\right\|^2  \,,\\
+&= \sum_{a\in C_i}\left\|X_{a}-\bar{X}_{C_{i}}\right\|^2 + 2\sum_{a\in C_i}\left \langle X_{a}-\bar{X}_{C_{i}};\frac{|C_j|}{|C_i|+|C_j|}(\bar{X}_{C_{i}} -\bar{X}_{C_{j}})\right\rangle  \\
+&\hspace{6cm}+ |C_i|\left\|\frac{|C_j|}{|C_i|+|C_j|}(\bar{X}_{C_{i}} -\bar{X}_{C_{j}})\right\|^2\,,\\
+&=  \sum_{a\in C_i}\left\|X_{a}-\bar{X}_{C_{i}}\right\|^2 + \frac{|C_i||C_j|^2}{(|C_i|+|C_j|)^2}\left\|\bar{X}_{C_{i}} -\bar{X}_{C_{j}}\right\|^2\,.
+\end{align*}
+Similarly,
+\[
+\sum_{a\in C_j}\|X_{a}-\bar{X}_{C_{i}\cup C_j}\|^2 = \sum_{a\in C_j}\left\|X_{a}-\bar{X}_{C_{j}}\right\|^2 + \frac{|C_j||C_i|^2}{(|C_i|+|C_j|)^2}\left\|\bar{X}_{C_{i}} -\bar{X}_{C_{j}}\right\|^2\,.
+\]
+Therefore,
+\[
+ \sum_{a\in C_i\cup C_j}\|X_{a}-\bar{X}_{C_{i}\cup C_j}\|^2 =  \sum_{a\in C_i}\left\|X_{a}-\bar{X}_{C_{i}}\right\|^2 +  \sum_{a\in C_j}\left\|X_{a}-\bar{X}_{C_{j}}\right\|^2 + \frac{|C_i||C_j|}{|C_i|+|C_j|}\left\|\bar{X}_{C_{i}} -\bar{X}_{C_{j}}\right\|^2\,,
+\]
+which concludes the proof.
+}
+\item  Establish that
+\[
+\textrm{crit}(C)= 2\sum_{k=1}^K{1\over |C_{k}|}\sum_{a,b\in C_{k}} \langle X_{a},X_{a}-X_{b}\rangle = 2\sum_{k=1}^K\sum_{a\in C_{k}}\|X_{a}-\bar{X}_{C_{k}}\|^2\,,
+\]
+where
+\[
+\bar{X}_{C_{k}}={1\over |C_{k}|}\sum_{b\in C_{k}} X_{b}\,.
+\]
+
+\vspace{.2cm}
+
+{\em
+Note that 
+\begin{align*}
+\textrm{crit}(C) & = \sum_{k=1}^K \frac{1}{|C_k|}\sum_{a, b\in G_{k}} \| X_a-X_b \|^2\,,\\
+&=\sum_{k=1}^K \frac{1}{|C_k|}\sum_{a, b\in C_{k}} \langle X_a-X_b,X_a -X_b \rangle \,,\\
+&=\sum_{k=1}^K \frac{1}{|C_k|}\left\{\sum_{a, b\in C_{k}} \langle X_a-X_b,X_a \rangle + \langle X_b-X_a,X_b \rangle\right\} \,,\\
+&=2\sum_{k=1}^K \frac{1}{|C_k|}\sum_{a, b\in C_{k}} \langle X_a-X_b,X_a\rangle\,.
+\end{align*}
+which concludes the proof of the first inequality. For the second inequality, write
+\begin{align*}
+\sum_{k=1}^K\sum_{a\in C_{k}}\|X_{a}-\bar{X}_{C_{k}}\|^2 & = \sum_{k=1}^K \sum_{a\in C_{k}} \langle X_a - \frac{1}{|C_k|} \sum_{b \in C_k} X_b,X_a - \frac{1}{|C_k|} \sum_{c \in C_k} X_c \rangle\,, \\
+& = \sum_{k=1}^K \frac{1}{|C_k|^2}\sum_{a, b, c\in C_{k}} \langle X_a - X_b,X_a - X_c \rangle\,, \\
+& = \sum_{k=1}^K \frac{1}{|C_k|^2}\sum_{a, b, c\in C_{k}} \langle X_a - X_b,X_a \rangle - \sum_{k=1}^K \frac{1}{|C_k|^2}\sum_{a, b, c\in C_{k}} \langle X_a - X_b,X_c \rangle\,,
+\end{align*}
+where
+\[
+\sum_{a, b, c\in C_{k}} \langle X_a - X_b,X_c \rangle  = |C_k| \sum_{a, c\in C_{k}} \langle X_a ,X_c \rangle - |C_k| \sum_{b, c\in C_{k}} \langle X_b ,X_c \rangle= 0\,.
+\]
+Thus, 
+\[
+\textrm{crit}(C) = 2\sum_{k=1}^K\sum_{a\in C_{k}}\|X_{a}-\bar{X}_{C_{k}}\|^2\,.
+\]
+}
+\item Prove that the criterion monotonically decreases with the iterations of the K-means algorithm.
+
+\vspace{.2cm}
+
+{\em
+For any cluster $C$ in and any $z\in \mathbb{R}^p$,
+\[
+\sum_{a\in C}\|X_{a}-z\|^2 = \sum_{a\in C}\|X_{a}-\bar{X}_{C}\|^2  + \sum_{a\in C}\|\bar{X}_{C}-z\|^2 +2\sum_{a\in C}\langle \bar{X}_{C}-z;X_{a}-\bar{X}_{C} \rangle = \sum_{a\in C}\|X_{a}-\bar{X}_{C}\|^2  + |C|\|\bar{X}_{C}-z\|^2 \,,
+\]
+so that 
+\[
+\sum_{a\in C}\|X_{a}-z\|^2 \geqslant \sum_{a\in C}\|X_{a}-\bar{X}_{C}\|^2 \,,
+\]
+which is enough to conclude the proof.
+}
+\item Assume that the observations are independent random variables. Define $\mu_{a}\in\mathbb{R}^p$ as the expectation of $X_{a}$ so that $X_{a}=\mu_{a}+\varepsilon_{a}$ with $(\varepsilon_{1},\ldots,\varepsilon_{n})$ centered and independent.  Define also $v_{a}=\textrm{trace}(cov(X_{a}))$. Prove that
+\[
+\mathbb{E}[\textrm{crit}(C)]= \sum_{k=1}^K{1\over |C_{k}|}\sum_{a,b\in C_{k}} \left(\|\mu_{a}-\mu_{b}\|^2+v_{a}+v_{b}\right){\bf 1}_{a\neq b}\,.
+\]
+What is the value of $\mathbb{E}[\textrm{crit}(C)]$ when all the within-group variables have the same mean?
+
+\vspace{.2cm}
+
+{\em
+The expectation of $\textrm{crit}(C)$ is given by
+$$
+\bE \left[ \textrm{crit}(C) \right] = \sum_{k=1}^K \frac{1}{|C_k|}\sum_{a, b\in C_{k}} \bE \left[ \| X_a-X_b \|^2 \right]\eqsp.
+$$
+Let $1\leqslant k \leqslant K$ and $a, b \in C_k, a \neq b$,
+\begin{align*}
+\bE \left[ \| X_a-X_b \|^2 \right] & = \bE \left[ \| \mu_a - \mu_b + \varepsilon_a - \varepsilon_b \|^2\right]\eqsp,\\
+& = \bE \left[ \| \mu_a - \mu_b\|^2 \right]   + \bE \left[ \| \varepsilon_a - \varepsilon_b \|^2 \right] 
++ 2  \underbrace{\bE \left[  \langle \mu_a - \mu_b, \varepsilon_a - \varepsilon_b \rangle \right]}_{=0}\eqsp,\\
+& = \| \mu_a - \mu_b\|^2 + \bE \left[ \| \varepsilon_a \|^2 \right] + \bE \left[ \| \varepsilon_b \|^2 \right] + 2 \underbrace{\bE \left[ \langle \varepsilon_a, \varepsilon_b \rangle \right]}_{=0}\eqsp,
+\end{align*}
+since $\varepsilon_a$ and $\varepsilon_b$ are independent and centred. Finally, since for all $a \in C_k, \bE \left[ \| \varepsilon_a \|^2 \right] = v_a$, 
+$$
+\bE \left[ \textrm{crit}(C) \right] = \sum_{k=1}^K \frac{1}{|C_k|}\sum_{a, b\in C_{k}} \left( \| \mu_a - \mu_b\|^2 + v_a + v_b \right) {\bf 1}_{a \neq b}\eqsp.
+$$
+
+Assume now that for all $1\leqslant k \leqslant K$, there exists $m_k\in\rset^p$ such that  for all $a\in C_k$, $\mu_a = m_k$. In this setting, 
+$$
+\bE \left[ \textrm{crit}(C) \right]  = \sum_{k=1}^K \frac{1}{|C_k|}\sum_{a, b\in C_{k}} \left( v_a + v_b \right) {\bf 1}_{a \neq b} \eqsp,
+$$
+where 
+\begin{align*}
+\frac{1}{|C_k|}\sum_{a, b\in C_{k}} \left( v_a + v_b \right) {\bf 1}_{a \neq b} &= \frac{1}{|C_k|} \left( \sum_{a, b\in C_{k}} \left( v_a + v_b \right)  - \sum_{a, b\in C_{k}} \left( v_a + v_b \right) {\bf 1}_{a = b} \right)\eqsp, \\
+& = \frac{1}{|C_k|} \left( 2 |C_k| \sum_{a \in C_{k}} v_a - 2 \sum_{a \in C_{k}} v_a \right)\eqsp,\\
+& = \frac{2 (|C_k|-1)}{|C_k|} \sum_{a \in C_{k}} v_a\eqsp.
+\end{align*}
+Consequently, if, for all $a \in C_k$, $\mu_a = m_k$,
+$$
+\bE \left[ \textrm{crit}(C) \right]  = 2\sum_{k=1}^K \frac{|C_k|-1}{|C_k|} \sum_{a \in C_{k}} v_a\eqsp.
+$$ 
+}
+\end{enumerate}
+
+
+
+\section{Gaussian vectors}
+\begin{enumerate}
+\item Let $X$ be a Gaussian vector with mean $\mu\in\rset^n$ and definite positive covariance matrix $\Sigma$. Pove that the characteristic function of $X$ is given, for all $t\in\rset^n$, by
+\[
+\bE[\rme^{i\langle t\eqsp;\eqsp X\rangle}] = \rme^{i\langle t\eqsp;\eqsp \mu\rangle - t'\Sigma t /2}\eqsp.
+\]
+
+\vspace{.2cm}
+
+{\em
+
+}
+
+\item Let $\Sigma$ be a positive definite matrix of $\rset^{n\times n}$. Provide a solution to sample a Gaussian vector with covariance matrix $\Sigma$ based on i.i.d. standard Gaussian variables.
+
+\vspace{.2cm}
+
+{\em
+
+}
+
+\item Let $\varepsilon$ be a random variable in $\{-1,1\}$ such that $\bP(\varepsilon = 1) = 1/2$. If $(X,Y)'\sim \mathcal{N}(0,I_2)$ explain why the following vectors are or are not Gaussian vectors.
+\begin{enumerate}[-]
+\item $(X,\varepsilon X)$\eqsp.
+
+{\em
+Not Gaussian since the probability that  $X +\varepsilon X = 0$ is $1/2$.
+}
+\item $(X,\varepsilon Y)$\eqsp.
+
+{\em
+Gaussian since coordinates are independent Gaussian random variables.
+}
+\item $(X,\varepsilon X + Y)$\eqsp.
+
+{\em
+Not Gaussian since the characteristic function of $(1+\varepsilon) X + Y$ is not the Gaussian characteristic function.
+}
+\item $(X,X + \varepsilon Y)$\eqsp.
+
+{\em
+Gaussian as a linear transform of $(b)$. Indeed,
+$$
+\begin{pmatrix} X \\X + \varepsilon Y\end{pmatrix} = \begin{pmatrix} 1 && 0 \\1 && 1\end{pmatrix}\begin{pmatrix} X \\ \varepsilon Y\end{pmatrix}\eqsp.
+$$
+}
+\end{enumerate}
+
+\vspace{.2cm}
+
+{\em
+
+}
+
+\item Let $X$ be a Gaussian vector in $\rset^n$ with mean $\mu\in\rset^n$ and covariance matrix $\sigma^2 I_n$. Prove that the random variables $\bar X_n$ and $\widehat \sigma^2_n$ defined as
+\[
+\bar X_n = \frac{1}{n}\sum_{i=1}^n X_i\quad \mathrm{and} \quad \widehat \sigma^2_n = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar X_n)^2
+\]
+are independent.
+
+\vspace{.2cm}
+
+{\em
+
+}
+\end{enumerate}
+
+
+\section{Regression: prediction of a new observation}
+Consider the regression model given, for all $1\leqslant i\leqslant n$, by
+\[
+Y_{i} = X\beta_{\star}+ \xi_{i}\eqsp,
+\]
+where $X\in\rset^{n\times d}$ the $(\xi_{i})_{1\leqslant i \leqslant n}$ are i.i.d. centered Gaussian random variables with variance $\sigma_{\star}^2$. Assume that $X'X$ has full rank and that $\beta_\star$ and $\sigma_{\star}^2$ are estimated by 
+\[
+\widehat \beta_n = (X'X)^{-1}X'Y\quad\mathrm{and}\quad \widehat \sigma^2_n =\frac{\|Y - X\widehat \beta_n \|^2}{n-d}\eqsp.
+\]
+Let $x_\star \in\rset^d$ and assume that its associated observation $Y_\star = x_\star'\beta_\star + \varepsilon_\star$ is predicted by $\widehat Y_\star = x_\star'\widehat \beta_n$.
+\begin{enumerate}
+\item  Provide the expression of $\bE[(\widehat Y_\star - x_\star'\beta_\star)^2]$?
+
+\vspace{.2cm}
+
+{\em
+By definition of $\widehat \beta_n $,
+$$
+\widehat Y_\star - x_\star^T\beta_\star = x_\star^T (\widehat\beta_n - \beta_\star)\,,
+$$
+so that $\bE[\widehat Y_\star] =  x_\star^T\beta_\star$ and
+$$
+\bE[(\widehat Y_\star - x_\star^T\beta_\star)^2] = \mathbb{V}[\widehat Y_\star] = x_\star^T \mathbb{V}[\widehat\beta_n]x_\star\,.
+$$
+On the other hand,
+$$
+\mathbb{V}[\widehat\beta_n] = (X^TX)^{-1}X^T \mathbb{V}[Y] X(X^TX)^{-1} = \sigma^2(X^TX)^{-1}\,.
+$$
+Therefore,
+$$
+\bE[(\widehat Y_\star - x_\star^T\beta_\star)^2] = \sigma^2x_\star^T(X^TX)^{-1}x_\star\,.
+$$
+}
+
+\item  Provide a confidence interval for $x_\star'\beta_\star$ with statistical significiance $1-\alpha$ for $\alpha\in(0,1)$?
+
+\vspace{.2cm}
+
+{\em
+By the first question, $\widehat Y_\star$ is a Gaussian random variable with mean $x_\star^T\beta_\star$ and variance $\sigma_\star^2x_\star^T(X^TX)^{-1}x_\star$. If $z_{1-\alpha/2}$ is the quantile of order $1-\alpha/2$ of the standard Gaussian variable,
+$$
+\mathbb{P}\left(\frac{\left|\widehat Y_\star-x_\star^T\beta_\star\right|}{\sigma_\star(x_\star^T(X^TX)^{-1}x_\star)^{1/2}}\leqslant z_{1-\alpha/2}\right)\geqslant 1-\alpha\,.
+$$
+Therefore, with probability larger than $1-\alpha$,
+$$
+x_\star^T\beta_\star \in \left(\widehat Y_\star - \sigma_\star(x_\star^T(X^TX)^{-1}x_\star)^{1/2}z_{1-\alpha/2}\,;\, \widehat Y_\star + \sigma_\star(x_\star^T(X^TX)^{-1}x_\star)^{1/2}z_{1-\alpha/2}\right)\,.
+$$
+}
+\end{enumerate}
+
+
+\section{Regression: linear estimators}
+Consider the regression model given, for all $1\leqslant i\leqslant n$, by
+\[
+Y_{i}=f^*(X_{i})+\xi_{i}\eqsp,
+\]
+where for all $1\leqslant i\leqslant n$, $X_i\in\xset$, and the $(\xi_{i})_{1\leqslant i \leqslant n}$ are i.i.d. centered Gaussian random variables with variance $\sigma^2$. In this exercise, $f^*$ is estimated by a linear estimator of the form
+\[
+\widehat f_n: x \mapsto \sum_{i = 1}^n w_i(x)Y_i\eqsp.
+\]
+Prove that
+\[
+\frac{1}{n}\bE\left[\sum_{i=1}^n(\widehat f_n(X_i) - f^*(X_i))^2\right] = \|Wf^*(X) - f^*(X)\|^2 + \frac{\sigma^2}{n}\mathrm{Trace}(W'W)\eqsp, 
+\]
+where $W = (w_i(X_j))_{1\leqslant i,j \leqslant n}$ and $f^*(X) = (f^*(X_1),\ldots,f^*(X_n))'$.
+
+\section{Kernels}
+ Let $\calH$ be a RKHS associated with a positive definite kernel $k: \xset\times \xset \to \rset$.
+\begin{enumerate}
+\item  Prove that for all $(x,y)\in\xset\times \xset$, 
+\[
+|f(x)-f(y)|\leqslant \|f\|_{\calH}|k(x,\cdot)-k(y,\cdot)|_{\calH}\eqsp.
+\]
+
+\vspace{.2cm}
+
+{\em
+The proof follows from Cauchy-Schwarz inequality as, for all $(x,y)\in\xset^2$,
+$$
+|f(x)-f(y)|= |\langle f, k(x,\cdot)\rangle_{\mathcal{H}}-\langle f, k(x,\cdot)\rangle_{\mathcal{H}}| = |\langle f, k(x,\cdot)-k(y,\cdot)\rangle_{\mathcal{H}}|\eqsp.
+$$
+}
+
+\item  Prove that the kernel $k$ associated with $\calH$ is unique, i.e. if $\widetilde k$ is another potitive definite kernel satisfying the RKHS properties for $\calH$, then $k = \widetilde k$.
+
+\vspace{.2cm}
+
+{\em
+Write, for all $x\in\xset$,
+$$
+\|k(x,\cdot) - \widetilde k(x,\cdot)\|_{\calH}^2 = \langle k(x,\cdot) - \widetilde k(x,\cdot),k(x,\cdot) - \widetilde k(x,\cdot)\rangle = k(x,x) - \widetilde k(x,x) +  \widetilde k(x,x) - k(x,x)= 0\,.
+$$
+}
+
+\item  Prove that  for all $x\in\xset$, the function defined on $\calH$ by $\delta_x: f \mapsto f(x)$ is continuous.
+
+\vspace{.2cm}
+
+{\em
+
+}
+\end{enumerate}
+
+\section{Kernel Principal Component Analysis}
+\label{ex:kernel:pca}
+Let $(X_i)_{1\leqslant i \leqslant n}$ be $n$ observations in a general space $\X$ and $k: \X\times \X \to \rset$ a positive kernel. $\mathsf{W}$ denotes the Reproducing Kernel Hilbert Space associated with $k$ and for all $x\in\X$, $\phi(x)$ denotes the function $\phi(x): y\to k(x,y)$. The aim is now to perform a PCA on $(\phi(X_1),\ldots,\phi(X_n))$. It is assumed that
+$$
+\sum_{i=1}^n \phi(X_i) = 0\eqsp.
+$$
+Define $ K = \left(k(X_i,X_j)\right)_{1\leqslant i,j \leqslant n}$.
+
+\begin{enumerate}
+\item  Prove that
+$$
+f_1 =  \underset{f\in \mathsf{W}\,;\,\|f\|_\mathsf{W}=1}{\mathrm{argmax}} \sum_{i=1}^n\langle \phi(X_i),f\rangle_\mathsf{W}^2
+$$
+may be written
+$$
+f_1 = \sum_{i=1}^n \alpha_1(i) \phi(X_i)\;,\quad\mbox{where}\quad \alpha_1 =  \underset{\alpha\in \rset^n\,;\, \alpha^T K\alpha=1}{\mathrm{argmax}}\alpha^TK^2\alpha\;.
+$$
+
+\vspace{.2cm}
+
+{\em
+Any solution to the optimization problem lies in the vectorial subspace $V = \mathrm{span}\{\phi(X_i), \ldots,\phi(X_n)\}$.
+Let $f = \sum_{i=1}^n \alpha(i)\phi(X_i)$ be such that $\|f\|_{\mathsf{W}}=1$. Then,
+$$
+\|f\|_{\mathsf{W}}^2 = \sum_{i,j=1}^n \alpha_i\alpha_j \langle \phi(X_i),\phi(X_j)\rangle_\mathsf{W} = \alpha^T K \alpha\;.
+$$
+On the other hand, $\langle \phi(X_i),f\rangle_\mathsf{W} = f(X_i) = [K\alpha](i)$ so that,
+$$
+\sum_{i=1}^n\langle \phi(X_i),f\rangle_\mathsf{W}^2 = \sum_{i=1}^nf^2(X_i) = \sum_{i=1}^n  \left([K\alpha](i)\right)^2 = (K\alpha_1)^TK\alpha_1 = \alpha^T K^2 \alpha\;.
+$$
+}
+\item Prove that $\alpha_1 = \lambda_1^{-1/2}b_1$ where $b_1$ is the unit eigenvector associated with the largest eigenvalue $\lambda_1$ of $K$.
+
+\vspace{.2cm}
+
+{\em
+Let $\lambda_1\geqslant\ldots\geqslant \lambda_n\ge 0$ be the eigenvalues of $K$ associated with the orthonormal basis of eigenvectors $(b_1,\ldots,b_n)$. For any $\alpha\in\rset^n$ such that $\alpha^T K\alpha=1$,
+$$
+\alpha^T K^2 \alpha = \alpha^T\left(\sum_{i=1}^n\lambda_i b_ib^T_i\right)^2 \alpha = \sum_{i=1}^n \lambda_i^2 \langle \alpha,b_i\rangle^2 \leqslant \lambda_1\underbrace{\sum_{i=1}^n \lambda_i\langle \alpha,b_i\rangle^2}_{=1}= \lambda_1\;,
+$$
+as $\alpha^T K\alpha = \sum_{i=1}^n \lambda_i\langle \alpha,b_i\rangle^2 = 1$. On the other hand,
+$$
+\left(\lambda_1^{-1/2}b_1\right)^T K^2 \left(\lambda_1^{-1/2}b_1\right) = \lambda_1^{-1}\sum_{i=1}^n \lambda_i^2 \langle b_1,b_i\rangle^2 = \lambda_1\;.
+$$
+Following the same steps, $f_j$ may be written $f_j = \sum_{i=1}^n \alpha_j(i)\phi(x_i)$ with $\alpha_j = \lambda^{-1/2}_jb_j$.
+}
+\item Write $H_d = \mathrm{span}\{f_1,\ldots,f_d\}$. Prove that, for all $1\leqslant i\leqslant n$,
+$$
+\pi_{H_d}(\phi(X_i)) = \sum_{j=1}^d \lambda_{j}\alpha_j(i)f_j\;.
+$$
+
+\vspace{.2cm}
+
+{\em
+Note first that the $(f_1,\ldots,f_d)$ is an orthonormal family. Therefore,
+$$
+\pi_{H_d}(\phi(X_i)) = \sum_{j=1}^d \langle \phi(X_i),f_j\rangle_{\mathsf{W}} f_j = \sum_{j=1}^d \langle \phi(X_i), \sum_{\ell=1}^n \alpha_j(\ell)\phi(X_{\ell})\rangle_{\mathsf{W}} f_j= \sum_{j=1}^d [K\alpha_j](i)f_j\eqsp.
+$$
+Therefore,
+$$
+\pi_{H_d}(\phi(x_i)) = \sum_{j=1}^d \lambda^{-1/2}_j[K b_j](i)f_j = \sum_{j=1}^d \lambda^{1/2}_jb_j(i)f_j =  \sum_{j=1}^d \lambda_{j}\alpha_j(i)f_j\eqsp.
+$$
+}
+\end{enumerate}
+
+\section{Penalized kernel regression}
+\label{ex:penalized:kernel:regression}
+Consider the regression model given, for all $1\leqslant i\leqslant n$, by
+\[
+Y_{i}=f^*(X_{i})+\xi_{i}\eqsp,
+\]
+where for all $1\leqslant i\leqslant n$, $X_i\in\xset$, and the $(\xi_{i})_{1\leqslant i \leqslant n}$ are i.i.d. centered Gaussian random variables with variance $\sigma^2$. In this exercise, $f^*$ is estimated by
+\[
+\widehat f_n=\argmin_{f\in\calH}\left\{{1\over n}\sum_{i=1}^n(y_{i}-f(X_{i}))^2+{\lambda\over n} \|f\|_{\calH}^2\right\}\eqsp,
+\]
+with $\lambda>0$  and $\calH$  a RKHS on $\xset$ with kernel $k$.
+\begin{enumerate}
+\item Check that $\widehat f(x)=\sum_{j=1}^n\widehat \beta_{n,j}k(X_{j},x)$ where $\widehat \beta_n$ is solution to
+$$
+\widehat \beta_n =\argmin_{\beta\in\R^n}\left\{\|y-K\beta\|^2+{\lambda} \beta'K\beta\right\}\eqsp,
+$$
+with $K$ defined, for all $1\leqslant i,j\leqslant n$, by $K_{i,j}=k (X_{i},X_{j})$.  Provide the explicit expression of $\widehat \beta_n$ when $K$ is nonsingular.
+
+\vspace{.2cm}
+
+{\em
+Let  
+$$
+V = \left\{ \sum_{i=1}^{n}\alpha_ik(X_i, \cdot)\eqsp;\eqsp  (\alpha_1,\ldots,\alpha_n)\in\rset^n\right\}\eqsp.
+$$  
+For all $f \in \mathcal{H}$, write $f = f_V + f_{V^{\perp}}$ where $f_V \in V$ and $f_{V^{\perp}} \in V^{\perp}$. Therefore,
+		\begin{align*}
+			\frac{1}{n} \sum_{i=1}^n \Big( Y_i - f(X_i) \Big)^2 + \frac{\lambda}{n} \|f\|_{\mathcal{H}}^2
+			& = 	\frac{1}{n} \sum_{i=1}^n \Big( Y_i - f_V(X_i) \Big)^2 + \frac{\lambda}{n} \Big( \|f_V\|_{\mathcal{H}}^2 + \|f_{V^{\perp}}\|_{\mathcal{H}}^2 \Big)\,,
+		\end{align*}	
+		since, by definition of $V^{\perp}$, for all $1 \leqslant i \leqslant n$,  
+		$$
+		f_{V^{\perp}}(X_i) = \langle f_{V^{\perp}} , k(X_i, \cdot) \rangle_{\mathcal{H}} = 0\,. 
+		$$
+		Thus, the initial optimization problem can be written as
+$$
+\widehat f_n=\argmin_{f\in V}\left\{{1\over n}\sum_{i=1}^n(Y_{i}-f(X_{i}))^2+{\lambda\over n} \|f\|_{\mathcal{H}}^2\right\}.
+$$
+Therefore, there exists $\beta\in\mathbb{R}^n$ such that, for all $x\in\xset$,
+$$
+\widehat{f}_n(x) = \sum_{j=1}^n \widehat{\beta}_j k(X_j, x)\,.
+$$
+This yields,
+$$
+{1\over n}\sum_{i=1}^n(Y_{i}-f(X_{i}))^2+{\lambda\over n} \|f\|_{\mathcal{H}}^2 = {1\over n}\sum_{i=1}^n(Y_{i}-\sum_{j=1}^n \beta_j k(X_j, X_i))^2+{\lambda\over n} \langle \sum_{j=1}^n \beta_j k(X_j, \cdot), \sum_{i=1}^n \beta_i k(X_i, \cdot) \rangle_{\mathcal{H}}\,.
+$$
+The proof is completed by noting that,
+$$
+\langle \sum_{j=1}^n \beta_j k(X_j, \cdot), \sum_{i=1}^n \beta_i k(X_i, \cdot) \rangle_{\mathcal{H}}  = \sum_{i,j=1}^n \beta_i \beta_j k(X_i, X_j)\,.
+$$
+Let 
+$$
+L(\beta) = \| Y - K \beta\|_2^2 + \lambda \beta^T K \beta.
+$$
+The gradient of $L$ is then given by
+$$
+\nabla L (\beta)  = -2K^T (Y - K \beta) + \lambda (K \beta + K^T \beta)   = -2K(Y-K \beta) + 2 \lambda K \beta\,.
+$$
+The minimum $\widehat{\beta}_n$ of $L$ satisfies 
+$$
+\widehat{\beta}_n = (K + \lambda I_n)^{-1} Y\,.
+$$
+}
+\item Assume that $f^*\in\calH$ and write 
+$$
+f^*_{V}: x\mapsto \sum_{i=1}^n \beta_{i}^*k(X_{i},x)
+$$ 
+the projection of $f^*$ onto the vector subspace generated by  $(k(X_{i},\cdot))_{1\leqslant i \leqslant n}$, with respect to the scalar product $\langle \eqsp;\eqsp \rangle_{\calH}$. Let $K=\sum_{i=1}^n \lambda_{i}u_{i}u_{i}^T$ be  an eigenvalue decomposition of $K$. Check that 
+\[
+K\widehat \beta= \sum_{i=1}^n {\lambda_{i}\over \lambda_{i}+\lambda} \langle Y, u_{i}\rangle u_{i}
+\]
+and
+\[
+\|\bE[K\widehat \beta_n]-K\beta^*\|^2=\sum_{i=1}^n \left( \lambda\lambda_{i}\over \lambda_{i}+\lambda\right)^2 \langle \beta^*, u_{i}\rangle^2\eqsp.
+\]
+
+\vspace{.2cm}
+
+{\em
+Since $(u_i)_{1 \leq i \leq n}$ is an orthonormal basis of $\R^n$, one can write  
+		\begin{align*}
+			K \widehat{\beta}_n & = \sum_{i=1}^n \langle K \widehat{\beta}_n, u_i\rangle u_i\,,\\
+			& = \sum_{i=1}^n \langle K (K+\lambda I_n)^{-1}Y, u_i\rangle u_i\,,\\
+			& = \sum_{i=1}^n \langle Y, (K+\lambda I_n)^{-1} K  u_i\rangle u_i\,,\\
+			& = \sum_{i=1}^n \frac{\lambda_i }{\lambda + \lambda_i} \langle Y, u_i \rangle u_i\,.
+		\end{align*}
+}
+\item Prove that
+$$
+\bV[K\widehat \beta_n]=\sum_{i=1}^n \left(\lambda_{i}\sigma\over \lambda_{i}+\lambda\right)^2u_{i}u_{i}^T\eqsp.
+$$
+
+\vspace{.2cm}
+
+{\em
+Since $\widehat{\beta}_n = (K + \lambda I_n)^{-1}Y$, 
+		\begin{align*}
+			\bV [K \widehat{\beta}_n] & = K \bV \left[ (K + \lambda I_n)^{-1} Y \right]K^T\,,\\
+			& = K (K + \lambda I)^{-1} \bV [Y] (K + \lambda I_n)^{-1} K\,,\\
+			& = \sigma^2 K^2 (K + \lambda I_n)^{-2}\,,\\
+			& = \sum_{i=1}^n \left( \frac{\lambda_i \sigma }{\lambda_i + \lambda}\right)^2 u_i u_i^T\,,
+		\end{align*}
+	using the eigenvector decomposition of $K$.
+}
+\end{enumerate}
+
+\section{Expectation Maximization algorithm}
+\label{ex:em}
+In the case where we are interested in estimating unknown parameters $\theta\in\mathbb{R}^m$ characterizing a model with missing data, the Expectation Maximization (EM) algorithm (Dempster et al. 1977) can be used when the joint distribution of the missing data $X$ and the observed data $Y$ is explicit. For all $\theta\in\mathbb{R}^m$, let $p_{\theta}$ be the probability density function of $(X,Y)$ when the model is parameterized by $\theta$ with respect to a given reference measure $\mu$. The EM algorithm aims at computing iteratively an approximation of the maximum likelihood estimator which maximizes the observed data loglikelihood:
+$$
+\ell(\theta;Y) = \log p_{\theta}(Y) =\log \int f_{\theta}(x,Y)\mu(\mathrm{d}x)\eqsp.
+$$
+As this quantity cannot be computed explicitly in general cases, the EM algorithm finds the maximum likelihood estimator by iteratively maximizing the expected complete data loglikelihood.
+%Denote by 
+%$$
+%\ell(X,Y;\theta) = \log f(X,Y;\theta)
+%$$
+%the complete data loglikelihood  
+Start with an inital value $\theta^{(0)}$ and let $\theta^{(t)}$ be the estimate at the $t$-th iteration for $t\geqslant 0$, then the next iteration of EM is decomposed into two steps.
+\begin{enumerate}
+\item {\bf E step}. Compute the expectation of the complete data loglikelihood, with respect to the conditional distribution of the missing data given the observed data parameterized by $\theta^{(t)}$:
+$$
+Q(\theta,\theta^{(t)}) =\mathbb{E}_{\theta^{(t)}}\left[\log p_{\theta}(X,Y)|Y \right]\eqsp.%=\int \ell(x,Y;\theta)f(x|Y;\theta^{(t)}) \mathrm{d}x \eqsp.
+$$
+\item {\bf M step}. Determine $\theta^{(t+1)}$ by maximizing the function Q:
+$$
+\theta^{(t+1)}\in \mbox{argmax}_\theta Q(\theta,\theta^{(t)})\eqsp.
+$$
+\end{enumerate}
+\begin{enumerate}
+\item Prove the following crucial property motivates the EM algorithm.  For all $\theta,\theta^{(t)}$,
+$$
+\ell(Y;\theta) - \ell(Y;\theta^{(t)}) \geqslant Q(\theta,\theta^{(t)})-Q(\theta^{(t)},\theta^{(t)})\eqsp.
+$$
+
+
+\vspace{.2cm}
+
+{\em
+This may be proved by noting that
+$$
+\ell(Y;\theta) = \log \left(\frac{p_{\theta}(X,Y)}{p_{\theta}(X|Y)}\right)\eqsp.
+$$
+Considering the conditional expectation of both terms given $Y$ when the parameter value is $\theta^{(t)}$ yields
+$$
+\ell(Y;\theta) = Q(\theta,\theta^{(t)}) - \mathbb{E}_{\theta^{(t)}}[\log p_{\theta}(X|Y)|Y]\eqsp.
+$$
+Then,
+$$
+\ell(Y;\theta) - \ell(Y;\theta^{(t)}) = Q(\theta,\theta^{(t)})-Q(\theta^{(t)},\theta^{(t)}) + H(\theta,\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)})\eqsp,
+$$
+where
+$$
+H(\theta,\theta^{(t)}) = - \mathbb{E}_{\theta^{(t)}}[\log p_{\theta}(X|Y)|Y]\eqsp.
+$$
+The proof is completed by noting that
+$$
+H(\theta,\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)})\geqslant 0\eqsp,
+$$
+as this difference if a Kullback-Leibler divergence. 
+}
+%Therefore, any value $\theta$ ,which improves $Q(\theta,\theta^{(t)})$ beyond reference value $Q(\theta^{(t)},\theta^{(t)})$, won't decrease the observed-data likelihood. Based on this inequality, the EM algorithm produces iteratively a sequence of parameter estimates $\left(\theta^{(t)}\right)_{t\ge 0}$. 
+\end{enumerate}
+In the following, $X = (X_1,\ldots,X_n)$ and $Y = (Y_1,\ldots,Y_n)$ where $\{(X_i,Y_i)\}_{1\leqslant i\leqslant n}$  are i.i.d. in $\{-1,1\} \times \rset^d$. For $k\in\{-1,1\}$, write $\pi_k = \bP(X_1 = k)$. Assume that, conditionally on the event $\{X_1 = k\}$, $Y_1$ has a Gaussian distribution with mean $\mu_k \in\rset^d$ and covariance matrix $\Sigma\in \rset^{d\times d}$. In this case, the parameter $\theta=(\pi_1, \mu_1,\mu_{-1}, \Sigma)$ belongs to the set $\Theta= [0,1] \times \rset^d \times \rset^d \times \rset^{d \times d}$.
+\begin{enumerate}
+\item Write the complete data loglikelihood.
+
+\vspace{.2cm}
+
+{\em
+The complete data loglikelihood  is given by
+\begin{align*}
+\log p_{\theta}\left(X,Y\right) &= - \frac{nd}{2} \log(2\pi)+\sum_{i=1}^n\sum_{k\in\{-1,1\}}\1_{X_i=k}\left(\log \pi_{k} -\frac{\log \det \Sigma}{2} - \frac{1}{2}\left(Y_i - \mu_{k}\right)^T\Sigma^{-1}\left(Y_i - \mu_{k}\right)\right) \eqsp,\\
+&= - \frac{nd}{2} \log(2\pi)-\frac{n}2 \log\det\Sigma + \left(\sum_{i=1}^n\1_{X_i=1}\right)\log \pi_1 + \left(\sum_{i=1}^n\1_{X_i=-1}\right)\log (1-\pi_{1})\\
+& \hspace{1cm}-  \frac{1}{2}\sum_{i=1}^n\1_{X_i=1}\left(Y_i - \mu_{1}\right)^T\Sigma^{-1}\left(Y_i - \mu_{1}\right) -  \frac{1}{2}\sum_{i=1}^n\1_{X_i=-1}\left(Y_i - \mu_{-1}\right)^T\Sigma^{-1}\left(Y_i - \mu_{-1}\right)\eqsp.
+\end{align*}
+}
+\item Let $\theta^{(t)}$ be the current parameter estimate. Compute $\theta\mapsto Q(\theta,\theta^{(t)})$.
+
+\vspace{.2cm}
+
+{\em
+Write $\omega_t^i = \bP_{\theta^{(t)}}(X_i=1|Y_i)$. The intermediate quantity of the EM algorithm is given by
+\begin{align*}
+Q(\theta,\theta^{(t)}) &= - \frac{nd}{2} \log(2\pi)-\frac{n}2 \log\det\Sigma + \left(\sum_{i=1}^n\omega_t^i \right)\log \pi_1 + \sum_{i=1}^n\left(1 - \omega_t^i \right)\log (1-\pi_{1})\\
+& \hspace{1cm}-  \frac{1}{2}\sum_{i=1}^n\omega_t^i \left(Y_i - \mu_{1}\right)^T\Sigma^{-1}\left(Y_i - \mu_{1}\right) -  \frac{1}{2}\sum_{i=1}^n(1-\omega_t^i )\left(Y_i - \mu_{-1}\right)^T\Sigma^{-1}\left(Y_i - \mu_{-1}\right)\eqsp.
+\end{align*}
+}
+\item Compute $\theta^{(t+1)}$.
+
+\vspace{.2cm}
+
+{\em
+The gradient of $Q(\theta,\theta^{(t)})$ with respect to $\theta$ is therefore given by
+\begin{align*}
+\frac{\partial Q(\theta,\theta^{(t)})}{\partial \pi_1} &= \frac{\sum_{i=1}^n\omega_t^i}{\pi_1} - \frac{n-\sum_{i=1}^n\omega_t^i}{1-\pi_{1}}\eqsp,\\
+\frac{\partial Q(\theta,\theta^{(t)})}{\partial \mu_1} &= \sum_{i=1}^n\omega_t^i\left(2\Sigma^{-1}Y_i - 2\Sigma^{-1}\mu_{1}\right)\eqsp,\\
+\frac{\partial Q(\theta,\theta^{(t)})}{\partial \mu_{-1}} &= \sum_{i=1}^n(1-\omega_t^i)\left(2\Sigma^{-1}Y_i - 2\Sigma^{-1}\mu_{-1}\right)\eqsp,\\
+\frac{\partial Q(\theta,\theta^{(t)})}{\partial \Sigma^{-1}} &= \frac{n}{2}\Sigma -  \frac{1}{2}\sum_{i=1}^n\omega_t^i\left(Y_i - \mu_{1}\right)\left(Y_i - \mu_{1}\right)^T -  \frac{1}{2}\sum_{i=1}^n(1-\omega_t^i)\left(Y_i - \mu_{-1}\right)\left(Y_i - \mu_{-1}\right)^T\eqsp.
+\end{align*}
+Then, $\theta^{(t+1)}$ is defined as the only parameter such that all these equations are set to 0. It is given by
+\begin{align*}
+\widehat \pi_1^{(t+1)} &= \frac{1}{n}\sum_{i=1}^n\omega_t^i\eqsp,\\
+\widehat \mu_1^{(t+1)} &= \frac{1}{\sum_{i=1}^n\omega_t^i}\sum_{i=1}^n\omega_t^i\,Y_i\eqsp,\\
+\widehat\Sigma^{(t+1)} &= \frac{1}{n}\sum_{i=1}^n\omega_t^i\left(Y_i - \mu_{1}\right)\left(Y_i - \mu_{1}\right)^T +  \frac{1}{n}\sum_{i=1}^n(1-\omega_t^i)\left(Y_i - \mu_{-1}\right)\left(Y_i - \mu_{-1}\right)^T\eqsp.
+\end{align*}}
+\end{enumerate}
+%	
+%	\subsection*{Solving Kernel ridge regression}
+%	\begin{enumerate}
+%		\item First, we prove that $\widehat f$ belongs to $V = \textrm{Span}(k(x_i, \cdot), i=1, \hdots, n)$. Take $f \in \mathcal{H}$ and set $f = f_V + f_{V^{\perp}}$ where $f_V \in V$ and $f_{V^{\perp}} \in V^{\perp}$. Therefore
+%		\begin{align*}
+%			\frac{1}{n} \sum_{i=1}^n \Big( y_i - f(x_i) \Big)^2 + \frac{\lambda}{n} |f|_{\mathcal{H}}^2
+%			& = 	\frac{1}{n} \sum_{i=1}^n \Big( y_i - f_V(x_i) \Big)^2 + \frac{\lambda}{n} \Big( |f_V|_{\mathcal{H}}^2 + |f_{V^{\perp}}|_{\mathcal{H}}^2 \Big),
+%		\end{align*}	
+%		since, by definition of $V^{\perp}$, for all $1 \leq i \leq n$,  
+%		$$
+%		f_{V^{\perp}}(x_i) = \langle f_{V^{\perp}} , k(x_i, \cdot) \rangle = 0. 
+%		$$
+%		Thus the initial optimization problem can be written as
+%		\begin{align}
+%			\widehat f=\argmin_{f\in V}\left\{{1\over n}\sum_{i=1}^n(y_{i}-f(x_{i}))^2+{\lambda\over n} |f|_{\mathcal{H}}^2\right\}. \label{ridge_optim}
+%		\end{align}
+%		In other words, there exist $\beta_j$ such that, for all $x$,
+%		\begin{align*}
+%			\widehat{f}(x) = \sum_{j=1}^n \widehat{\beta}_j k(x_j, x).
+%		\end{align*}
+%		Injecting this expression into (\ref{ridge_optim}), we get
+%		\begin{align*}
+%			{1\over n}\sum_{i=1}^n(y_{i}-f(x_{i}))^2+{\lambda\over n} |f|_{\mathcal{H}}^2 
+%			& = {1\over n}\sum_{i=1}^n(y_{i}-\sum_{j=1}^n \beta_j k(x_j, x_i))^2+{\lambda\over n} \langle \sum_{j=1}^n \beta_j k(x_j, \cdot), \sum_{i=1}^n \beta_i k(x_i, \cdot) \rangle,
+%		\end{align*}
+%	which gives the result, since 
+%	\begin{align*}
+%		\langle \sum_{j=1}^n \beta_j k(x_j, \cdot), \sum_{i=1}^n \beta_i k(x_i, \cdot) \rangle & = \sum_{i,j=1}^n \beta_i \beta_j k(x_i, x_j).
+%	\end{align*}
+%
+%		\item Let 
+%		\begin{align*}
+%			L(\beta) = \| y - K \beta\|_2^2 + \lambda \beta^T K \beta.
+%		\end{align*}
+%		The gradient of $L$ is then given by
+%		\begin{align*}
+%			\nabla L (\beta) & = -2K^T (y - K \beta) + \lambda (K \beta + K^T \beta)  \\
+%			& = -2K(y-K \beta) + 2 \lambda K \beta.
+%	\end{align*}
+%	The minimum $\widehat{\beta}$ of $L$ satisfies 
+%	\begin{align*}
+%		\Leftrightarrow & -2K(y-K \widehat{\beta}) + 2 \lambda K \widehat{\beta} = 0\\
+%		\Leftrightarrow & \widehat{\beta} = (K + \lambda I)^{-1} y.
+%	\end{align*}
+%			
+%	\end{enumerate}
+%	
+%	\subsection*{Bias and variance}
+%	
+%	\begin{enumerate}
+%		\item Since $(u_i)_{1 \leq i \leq n}$ is an orthonormal basis of $\R^n$, one can write  
+%		\begin{align*}
+%			K \widehat{\beta} & = \sum_{i=1}^n \langle K \widehat{\beta}, u_i\rangle u_i\\
+%			& = \sum_{i=1}^n \langle K (K+\lambda I)^{-1}y, u_i\rangle u_i\\
+%			& = \sum_{i=1}^n \langle y, (K+\lambda I)^{-1} K  u_i\rangle u_i\\
+%			& = \sum_{i=1}^n \frac{\lambda_i }{\lambda + \lambda_i} \langle y, u_i \rangle u_i.
+%		\end{align*}
+%		
+%		
+%		\item First, note that, for all $1 \leq i \leq n$, 
+%		\begin{align*}
+%			\langle \E [y], u_i \rangle = \left\langle \left(
+%			\begin{array}{c}
+%			f^*(x_1)\\
+%			\hdots \\
+%			f^*(x_n)
+%			\end{array}			
+%			\right), u_i \right\rangle = \langle K \beta^* , u_i\rangle 
+%			= \langle \beta^* , K u_i\rangle = \lambda_i \langle \beta^* , u_i\rangle.
+%		\end{align*}
+%		Consequently, 
+%		\begin{align*}
+%			\| \E [K \widehat{\beta}] - K \beta^* \|^2 
+%			& = \left\| \sum_{i=1}^n \frac{\lambda_i}{\lambda_i + \lambda} \langle \E [y], u_i \rangle u_i - \sum_{i=1}^n \langle K \beta^*, u_i \rangle u_i  \right\|_2^2 \\
+%			& = \left\| \sum_{i=1}^n \left( \frac{\lambda_i^2}{\lambda_i + \lambda} - \lambda_i \right)  \langle \beta^*, u_i \rangle u_i \right\|_2^2 \\
+%			& = \sum_{i=1}^n \left( \frac{\lambda \lambda_i }{\lambda_i + \lambda}\right)^2 \langle \beta^*, u_i \rangle^2.
+%		\end{align*}
+%		
+%		\item Since $\widehat{\beta} = (K + \lambda I)^{-1}y$, 
+%		\begin{align*}
+%			\C (K \widehat{\beta}) & = K \C \left( (K + \lambda I)^{-1} y \right) K'\\
+%			& = K (K + \lambda I)^{-1} \C (y) (K + \lambda I)^{-1} K\\
+%			& = \sigma^2 K^2 (K + \lambda I)^{-2}\\
+%			& = \sum_{i=1}^n \left( \frac{\lambda_i \sigma }{\lambda_i + \lambda}\right)^2 u_i u_i^T,
+%		\end{align*}
+%	using the eigenvector decomposition of $K$.
+%	
+%	\item Simple calculations show that 
+%	\begin{align*}
+%		\E [\| \widehat{f} - f^* \|_n^2] & = \frac{1}{n} \sum_{i=1}^n \E \Big[
+%		\widehat{f}(x_i) - f^*(x_i)\Big]^2\\
+%		& = \frac{1}{n} \sum_{i=1}^n \E \Big[ \widehat{f}(x_i) - \E [\widehat{f}(x_i)]\Big]^2 + \frac{1}{n} \sum_{i=1}^n \E \Big[ \E [\widehat{f}(x_i)] - f^*(x_i)\Big]^2\\
+%		& = \frac{1}{n} \textrm{Tr}(\C [K \widehat{\beta}]) + \frac{1}{n} \| \E [K \widehat{\beta}] - K \beta^* \|^2 \\
+%		& = \frac{1}{n} \sum_{i=1}^n \left( \frac{\lambda_i}{\lambda + \lambda_i}\right)^2 (\lambda^2 \langle \beta^* , u_i \rangle^2 + \sigma^2),
+%	\end{align*}
+%according to the two previous questions. 
+%	\end{enumerate}
+	

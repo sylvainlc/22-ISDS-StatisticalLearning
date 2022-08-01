@@ -1,0 +1,872 @@
+%\renewenvironment{solexo}{\begin{proof}\textcolor{magenta}{\fbox{Please, comment "solexo" in the first lines of defs.tex once the proof is written}}\\}{\end{proof}}
+
+
+\newenvironment{oldversion}{\ \newline\noindent $\blacktriangleright$ \hrulefill \textcolor{red}{old version: start} \hrulefill $\blacktriangleleft$\newline}{\ \newline\noindent $\blacktriangleright$ \hrulefill \textcolor{red}{old version: end}\hrulefill $\blacktriangleleft$ \newline}
+
+\newenvironment{newversion}{\ \newline\noindent $\blacktriangleright$ \hrulefill \textcolor{blue}{new version: start} \hrulefill $\blacktriangleleft$\newline}{\ \newline\noindent $\blacktriangleright$ \hrulefill \textcolor{blue}{new version: end}\hrulefill $\blacktriangleleft$ \newline}
+
+\newenvironment{encart}[1][]{\ \newline\noindent $\blacktriangleright$ \hrulefill \textcolor{violet}{\textbf{\textsc{#1: start}}} \hrulefill $\blacktriangleleft$\newline}{\ \newline\noindent $\blacktriangleright$ \hrulefill \textcolor{violet}{\textbf{\textsc{ end}}}\hrulefill $\blacktriangleleft$ \newline}
+
+\newenvironment{memo}{\begin{shaded}}{\end{shaded}}
+
+
+
+\newenvironment{enumerateList}{ \begin{enumerate}[(i),wide=0pt, labelindent=\parindent]}{\end{enumerate}}
+
+
+\newenvironment{itemizeList}{ \begin{itemize}[wide=0pt, labelindent=\parindent]}{\end{itemize}}
+
+
+\def\wdeltafc{W_C}
+
+\def\ddoeblin{contracting}
+
+
+\newcommand{\tcr}[1]{\textcolor{red}{#1}}
+
+\newcommand{\philippe}[1]{\todo[color=magenta!10]{ Ph: #1}}
+\newcommand{\eric}[1]{\todo[color=green!20]{ Er: #1}}
+\newcommand{\rd}[1]{\todo[color=blue!20]{ Rd: #1}}
+\newcommand{\pierre}[1]{\todo[color=yellow!20]{Pierre: #1}}
+
+\def\card{\mathrm{card}}
+
+%%%%%%%%%%% les notations pour le renouvellement discret
+
+\def\waitingdistr{b}
+\def\Waitingdistr{\bar{\waitingdistr}}
+\def\waitinggen{B}
+\def\delaydistr{a}
+\def\delaystation{a_{\mathrm{s}}}
+\newcommandx\accesset[1][1=P]{\Xsigma^+_{#1}}
+\newcommandx\accessetdiscret[1][1=P]{\Xset^+_{#1}}
+\newcommandx\forwardinitdistr[1][1=\delaydistr]{\mu_{#1}}
+\def\delaygen{A}
+\newcommand\renoup{u} %%%%% pure renewal sequence
+\newcommandx\renoud[1][1=]{v_{#1}}  %%%%% delayed renewal sequence
+\newcommandx\renoudgen[1][1=]{V_{#1}} %%%%% fonction generatrice de la delayed renewal sequence
+\newcommand\renoupgen{U} %%%%% fonction generatrice de la zero-delayed renewal sequence
+
+\newcommand{\paramset}{\Theta}
+\newcommand{\param}{\theta}
+
+\renewcommand{\Re}{\mathrm{Re}}
+\renewcommand{\Im}{\mathrm{Im}}
+
+\def\bigone{\mathbf{1}}
+\newcommandx{\indi}[2][1=]{\1^{#1}_{#2}}
+\newcommand{\indiacc}[1]{\1_{\{#1\}}}
+\newcommand{\indin}[1]{\1\left\{#1\right\}}
+
+%%%% Linear State Space Notations
+\def\corr{\PCor}               % define \corr
+\def\rank{\hbox{rank}}
+%\def\range{\hbox{range}}
+\def\vec{\Vvec}
+\def\ssf{{\tt}}
+\def\bfit{\em }
+\def\bb{{\bm\beta}}
+\def\ab{{\bm\alpha}}
+\def\pb{{\bm\phi}}
+\def\lb{{\bm\lambda}}
+\def\rb{{\bm\rho}}
+\def\bz{{\bm z}}
+
+\def\mub{{\bm\mu_0}}
+
+\def\gcd{\mathrm{g.c.d.}}
+
+
+
+% definition for R stat package% %
+\def\R{{\sf R}\ }
+% % % % % % % % % % %
+
+% hyperref changes go here
+\renewcommand{\subsectionautorefname}{Section}  % these have to come after begin{doc}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\chapterautorefname}{Chapter}
+
+\newcommand{\argmax}{\operatornamewithlimits{arg\,max}}
+\newcommand{\argmin}{\operatornamewithlimits{arg\,min}}
+
+%%% definitions of sets
+\def\rset{\ensuremath{\mathbb{R}}}
+\def\rsetbar{\ensuremath{\bar{\mathbb{R}}}}
+\def\rplus{\ensuremath{\mathbb{R}_+}}
+\def\qset{\ensuremath{\mathbb{Q}}}
+\def\nset{\ensuremath{\mathbb{N}}}
+\def\zset{\ensuremath{\mathbb{Z}}}
+\def\cset{\ensuremath{\mathbb{C}}}
+
+
+
+%\def\1{\ensuremath{\mathds{1}}}
+\def\xset{\ensuremath{\mathcal{X}}}
+\def\yset{\ensuremath{\mathcal{Y}}}
+\def\bP{\ensuremath{\mathbb{P}}}
+\def\bE{\ensuremath{\mathbb{E}}}
+\def\calF{\ensuremath{\mathcal{F}}}
+\def\calH{\ensuremath{\mathcal{H}}}
+
+\def\mbh{\mathbb{H}} %%% notation pour un espace de Hilbert dans le chapitre Wasserstein
+\def\mbz{\zset} %%% notation pour une va dans un  espace de Hilbert dans le chapitre Wasserstein
+\def\mbx{\mathbb{X}} %%% notation pour une va dans un  espace de Hilbert dans le chapitre Wasserstein
+
+
+
+\newcommand{\distiid}{\ensuremath{\stackrel{\mathrm{iid}}{\sim\,}}}    % ~ with iid over it (for display)
+\newcommand{\simiid}{\ensuremath{ {\sim}\,{\rm iid\,} }}         % ~ with iid next to it (for text)
+\newcommand{\wn}{\ensuremath{\mathrm{WN}}}   % white noise
+\newcommand{\om}{\omega}
+\newcommand{\omj}{\omega_j}
+\newcommandx{\predx}[3][1=\bm X]{#1_{#2|#3}}   % prediction of boldface X as default
+\newcommand{\predxmse}[2]{P_{#1|#2}}  % MSPE
+\newcommand{\mslim}{\ensuremath{\stackrel{\text{m.s.}}{\longrightarrow}}}   %mean square convergence
+\newcommand{\PCor}{\ensuremath{\operatorname{Cor}}}  % correlation
+\newcommand{\cum}{{\rm cum}}
+%\newcommand{\mb}{\bm}  % I tend to switch these
+% \newcommand{\doublesum}{\mathop{\sum\sum}}
+% \newcommand{\triplesum}{\mathop{\sum\sum\sum}}  % used in chapter 2
+% \newcommand{\dotsum}{\mathop{\sum\dots\sum}}
+
+\newcommand{\Tr}[1]{\mathrm{Tr}(#1)}
+\newcommand{\proj}{\ensuremath{{\sf P\!}}}
+\newcommand{\mcy}{\ensuremath{\mathcal Y}}
+
+
+% % % % % % % % end used in ch1 % % % %
+
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\newcommandx\supnorm[2][1=]{| #2 |^{#1}_\infty}
+\newcommandx\lnorm[3][1=]{\left\lVert #2 \right\rVert^{#1}_{#3}}
+\newcommandx\vectornorm[2][1=]{\left| #2 \right|^{#1}}  %%%% norme de vecteurs pas fonctions
+\def\Xinit{\xi} %% initial distribution
+\def\borel{\mathcal{B}}
+\def\bepsilon{\boldsymbol{\epsilon}}
+\def\lleb{\ensuremath{\mathrm{Leb}}}
+\def\bx{\mathbf{x}}
+\def\by{\mathbf{y}}
+\newcommand{\vvec}[1]{\mathbf{#1}}
+\newcommand{\VVec}[1]{\mathrm{Vec}(#1)}
+\def\bA{\mathbf{A}}
+\def\bB{\mathbf{B}}
+\def\bX{\mathbf{X}}
+\def\bY{\mathbf{Y}}
+\def\bZ{\mathbf{Z}}
+\def\bM{\mathbf{M}}
+\def\bV{\mathbb{V}}
+
+
+\newcommand{\coint}[1]{\left[#1\right)}
+\newcommand{\ocint}[1]{\left(#1\right]}
+\newcommand{\ooint}[1]{\left(#1\right)}
+\newcommand{\ccint}[1]{\left[#1\right]}
+\newcommand{\Id}{\mathrm{I}}
+
+
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\interior}[1]{#1^{o}}
+%\newcommand{\cas}{{\:\stackrel{\prob-\mathrm{a.s.}}{\longrightarrow}\:}}
+%\newcommand{\cp}{{\:\stackrel{\prob}{\longrightarrow}\:}}
+\newcommand{\sigmalg}[1]{\mathcal{#1}}
+
+% two optional arguments, with the package xargs.
+\newcommandx\cov[3][1=]{\ensuremath{\mathrm{Cov}_{#1}\left( #2,#3 \right)}}
+\newcommandx\var[2][1=]{\ensuremath{\mathrm{Var}_{#1}\left( #2 \right)}}
+\newcommandx\cvar[3][1=]{\ensuremath{\mathrm{Var}_{#1}\left( \left. #2 \right| #3 \right)}}
+\newcommandx\ccov[3][1=]{\ensuremath{\mathrm{Cov}_{#1}\left( \left. #2 \right| #3 \right)}}
+
+
+\newcommand{\ci}[4][]%
+{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{#2 \perp\!\!\!\perp #3 \mid #4 }}{\ensuremath{#2 \perp\!\!\!\perp #3 \mid #4 \; \: [#1]}}%
+}
+
+% \haslaw{X}{\mu} math symbol for "$X$ has law $\mu$"
+\newcommand{\haslaw}[2]{\mathcal{L}(#1)=#2}
+\newcommand{\hascondlaw}[3]{\mathcal{L}(#1|#2)=#3}
+
+%\newcommand{\lip}[1]{\mathrm{L}(#1)}
+\def\bu{\mathbf{u}}
+%\newcommandx\bprob[2][1=,2=]{\ensuremath{\bar{{\mathbb P}}_{#1}^{#2}}}
+\newcommandx\tprob[2][1=,2=]{\ensuremath{\tilde{{\mathbb P}}_{#1}^{#2}}}
+
+\newcommandx\besp[2][1=,2=]{\ensuremath{\bar{{\mathbb E}}_{#1}^{#2}}}
+\newcommandx\esp[2][1=,2=]{\ensuremath{{\mathbb E}_{#1}^{#2}}}
+\newcommandx\tesp[2][1=,2=]{\ensuremath{\tilde{{\mathbb E}}_{#1}^{#2}}}
+\newcommandx\espp[3][1=,2=]{\ensuremath{{\mathbb E}_{#1}^{#2} \left[ #3 \right]}}
+\newcommandx\cesp[4][1=,2=]{\ensuremath{{\mathbb E}_{#1}^{#2}\left[ \left. #3 \right| #4 \right]}}
+
+
+\newcommandx{\cCPE}[3][1=]{{\check{\mathbb{E}}}_{#1}\left[\left. #2 \, \right| #3 \right]} %%%% esperance conditionnelle pour la mesure splitee
+\newcommandx{\cCPP}[3][1=]{\check{\mathbb{P}}_{#1}\left(\left. #2 \, \right| #3 \right)}
+\def\bell{D} %%%%%% la bell variable pour le splitting
+\def\bellv{d}
+
+\newcommandx\cesptilde[4][1=,2=]{\ensuremath{\tilde{{\mathbb E}}_{#1}^{#2}\left[ \left. #3 \right| #4 \right]}}
+\newcommandx\cbesp[4][1=,2=]{\ensuremath{\bar{{\mathbb E}}_{#1}^{#2}\left[ \left. #3 \right| #4 \right]}}
+\newcommandx\cprob[4][1=,2=]{\ensuremath{{\mathbb P}_{#1}^{#2}\left[ \left. #3 \right| #4 \right]}}
+\newcommandx\cprobtilde[4][1=,2=]{\ensuremath{\tilde{{\mathbb P}}_{#1}^{#2}\left( \left. #3 \right| #4 \right)}}
+
+\newcommandx\cprobcheck[4][1=,2=]{\ensuremath{\check{{\mathbb P}}_{#1}^{#2}\left( \left. #3 \right| #4 \right)}}
+\newcommandx\cbprob[4][1=,2=]{\ensuremath{\bar{{\mathbb P}}_{#1}^{#2}\left[ \left. #3 \right| #4 \right]}}
+
+
+\newcommandx\sequence[3][2=,3=]
+{\ifthenelse{\equal{#3}{}}{\ensuremath{\{ #1_{#2}\}}}{\ensuremath{\{ #1_{#2}, \eqsp #2 \in #3 \}}}}
+\newcommandx\sequencePar[3][2=,3=]
+{\ifthenelse{\equal{#3}{}}{\ensuremath{\{ #1({#2})\}}}{\ensuremath{\{ #1({#2}), \eqsp #2 \in #3 \}}}}
+%\newcommand{\sequencen}[2]{\ensuremath{\{ #1, \eqsp #2 \}}}
+\newcommandx{\sequencen}[2][2=n\in\nset]{\ensuremath{\{ #1, \eqsp #2 \}}}
+\newcommandx\dsequence[4][3=,4=]{\ensuremath{\{ (#1_{#3}, #2_{#3}), \eqsp #3 \in #4 \}}}
+\newcommand{\setmat}[2]{\mathbb{M}_{#1}(#2)}
+\newcommandx{\opernorm}[2][2=]{\interleave#1 \interleave_{{#2}}}
+\newcommandx{\opernormp}[2][2=]{\interleave#1 \interleave_{{#2}}}
+\newcommand{\BoundedLinear}[1]{\mathcal{BL}(#1)}
+\newcommandx\proba[3][1=,3=]{{\mathbb P}_{#1}^{#3} (#2)}
+
+\newcommand{\rmi}{\mathrm{i}}
+\newcommand{\rme}{\mathrm{e}}
+\newcommand{\rmd}{\mathrm{d}}
+\def\diam{\mathrm{diam}}
+
+
+
+\newcommand{\lone}{\ensuremath{\mathrm{L}^1}}
+\newcommand{\ltwo}{\ensuremath{\mathrm{L}^2}}
+\newcommandx{\lp}[1][1=p]{\ensuremath{\operatorname{L}^{#1}}}
+\newcommand{\linfty}{\ensuremath{\operatorname{L}^\infty}}
+
+\newcommand{\1}{\ensuremath{\mathbbm{1}}}
+
+
+\newcommand{\etal}{et al.}
+\newcommand{\wrt}{with respect to}
+\def\iff{if and only if}
+%\newcommand{\wrt}{w.r.t.}
+\newcommand{\rhs}{right-hand side}
+\newcommand{\lhs}{left-hand side}
+\newcommand{\iid}{i.i.d.}
+\renewcommand{\-}{\mbox{-}}
+\newcommandx{\as}[1][1=\PP]{\ensuremath{#1\, -\mathrm{a.s.}}}
+\newcommand{\mae}{\ensuremath{\mathrm{a.e.}}}
+\newcommand{\aae}[1]{\ensuremath{#1-\mathrm{a.e.}}}
+\newcommand{\aall}[1]{\ensuremath{#1-\mathrm{almost\ all}}}
+\newcommand{\ie}{i.e.}
+\newcommand{\wlogg}{without loss of generality}
+\newcommand{\io}{\ensuremath{\mathrm{i.o.}}}
+\newcommand{\ifof}{if and only if}
+\newcommand{\eg}{e.g.}
+\newcommand{\cf}{cf.}
+\newcommand{\pdf}{probability density function}
+\newcommand{\eqsp}{\;}
+\newcommand{\eqspp}{\ \ }
+\newcommand{\eqsppeq}{\quad \quad }
+
+
+\newcommand{\eqdef}{\ensuremath{:=}}
+\newcommand{\eqdefrev}{\ensuremath{=:}}
+% \newcommand{\eqdef}{\ensuremath{\stackrel{\mathrm{def}}{=}}}
+\def\mca{\mathcal{A}}
+\def\mcbb{\mathcal{B}}  %%% \mcb est déjà pris
+\def\mcc{\mathcal{C}}
+\def\mce{\mathcal{E}}
+\def\mcf{\mathcal{F}}
+\def\mcg{\mathcal{G}}
+\def\mch{\mathcal{H}}
+\def\mcm{\mathcal{M}}
+\def\mcp{\mathcal{P}}
+\def\mcu{\mathcal{U}}
+\def\mcv{\mathcal{V}}
+\def\shift{\theta}
+\def\bshift{\bar{\theta}}
+\def\InvariantField{\mathcal{I}}
+
+%%%%%%%%%%%%%
+% Probability
+\newcommand{\PP}[1][]{\ifthenelse{\equal{#1}{}}{\ensuremath{\mathbb{P}}}{\ensuremath{\mathbb{P}\left( #1 \right)}}}
+\newcommand{\bPP}[1][]{\ifthenelse{\equal{#1}{}}{\ensuremath{\bar{\mathbb{P}}}}{\ensuremath{\bar{\mathbb{P}}\left( #1 \right)}}}
+\newcommand{\QQ}[1][]{\ifthenelse{\equal{#1}{}}{\ensuremath{\mathbb{Q}}}{\ensuremath{\mathbb{Q}\left( #1 \right)}}}
+
+
+\newcommandx{\PPRen}[1][1=\delaydistr]{\mathbb{P}_{#1}} %%%% loi d'un renouvellement avec delaydistr et watingdistr
+\newcommandx{\PERen}[1][1=\delaydistr]{\mathbb{E}_{#1}} %%%% loi d'un renouvellement avec delaydistr et watingdistr
+
+
+\newcommand{\PE}[1][]{\ifthenelse{\equal{#1}{}}{\ensuremath{\mathbb E}}{\ensuremath{{\mathbb E}\left[ #1 \right]}}}
+\newcommand{\PEs}[1]{\PE{[\, #1\,]}}
+
+\newcommand{\bPE}[1][]{\ifthenelse{\equal{#1}{}}{\ensuremath{\bar{\mathbb E}}}{\ensuremath{\bar{\mathbb E}\left[ #1 \right]}}}
+% David changed the command below to the one above
+%\newcommand{\PE}[1][]{\ifthenelse{\equal{#1}{}}{\ensuremath{\operatorname{E}}}{\ensuremath{\operatorname{E}\left[ #1 \right]}}}
+\newcommandx{\PPdoup}[2][1=,2=]{\mathbb{P}_{#1}^{#2}} % doup comme down-up
+\newcommandx{\PEdoup}[2][1=,2=]{\mathbb{E}_{#1}^{#2}}
+
+\newcommandx{\bCPE}[3][1=]
+{\bar{{\mathbb E}}_{#1}\left[\left. #2 \, \right| #3 \right]}
+\newcommandx{\CPbP}[3][1=]{\bar{{\mathbb P}}_{#1}\left(\left. #2 \, \right| #3 \right)} %%%% proba conditionnelle
+
+\newcommandx{\CPhE}[3][1=]
+{\hat{{\mathbb E}}_{#1}\left[\left. #2 \, \right| #3 \right]}
+\newcommandx{\CPhP}[3][1=]{\hat{{\mathbb P}}_{#1}\left(\left. #2 \, \right| #3 \right)} %%%% proba conditionnelle
+\newcommandx{\CPE}[3][1=]{{\mathbb E}_{#1}\left[\left. #2 \, \right| #3 \right]} %%%% esperance conditionnelle
+\newcommand{\CPP}[3][]
+{\ifthenelse{\equal{#1}{}}{{\mathbb P}\left(\left. #2 \, \right| #3 \right)}{{\mathbb P}_{#1}\left(\left. #2 \, \right | #3 \right)}}
+\newcommand{\bCPP}[3][]
+{\ifthenelse{\equal{#1}{}}{{\bar{\mathbb P}}\left(\left. #2 \, \right| #3 \right)}{{\bar{\mathbb P}}_{#1}\left(\left. #2 \, \right | #3 \right)}}
+
+\newcommand{\barP}{\bar{P}}
+\newcommand{\barV}{\bar{V}}
+\newcommand{\barC}{\bar{C}}
+\newcommand{\barcc}{\bar{C}^c}
+\newcommand{\barb}{\bar{b}}
+
+
+
+
+\newcommandx{\PVar}[1][1=]{\ensuremath{\operatorname{Var}_{#1}}}
+\newcommand{\CPVar}[2]{\ensuremath{\operatorname{Var}\left(\left. #1 \, \right| #2 \right)}}
+\newcommandx{\PCov}[1][1=]{\ensuremath{\operatorname{Cov}_{#1}}}
+\newcommand{\PCorr}{\ensuremath{\operatorname{Corr}}}
+
+%%%% les lois
+\newcommand{\gauss}{\ensuremath{\operatorname{N}}}
+\newcommand{\gammadist}{\ensuremath{\operatorname{\Gamma}}}
+\newcommand{\cauchy}{\ensuremath{\operatorname{C}}}
+\newcommand{\lognorm}{\ensuremath{\operatorname{LN}}}
+\newcommand{\dirich}{\ensuremath{\operatorname{Dir}}}
+\newcommand{\negexp}{\ensuremath{\operatorname{Exp}}}
+\newcommand{\gam}{\ensuremath{\operatorname{Ga}}}
+\newcommand{\invgam}{\ensuremath{\operatorname{IG}}}
+\newcommand{\unif}{\ensuremath{\operatorname{Unif}}}
+\newcommand{\bin}{\ensuremath{\operatorname{Bin}}}
+\newcommand{\betad}{\ensuremath{\operatorname{Be}}}
+\newcommand{\poiss}{\ensuremath{\operatorname{Pn}}}
+\newcommand{\mult}{\ensuremath{\operatorname{Mult}}}
+\newcommandx{\ber}[1][1=\epsilon]{\ensuremath{\operatorname{b}_{#1}}}
+
+
+
+
+\newcommand\distgeneric{\boldsymbol\rho}
+\newcommand{\tvdistsym}{\ensuremath{\mathrm{d}_{\mathrm{TV}}}}
+\newcommandx{\tvdist}[3][1=]{\ensuremath{\mathrm{d}^{#1}_{\mathrm{TV}}}(#2,#3)}
+\newcommand{\tvnorm}[1]{\ensuremath{\left\|#1\right\|_{\mathrm{TV}}}}
+\newcommand{\Vnorm}[2]{\ensuremath{\left\|#1\right\|_{\mathrm{#2}}}}
+\newcommand{\VnormMeas}[2]{\ensuremath{\left\|#1\right\|_{#2}}}
+\newcommandx{\VnormFunc}[3][1=]{\ensuremath{\left|#2\right|_{{#3}}^{#1}}}
+\newcommand{\blnorm}[1]{\ensuremath{\left\|#1\right\|_{\mathrm{BL}}}}
+\newcommand{\dbl}[2]{\ensuremath{d_{\mathrm{BL}}(#1,#2)}}
+\newcommandx{\oscnorm}[3][1=,3=]%
+{\operatorname{osc}^{#1}_{#3}\left(#2\right)}
+
+
+\def\neighborhood{\mathcal{V}}
+
+%%%%%%%%%%%%%%%%%%%%% class of functions
+% ARGUMENT DE TYPE X
+\newcommandx\functionset[3][1=,3=]{
+\ifthenelse{\equal{#1}{c}}
+{\mathrm{C}(\mathsf{#2})}%fonctions continues
+{\ifthenelse{\equal{#1}{bc}}{\mathrm{C}^{#3}_b(\mathsf{#2})}%fonctions continues born\'{e}es
+{\ifthenelse{\equal{#1}{u}}{\mathrm{U}^{#3}(\mathsf{#2})}%fonctions uniform\'{e}ment continues
+{\ifthenelse{\equal{#1}{bu}}{\mathrm{U}_b^{#3}(\mathsf{#2})}%fonctions uniform\'{e}ment continues born\'{e}es
+{\ifthenelse{\equal{#1}{l}}{\mathrm{Lip}_{#3}(\mathsf{#2})}%fonctions lipschitz
+{\ifthenelse{\equal{#1}{cz}}{\mathrm{C}_0^{#3}(\mathsf{#2})}
+{\ifthenelse{\equal{#1}{k}}{\mathrm{C}_c^{#3}(\mathsf{#2})} %fonctions continues à support compact
+{\ifthenelse{\equal{#1}{bl}}{\mathrm{Lip}_{b#3}(\mathsf{#2})}%fonctions lipschitz born\'{e}es
+{\ifthenelse{\equal{#1}{ldp}}{\mathrm{Lip}_{#3}(\mathsf{#2})}%fonctions lipschitz à poids
+%{\mathbb{F}_{#1}^{#3}(\mathsf{#2},\mathcal{#2})}%le reste
+{\mathbb{F}_{#1}^{#3}(\mathsf{#2})}%le reste, j imagine que la ligne du dessus comporte un \mathcal{#2} de trop...
+}}}}}}}}}
+
+\newcommand{\functionsetalone}[3]{\mathbb{F}_{#1}\lr{#2,#3}}
+
+% IDEM, ARGUMENT DE TYPE \Xset,\borel(\Xset)
+\newcommandx\functionsetarg[2][1=]{\ifthenelse{\equal{#1}{c}}{\mathrm{C}(\mathsf{#2})}%fonctions continues
+{\ifthenelse{\equal{#1}{bc}}{\mathrm{C}_b(#2)}%fonctions continues born\'{e}es
+{\ifthenelse{\equal{#1}{u}}{\mathrm{U}(#2)}%fonctions uniform\'{e}ment continues
+{\ifthenelse{\equal{#1}{bu}}{\mathrm{U}_b(#2)}%fonctions uniform\'{e}ment continues born\'{e}es
+{\ifthenelse{\equal{#1}{cz}}{\mathrm{C}_0(#2)}
+{\ifthenelse{\equal{#1}{k}}{\mathrm{C}_c(#2)}%fonctions continues à support compact
+{\ifthenelse{\equal{#1}{l}}{\mathrm{Lip}(#2)}%fonctions lipschitz
+{\ifthenelse{\equal{#1}{bl}}{\mathrm{Lip}_b(#2)}%fonctions lipschitz born\'{e}es
+{\mathbb{F}_{#1}(#2)}%le reste
+}}}}}}}}
+
+%IDEM, SANS ARGUMENT
+\newcommandx\functionsetspec[1][1=]{
+\ifthenelse{\equal{#1}{c}}{\mathrm{C}}%fonctions continues
+{\ifthenelse{\equal{#1}{bc}}{\mathrm{C}_b}%fonctions continues born\'{e}es
+{\ifthenelse{\equal{#1}{u}}{\mathrm{U}}%fonctions uniform\'{e}ment continues
+{\ifthenelse{\equal{#1}{bu}}{\mathrm{U}_b}%fonctions uniform\'{e}ment continues born\'{e}es
+{\ifthenelse{\equal{#1}{l}}{\mathrm{Lip}}%fonctions lipschitz
+{\ifthenelse{\equal{#1}{bl}}{\mathrm{Lip}_b}%fonctions lipschitz born\'{e}es
+{\mathbb{F}_{#1}}%le reste
+}}}}}}
+
+%%%%%%%%%%  espaces Lp
+\newcommand\lpspace[2]{\mathcal{L}^{#1}(#2)} %%%% espace $\mathcal{L}^p(\mu)$
+
+% abreviations of lipschitz, bounded lipschitz
+\newcommand{\lipabb}{\mathrm{Lip}}
+\newcommandx{\blabb}[1][1=\distance]{\mathrm{BL}(#1)}
+\newcommandx{\normLip}[2][1=\distance]{\left|#2\right|_{\mathrm{Lip}(#1)}}
+\newcommandx{\normBL}[2][1=\distance]{\left|#2\right|_{\mathrm{BL}(#1)}}
+% Set of Lipschitz functions on X: \functionset[\lipabb]{X}, bounded lipschitz:\functionset[\blabb]{X}
+%\newcommandx\lipshitzset[3][1=]{\mathbb{L}_{#1}(#2,#3)}
+
+\def\radon{\mathrm{r}}
+\newcommandx\measureset[3][1=\mathrm{s},3=]{\mathbb{M}^{#3}_{#1}(\mathcal{#2})}
+\newcommandx\measuresetmetric[2][1=1]{\mathbb{M}_{#1}(\mathcal{B}(\mathsf{#2}))}  %%% espace de mesures sur un metric muni de sa tribu borelienne
+\newcommandx\measuresetspec[1][1=\mathrm{s}]{\mathbb{M}_{#1}}
+\newcommandx\measuresetarg[3][1=\mathrm{s},3=]{\mathbb{M}_{#3}^{#1}(#2)}
+\newcommandx\ball[3][1=]{\mathrm{B}_{#1} (#2,#3)}
+
+
+\newcommandx\bernoulli[1][1=\epsilon]{\operatorname{Be}({#1})}
+
+
+\newcommandx\spacexd[3][1=\distance,3=]{\mathbb{S}_{#3}(\mathsf{#2},#1)}
+
+%%%%%%%%%%%%%% used in Chap erg Ele%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% NORMS ON MEASURES   %%%%%%%%%%%%%%%%%%%%%
+\newcommandx{\wassnorm}[2][1]{\lVert #2\rVert_{#1}}
+
+\newcommand{\marginal}[2]{\mathcal{M}\left(#1,#2\right)}
+\newcommand\atom{\alpha}
+
+\newcommandx{\Vdist}[3][1=V]{\mathrm{d}_{#1}(#2,#3)}
+\newcommandx{\Vdistvide}[1][1=V]{\mathrm{d}_{#1}}
+\newcommandx{\wassersym}[1][1=\distance]{\mathbf{W}_{#1}}
+\newcommandx{\wasser}[4][1=\distance,4=]{\mathbf{W}_{#1}^{#4}\left(#2,#3\right)}
+\newcommand{\hammingdist}{\distance_H}
+\newcommandx{\prohosym}[1][1=\distance]{{\bm\rho}_{#1}}
+\newcommandx{\proho}[4][1=\distance,4=]{{\bm\rho}_{#1}^{#4}\left(#2,#3\right)}
+\newcommandx{\dualblsym}[1][1=\distance]{{\bm\beta}_{#1}}
+\newcommandx{\dualbl}[4][1=\distance,2=]{{\bm\beta}^{#2}_{#1}\left(#3,#4\right)}
+\newcommandx{\duallipsym}[1][1=\distance]{{\bm\gamma}_{#1}}
+\newcommandx{\duallip}[4][1=\distance,2=]{{\bm\gamma}^{#2}_{#1}\left(#3,#4\right)}
+\def\couplingmeasure{\mathcal{C}}
+
+\newcommandx{\pscal}[3][3=]{\ifthenelse{\equal{#3}{}}{\left\langle #1, #2 \right\rangle}{\left\langle #1, #2 \right\rangle_{\operatorname{L}^2(#3)}}}
+\newcommandx{\mscal}[3][3=]{\ifthenelse{\equal{#3}{}}{\left( #1, #2 \right)}{\left( #1, #2 \right)_{{\measuresetarg[2]{#3}}}}}
+
+\newcommandx{\dualnormBL}[2][1=d]{\|#2\|_{\mathrm{BL}(#1)}}
+
+\newcommand{\dobrush}{\mathsf{\Delta}}
+\newcommandx{\dobru}[3][1=,3=]{\dobrush_{#1}^{#3}\left( #2\right)}  %%% dobrushin coefficient
+\newcommandx{\tildedobru}[3][1=,3=]{\tilde{\dobrush}_{#1}^{#3}\left( #2\right)}  %%% modified dobrushin coefficient, for the proof
+
+\newcommand{\distmeasureset}[2]{\mathbb{S}(#1,#2)}
+\newcommand{\Uset}{\mathrm U}
+\newcommand{\Usigma}{\mathcal U}
+\newcommand{\dist}{\Upsilon}
+
+%%%%%%%%%%%%% end notations used in chap erg ele %%%%%%%%%
+
+
+%%%% probability convergence
+\newcommand{\weaklim}{\ensuremath{\stackrel{{w}}{\Rightarrow}}}
+\newcommand{\starweaklim}{\ensuremath{\stackrel{\textrm{w}^*}{\Rightarrow}}}
+\newcommand{\vaguelim}{\ensuremath{\stackrel{\textrm{vague}}{\Rightarrow}}}
+
+\newcommand{\eqd}{\ensuremath{\stackrel{\mathrm{law}}{=}}}   %%%% égalité en loi
+\newcommandx{\plim}[1]{\ensuremath{\stackrel{#1\mbox{-}\text{prob}}{\longrightarrow}}}
+\newcommandx{\dlim}[1]{\ensuremath{\stackrel{#1}{\Longrightarrow}}}
+\newcommandx{\aslim}[1]{\ensuremath{\stackrel{#1 \mbox{-} \text{a.s.}}{\longrightarrow}}}
+
+\newcommand{\mcb}[1]{\ensuremath{\mathcal{B}\left(#1\right)}}
+\newcommand{\existLim}[1][]{\underset{#1}{\rightsquigarrow}} % means that the limit exists
+
+%%%% Ergodicity and mixing
+\def\opinv{\ensuremath{\operatorname{T}}}
+\def\invarmes{\ensuremath{\mathbb{P}}}
+\def\systdyn{\ensuremath{(\Omega, \mathcal{B}, \invarmes, \opinv)}}
+\def\probaspace{\ensuremath{(\Omega, \mathcal{B}, \invarmes)}}
+
+
+%%%%%%%%%%%%%%%
+% Markov Chain and HMM notations
+% Hidden states and observations
+\newcommand{\X}{\ensuremath{X}}
+\newcommand{\Y}{\ensuremath{Y}}
+\newcommand{\x}{\ensuremath{x}}
+\newcommand{\Aset}{\ensuremath{\mathsf{A}}}
+\newcommand{\Cset}{\ensuremath{\mathbb{C}}}
+\newcommand{\Xset}{\ensuremath{\mathsf{X}}}
+
+\newcommand{\Asigma}{\ensuremath{\mathcal{A}}}
+\newcommand{\Xsigma}{\ensuremath{\mathcal{X}}}
+\newcommand{\Eset}{\ensuremath{\mathsf{E}}}
+\newcommand{\Esigma}{\ensuremath{\mathcal{E}}}
+\newcommand{\Hset}{\ensuremath{\mathsf{H}}}
+\newcommand{\Hsigma}{\ensuremath{\mathcal{H}}}
+
+\newcommand{\Xchain}{\ensuremath{\sequence{X}[k][\nset]}}
+\newcommand{\Xproc}{\ensuremath{\sequence{X}[k][\nset]}}
+\newcommand{\Xprocshort}{\ensuremath{\{X_k\}}}
+\newcommand{\Yset}{\ensuremath{\mathsf{Y}}}
+\newcommand{\Ysigma}{\ensuremath{\mathcal{Y}}}
+\newcommand{\Yproc}{\ensuremath{\{Y_k\}_{k\geq 0}}}
+\newcommand{\Yprocshort}{\ensuremath{\{Y_k\}}}
+\newcommand{\Yprocone}{\ensuremath{\{Y_k\}_{k\geq 1}}} % for order chapter
+\newcommand{\XYchain}{\ensuremath{\{X_k,Y_k\}_{k\geq 0}}}
+\newcommand{\XYchainshort}{\ensuremath{\{X_k,Y_k\}}}
+\newcommand{\XYproc}{\ensuremath{\{X_k,Y_k\}_{k\geq 0}}}
+\newcommand{\XYprocshort}{\ensuremath{\{X_k,Y_k\}}}
+\newcommand{\Zset}{\ensuremath{\mathsf{Z}}}
+\newcommand{\Zsigma}{\ensuremath{\mathcal{Z}}}
+\newcommand{\Tset}{\ensuremath{\mathsf{T}}}
+\newcommand{\Tsigma}{\ensuremath{\mathcal{T}}}
+
+
+
+\newcommand{\crochet}[1]{\ensuremath{\langle #1 \rangle}}
+
+
+\newcommand{\chunk}[4][]%
+{\ifthenelse{\equal{#1}{}}{\ensuremath{{#2}_{#3:#4}}}{\ensuremath{#2^#1}_{#3:#4}}
+}
+%%%%%%%%%%%%%%
+% Filtering and Smoothing notations
+\newcommand{\pred}[3][]%
+{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\phi_{#2|#3}}}{\ensuremath{\phi_{#1,#2|#3}}}%
+}
+\newcommand{\adjfunc}[4][]
+{\ifthenelse{\equal{#1}{}}{\ifthenelse{\equal{#4}{}}{\vartheta_{#2}}{\vartheta_{#2}(#4)}}
+{\ifthenelse{\equal{#1}{smooth}}{\ifthenelse{\equal{#4}{}}{\tilde{\vartheta}_{#2}}{\tilde{\vartheta}_{#2}(#4)}}
+{\ifthenelse{\equal{#1}{fully}}{\ifthenelse{\equal{#4}{}}{\vartheta^*_{#2}}{\vartheta^*_{#2}(#4)}}{\mathrm{erreur}}}}}
+
+
+
+\newcommand{\smwght}[3]{\tilde{\omega}_{#1|#2}^{#3}}
+\newcommand{\smwghtfunc}[2]{\tilde{\omega}_{#1|#2}}
+
+
+\newcommand{\post}[3][]%
+{
+\ifthenelse{\equal{#1}{}}{\ensuremath{\phi_{#2|#3}}}%
+{\ifthenelse{\equal{#1}{hat}}{\ensuremath{\phi^{N}_{#2|#3}}}
+{\ifthenelse{\equal{#1}{tilde}}{\ensuremath{\tilde{\phi}^{N}_{#2|#3}}}
+{\ifthenelse{\equal{#1}{tar}}{\ensuremath{\phi^{N,\mathrm{t}}_{#2|#3}}}}
+}
+}
+}
+
+\newcommand{\filt }[2][]%
+{
+\ifthenelse{\equal{#1}{}}{\ensuremath{\phi_{#2}}}%
+{\ifthenelse{\equal{#1}{hat}}{\ensuremath{\phi^{N}_{#2}}}
+{\ifthenelse{\equal{#1}{tilde}}{\ensuremath{\tilde{\phi}^{N}_{#2}}}
+{\ifthenelse{\equal{#1}{tar}}{\ensuremath{\phi^{N,\mathrm{t}}_{#2}}}
+{\ifthenelse{\equal{#1}{aux}}{\ensuremath{\phi^{N,\mathrm{a}}_{#2}}}
+}
+}
+}
+}
+}
+
+\newcommand{\unfilt}[2][]%
+{
+\ifthenelse{\equal{#1}{}}{\ensuremath{\gamma_{#2}}}%
+{\ifthenelse{\equal{#1}{hat}}{\ensuremath{\gamma^{N}_{#2}}}
+{\ifthenelse{\equal{#1}{tilde}}{\ensuremath{\tilde{\gamma}^{N}_{#2}}}
+{\ifthenelse{\equal{#1}{tar}}{\ensuremath{\gamma^{N,\mathrm{t}}_{#2}}}
+{\ifthenelse{\equal{#1}{aux}}{\ensuremath{\gamma^{N,\mathrm{a}}_{#2}}}
+}
+}
+}
+}
+}
+
+\newcommand{\bPhi}{\boldsymbol{\Phi}}
+\newcommand{\bespilon}{\boldsymbol{\epsilon}}
+
+\def\cXset{\check{\Xset}}
+\def\cXsigma{\check{\Xsigma}}
+\def\calpha{{\check{\alpha}}}
+\def\cP{\check{P}}
+\def\cPP{\check{\PP}}
+\def\cPE{\check{\PE}}
+
+\newcommand{\lagvector}[3]{#1_{#2},\dots,#1_{#3}}
+
+
+
+%%%%%%%%%%%%%% Particle Filtering Notations
+\newcommand{\epart}[2][]
+{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\xi^{#2}}}{\ensuremath{\xi^{#2}_{#1}}}
+}
+\newcommand{\etpart}[2][]
+{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\tilde{\xi}^{#2}}}{\ensuremath{\tilde{\xi}^{#2}_{#1}}}
+}
+\newcommand{\etwght}[2][]{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\tilde{\omega}^{#2}}}{\ensuremath{\tilde{\omega}^{#2}_{#1}}}
+}
+\newcommand{\ewght}[2][]{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\omega^{#2}}}{\ensuremath{\omega^{#2}_{#1}}}
+}
+\newcommand{\NISE}[4][]%
+{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\tilde{#2}^{\scriptstyle \mathrm{IS}}_{#4}\left(#3 \right)}}{\ensuremath{\tilde{#2}^{\scriptstyle \mathrm{IS}}_{#1,#4}\left(#3 \right)}}%
+}
+\newcommand{\ISE}[4][]%
+{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\widehat{#2}^{\scriptstyle  \mathrm{IS}}_{#4} \left(#3 \right)}}{\ensuremath{\widehat{#2}^{\scriptstyle  \mathrm{IS}}_{#1,#4} \left(#3 \right)}}%
+}
+\newcommand{\SIRE}[4][]%
+{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\hat{#2}^{\scriptstyle  \mathrm{SIR}}_{#4} \left(#3 \right)}}{\ensuremath{\hat{#2}^{\scriptstyle  \mathrm{SIR}}_{#1,#4} \left(#3 \right)}}%
+}
+\newcommand{\MCE}[3]%
+{
+{\ensuremath{\hat{#1}^{\scriptstyle  \mathrm{MC}}_{#3} \left(#2 \right)}}%
+}
+\newcommand{\KUN}{\ensuremath{Q}}
+\newcommand{\kun}{\ensuremath{\ell}}
+\newcommand{\KISS}{\ensuremath{R}}
+\newcommand{\kiss}{\ensuremath{r}}
+\newcommand{\XinitTAR}{\ensuremath{\phi_{0}}}
+\newcommand{\TAR}[1]{\ensuremath{\phi_{0:#1|#1}}}
+\newcommand{\lhood}[2][]%
+{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\mathrm{L}_{#2}}}{\ensuremath{\mathrm{L}_{#1,#2}}}%
+}
+
+
+
+\newcommand{\XinitIS}{\ensuremath{\rho_0}}
+\newcommand{\ISD}[1]{\ensuremath{\rho_{0:#1}}}
+\newcommand{\ETAR}[1]{\ensuremath{\hat{\phi}_{0:#1|#1}}}
+\newcommandx\weightfunc[1][1=]{\operatorname{w}_{#1}}
+
+% Optimal transition kernel
+\newcommand{\KOPT}{\ensuremath{T}}
+\newcommand{\kopt}{\ensuremath{t}}
+% Normalizing constant of the optimal kernel
+\newcommand{\NormOPT}{\ensuremath{\gamma}}
+\newcommand{\URoot}{\ensuremath{R}}
+\newcommand{\VRoot}{\ensuremath{S}}
+\newcommand{\VCov}[1][]%
+{%
+\ifthenelse{\equal{#1}{}}{\VRoot \VRoot^t}{\VRoot_{#1} \VRoot^t_{#1}}%
+}
+\newcommand{\KGF}[1]{\ensuremath{K_{#1}}}
+% Coefficients of variation
+\def\CV{\mathrm{CV}}
+\newcommand{\ebwght}[2]{\ensuremath{\bar{\omega}_{#1}^{#2}}}
+\newcommand{\proppart}[2]{\ensuremath{\tilde{\xi}_{#1}^{#2}}}
+\newcommand{\PROPTAR}[1]{\ensuremath{\tilde{\phi}_{0:#1|#1}}}
+\newcommand{\sumweight}[2][]{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\Omega_{#2}}}{\ensuremath{\Omega_{#2}^{(#1)}}}}
+\newcommand{\epartset}{\ensuremath{\mathsf{E}}}
+\newcommand{\epartsigma}{\ensuremath{\mathcal{E}}}
+\newcommand{\etpartset}{\ensuremath{\mathsf{\tilde{E}}}}
+\newcommand{\etpartsigma}{\ensuremath{\mathcal{\tilde{E}}}}
+\def\stdnormfunc{\sigma}
+\def\LTAR{Q}
+\newcommand\ntimes[1]{\eta_{#1}}
+\newcommand\ntimesres[1]{H_{#1}}
+\newcommand{\partfrac}[1]{\left\langle #1 \right\rangle}
+\newcommand{\mcfpart}[2][]{%
+\ifthenelse{\equal{#1}{}}{{\mathcal{F}_{#2}}}{\mathcal{F}_{#1}^{#2}}%
+}
+\newcommand{\Afunc}{\ensuremath{a}}
+\newcommand{\Bfunc}{\ensuremath{b}}
+\newcommand{\PX}{\ensuremath{W}}
+%\newcommand{\px}{\ensuremath{w}}
+\newcommand{\PXset}{\ensuremath{\mathsf{W}}}
+\newcommand{\PXsigma}{\ensuremath{\mathcal{W}}}
+\newcommand{\DX}{\ensuremath{I}}
+\newcommand{\dx}{\ensuremath{i}}
+\newcommand{\DXset}{\ensuremath{\mathsf{I}}}
+\newcommand{\DXsigma}{\ensuremath{\mathcal{I}}}
+\newcommand{\order}{\ensuremath{r}}
+\newcommand{\tsumweight}[2][]{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\widetilde{\Omega}_{#2}}}{\ensuremath{\widetilde{\Omega}_{#2}^{(#1)}}}}
+
+\newcommand{\BK}[1]{\mathrm{B}_{#1}}
+
+\renewcommand{\aleph}{M_0}
+\renewcommand{\beth}{M_1}
+
+
+\newcommand{\mynegspace}{\hspace{-0.12em}}
+\newcommand{\lvvvert}{\rvert\mynegspace\rvert\mynegspace\rvert}
+\newcommand{\rvvvert}{\rvert\mynegspace\rvert\mynegspace\rvert}
+\newcommand{\triple}[1]{\lvvvert#1\rvvvert}
+\renewcommandx{\ker}[1][1=]{\mathrm{Ker}^{#1}}
+\newcommand{\vect}{\mathrm{Span}}
+\newcommandx{\im}[1][1=]{\mathrm{Im}^{#1}}
+\newcommand{\operp}{\oplus}
+
+
+\newcommandx{\rtis}[2][1=m]{\sigma_{#2,#1}}
+\def\rti{\sigma}
+\def\hti{\tau}
+\def\visite{\tau}
+
+\newcommand{\exit}[1]{T_{#1}}
+
+\def\deltaK{d_{\cal K}}
+
+\newcommand{\ensemble}[2]{\left\{#1\,:\eqsp #2\right\}}
+\newcommand{\set}[2]{\ensemble{#1}{#2}}
+
+\newcommand{\projo}{\Phi}
+
+\newcommand{\lsc}{lower semi-continuous}
+\newcommand{\usc}{upper semi-continuous}
+\newcommand{\supp}{\mathrm{supp}}
+
+
+\newcommand{\minmeas}[2]{#1 \wedge #2}
+\newcommand{\maxmeas}[2]{#1 \vee #2}
+\newcommandx{\law}[2][1=\PP]{\mathcal{L}_{#1}\left(#2\right)}
+
+\newcommand\diagonal{\Delta} %%%% diagonale de l'espace produit $\Xset\times\Xset$; notation à  changer!!!
+
+\def\sign{\mathrm{sign}}
+
+\newcommand{\done}{\textcolor{red}{$\blacktriangleright$ Done!}}
+
+
+\newcommandx\stochdom[1][1=\PP]{ \unlhd_{#1} }
+
+
+\newcommand\weakstarconv{weak*}
+\newcommandx{\weakstar}[1][1=weak]{{#1}*}
+
+
+%%%%%%%%%%%%%%%%%%%%% sup essentiel
+
+\newcommand\esssup[2]{\left\Vert #2 \right\Vert_{\infty,#1}}
+\newcommandx\lpnorm[3][1=p]{\left\Vert #3 \right\Vert_{\operatorname{L}^{#1}(#2)}}
+\newcommandx\mpnorm[3][1=p]{\left\Vert #3 \right\Vert_{{\measuresetarg[#1]{#2}}}}
+
+%%%%%%%%% parties positives
+
+\newcommand\pospart[1]{#1^+}
+\newcommand\negpart[1]{#1^-}
+\newcommand\logplus{\pospart{\log}}
+\newcommand\decreasing{decreasing\ }
+\newcommand\increasing{increasing\ }
+\newcommand\nondecreasing{non decreasing}
+\newcommand\nonincreasing{non increasing}
+
+\renewcommand{\mod}[2]{#1\, [#2]}
+\newcommand{\alert}[1]{\textcolor{red}{#1}}
+\newcommandx{\Sfr}[2][2=k]{\sum_{#2=0}^{#1-1} r(#2) f(X_{#2})}
+\newcommandx{\taboo}[3][1=,3=]{\leftidx{_#1^{#3}}{#2}}
+\newcommand{\rate}{\beta}
+\newcommand{\trate}{\tilde{\beta}}
+
+
+
+
+%%%% sommes partielles
+%\newcommand\prim[1]{#1^0} on n a plus besoin de cette commande car j ai introduis la commande \rzero
+
+\newcommand{\lr}[1]{\left( #1 \right)}
+\newcommand{\lrb}[1]{\left[ #1 \right]}
+\newcommand{\lrcb}[1]{\left\{ #1 \right\}}
+\newcommand{\rzero}{r^0}
+\newcommand{\rone}{r^*}
+
+
+\newcommand\inftyset[1]{#1_+}
+\newcommand\inftynb[1]{#1_\infty}
+
+
+\newcommand\rseq{r}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% mesures pour la formule de kac
+
+\def\muczero{\mu_C^0}
+\def\mucun{\mu_C^1}
+\newcommand{\mukac}[3]{#1_#2^#3}   %%%% ex: $\mu_g^0$
+
+%%%%%%%%%%% suites sous géométriques
+
+\def\quasistationaireseq{\Lambda_1}
+\def\autoanihilseq{\Lambda_2}
+\def\bautoanihilseq{\bar{\Lambda}_2}
+\def\logsubadditiveseq{\mathcal{S}}
+\def\blogsubadditiveseq{\bar{\mathcal{S}}}
+\def\stonewaingerseq{\Lambda_0}
+
+
+
+\newcommandx\multidrift[5][1={\{V_n\}},2=f,3=r,4=b,5=C]{\ensuremath{\operatorname{D}_{\mathrm{SG}}(#1,#2,#3,#4,#5)}} %%% sequence of drift conditions
+
+\newcommandx\subgeometricdrift[4][1=V,2=\phi,3=b,4=C]{\ensuremath{\operatorname{D}_{\mathrm{SG}}(#1,#2,#3,#4)}} %%% subgeometric drift condition
+\newcommandx\subgeometricdriftwset[3][1=V,2=\phi,3=b]{\ensuremath{\operatorname{D}_{\mathrm{SG}}(#1,#2,#3)}} %%% subgeometric drift condition
+
+
+
+\newcommandx\geometricdrift[4][1=V,2=\lambda,3=b,4=C]{\ensuremath{\operatorname{D}_{\mathrm{G}}(#1,#2,#3,#4)}} %%% subgeometric drift condition
+\newcommandx\geometricdriftwset[3][1=V,2=\lambda,3=b]{\ensuremath{\operatorname{D}_{\mathrm{G}}(#1,#2,#3)}} %%% geometric drift condition
+% \newcommandx*\multdrift[5][1={\{V_n\}},2=f,3=r,4=b,5=C,usedefault]{\ensuremath{D(#1,#2,#3,#4,#5)}}
+%%% la meme chose pour remplacer les valeurs par defaut par [] lorsqu'on en change seulement quelques unes
+
+
+\def\wfdeltac{W^{f,\delta}_C} %%%%% solution minimale du drift geometrique
+\newcommand{\wfrc}[1]{W_{#1,C}^{\tiny{f,r}}} %%%%% solution minimale du drift sous-geometrique
+
+\def\atomd{\mathsf{a}}
+\def\atomdb{\mathsf{b}}
+
+\newcommand{\travaux}{\rd{Travaux en cours}}
+\newcommand{\restker}[1]{Q_{#1}}
+\newcommand{\restmes}[2]{#1\mid_{#2}}
+\newcommand{\mustar}{\mu^*}
+
+\def\barf{\bar{f}_\epsilon}
+
+%%%%%%%%%%%%% maximal coupling
+\newcommand{\restric}[2]{\left(#1\right)_{#2}}
+\newcommand{\add}[2]{_{#2}^{\langle #1\rangle}} % attribut
+
+\def\spec{\operatorname{spec}}
+\def\monplus{\stackrel{\bot}{\oplus}}
+\def\spectradius{\mathrm{Sp.Rad.}}
+\def\range{\operatorname{range}}
+\def\distance{\mathrm{{d}}}
+\def\cost{\mathrm{{c}}}
+
+%%%%%%%%%%% newcommandes polyXtremes
+
+\newcommandx\invcdf[1][1=X]{F_{#1}^{\leftarrow}}
+\newcommandx\cdf[1][1=X]{F_{#1}}
+\newcommandx\compcdf[1][1=X]{\overline{F}_{#1}}
+\newcommand{\calS}{\mathcal S}
+\newcommand{\calC}{\mathcal C}
+\newcommand{\calB}{\mathcal B}
+\newcommand{\eqlaw}{\stackrel{\mathcal L}{=}}
+\newcommand{\eqLaw}{\stackrel{\mathcal L}{=}}
+\newcommand{\Xn}[1]{X_{(#1,n)}}
+\newcommand{\Un}[1]{U_{(#1,n)}}
+\newcommand{\Vn}[1]{V_{(#1,n)}}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand{\mcS}{\mathcal S}
+\newcommand{\ma}[1]{\hat{#1}}
+\newcommand{\mi}[1]{\check{#1}}
+\newcommandx\odr[3][1=X,3=n]{#1_{(#2,#3)}}
+\def\mcL{{\mathcal L}_0}
+\def\mcl{{\mathcal L}}
+\newcommand{\domn}[1]{{\mathcal D}\lr{#1}}
+\newcommand{\nom}[1]{\hfill \mbox{ $(\blacktriangleright$\textsc{#1}$)$}}
+\newcommand{\sgn}{\mathrm{sgn}}
+\newcommand{\Lmiss}{L_{\mathrm{miss}}}
+
+\newcommand{\Mplus}{M^+_{d}}
+\renewcommand{\det}{\mathrm{det}}
+
+
+
+
