@@ -265,6 +265,19 @@ since $\mathbb{E}[\varepsilon] = 0$. On the other hand, a standard bias-variance
 \end{align*}
 
 
+\begin{proposition}
+In the well-specified setting, 
+$$
+\bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] = \sigma_\star^2 \frac{d}{n}\eqsp.
+$$
+\end{proposition}
+
+\begin{proof}
+By Proposition~\ref{prop:least:squares:full:rank}, $\bE[\widehat \param_n] = \param_\star$ so that 
+$$
+\bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] = \bE\left[ \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)\right]\eqsp.
+$$
+\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%ù%
