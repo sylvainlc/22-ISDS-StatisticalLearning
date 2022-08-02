@@ -89,7 +89,7 @@ In a linear regression setting, we assume that $\paramset = \rset^d$ and that  f
 %In this section, it is assumed that $\bE[\varepsilon] = 0$ and $\bE[\varepsilon \varepsilon^T] = \sigma_{\star}^2 I_n$ and that the matrix $X$ has full rank, i.e. the columns of $X$ are linearly independent. 
 The least squares estimate is defined as a solution to
 \[
-\widehat \param_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|^2\eqsp.
+\widehat \param_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|_2^2\eqsp.
 \]
 In a well-specified setting, we assumed that  for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. random variables in $\rset^d$. Let  $\varepsilon\in\rset^d$  be the random vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $\varepsilon$  is $\varepsilon_i$. The model is then written
 \[
@@ -98,16 +98,16 @@ Y = X \param_{\star} + \varepsilon\eqsp.
 \begin{shaded}
 \begin{proposition}
 \label{prop:least:squares:full:rank}
-If the matrix $X$ has full rank, then, $\widehat \beta_n = (X^\top X)^{-1}X^\top Y$. In the well-specified setting, this  is an unbiased estimator of $\param_\star$ and it satisfies $\bV[\widehat \param_n] = \sigma_\star^2 (X^\top X)^{-1}$.
+If the matrix $X$ has full rank, then, $\widehat \param_n = (X^\top X)^{-1}X^\top Y$. In the well-specified setting, this  is an unbiased estimator of $\param_\star$ and it satisfies $\bV[\widehat \param_n] = \sigma_\star^2 (X^\top X)^{-1}$.
 \end{proposition}
 \end{shaded}
 
 \begin{proof}
 For all $\param\in\rset^d$,
 \[
- \|Y - X\param\|^2 = \|Y\|^2 + \param^\top X^TX\param + 2Y^\top X\param\eqsp.
+ \|Y - X\param\|_2^2 = \|Y\|_2^2 + \param^\top X^\top X\param + 2Y^\top X\param\eqsp.
 \]
-The function $\ell:\param \mapsto\|Y\|^2 + \param^\top X^\top X\param + 2Y^\top X\param$ is convex and for all $\param\in\rset^d$,
+The function $\ell:\param \mapsto\|Y\|_2^2 + \param^\top X^\top X\param + 2Y^\top X\param$ is convex and for all $\param\in\rset^d$,
 \[
 \nabla \ell (\param) = 2X^\top X\param + 2 X^\top Y\eqsp.
 \]
@@ -128,30 +128,30 @@ In addition,
 \begin{shaded}
 \begin{proposition}
 \label{prop:least:squares:full:rank}
-In the case where $\varepsilon \sim \mathcal{N}(0,\sigma_\star^2I_n)$, the random variable
+In the well-specified setting where $\varepsilon \sim \mathcal{N}(0,\sigma_\star^2I_n)$, the random variable
 \[
-\widehat \sigma^2_n =\frac{\|Y - X\widehat \beta_n \|^2}{n-d}
+\widehat \sigma^2_n =\frac{\|Y - X\widehat \param_n \|_2^2}{n-d}
 \]
-is an unbiased estimator of $\sigma_\star$. In addition, $(n-d)\widehat \sigma^2_n/\sigma_\star^2\sim\chi^2(n-d)$, $\widehat \beta_n \sim \mathcal{N}(\beta_{\star},\sigma_\star^2(X^TX)^{-1})$ and $\widehat \beta_n$ and $\widehat \sigma^2_n$ are independent.
+is an unbiased estimator of $\sigma_\star$. In addition, $(n-d)\widehat \sigma^2_n/\sigma_\star^2\sim\chi^2(n-d)$, $\widehat \param_n \sim \mathcal{N}(\param_{\star},\sigma_\star^2(X^\top X)^{-1})$ and $\widehat \param_n$ and $\widehat \sigma^2_n$ are independent.
 \end{proposition}
 \end{shaded}
 
 \begin{proof}
-By definition of $\widehat \beta_n$,
+By definition of $\widehat \param_n$,
 \[
-\widehat \sigma^2_n =\frac{\|Y - X\widehat \beta_n \|^2}{n-d} = \frac{\|Y - X(X^TX)^{-1}X^TY\|^2}{n-d} = \frac{\|(I_n - X(X^TX)^{-1}X^T)Y\|^2}{n-d}
+\widehat \sigma^2_n =\frac{\|Y - X\widehat \param_n \|_2^2}{n-d} = \frac{\|Y - X(X^\top X)^{-1}X^\top Y\|_2^2}{n-d} = \frac{\|(I_n - X(X^\top X)^{-1}X^\top )Y\|_2^2}{n-d}
 \]
-The columns of $X$ are linearly independent so that the matrix of the orthogonal projection on $\mathrm{Range}(X)$ is $X(X^TX)^{-1}X^T$ and therefore $(I_n - X(X^TX)^{-1}X^T$ is the matrix  of the orthogonal projection on $\mathrm{Range}(X)^{\perp}$. Then,
+The columns of $X$ are linearly independent so that the matrix of the orthogonal projection on $\mathrm{Range}(X)$ is $X(X^\top X)^{-1}X^\top$ and therefore $(I_n - X(X^\top X)^{-1}X^\top$ is the matrix  of the orthogonal projection on $\mathrm{Range}(X)^{\perp}$. Then,
 \[
-(I_n - X(X^TX)^{-1}X^T)Y = (I_n - X(X^TX)^{-1}X^T)(X\beta_\star + \varepsilon) = (I_n - X(X^TX)^{-1}X^T)\varepsilon\eqsp.
+(I_n - X(X^\top X)^{-1}X^\top)Y = (I_n - X(X^\top X)^{-1}X^\top)(X\param_\star + \varepsilon) = (I_n - X(X^\top X)^{-1}X^\top)\varepsilon\eqsp.
 \]
-By Theorem~\ref{th:cochran}, $\|\sigma_\star^{-1}(I_n - X(X^TX)^{-1}X^T)\varepsilon\|^2$ has a $\chi^2$ distribution with $n-d$ degrees of freedom which yields
+By Theorem~\ref{th:cochran}, $\|\sigma_\star^{-1}(I_n - X(X^\top X)^{-1}X^\top)\varepsilon\|_2^2$ has a $\chi^2$ distribution with $n-d$ degrees of freedom which yields
 \[
-\bE[\|(I_n - X(X^TX)^{-1}X^T)Y\|^2] = \sigma_\star^2(n-d)
+\bE[\|(I_n - X(X^\top X)^{-1}X^\top)Y\|_2^2] = \sigma_\star^2(n-d)
 \]
-and $\bE[\widehat \sigma^2_n ] = \sigma_\star^2$. By Proposition~\ref{prop:least:squares:full:rank}, $\bE[\widehat \beta_n] = \beta_\star$ and $\bV[\widehat \beta_n] = \sigma_\star^2(X^TX)^{-1}$ and $\widehat \beta_n$ is a Gaussian vector as an  affine transformation of a Gaussian vector. Note that $(n-d)\widehat \sigma^2_n = \|(I_n - X(X^TX)^{-1}X^T)\varepsilon\|^2$ and $\widehat \beta_n = (X^TX)^{-1}X^TX\beta_{\star} + (X^TX)^{-1}X^T\varepsilon$ and that $(X^TX)^{-1}X^T\varepsilon$ and $(I_n - X(X^TX)^{-1}X^T)\varepsilon$ are not correlated as 
+and $\bE[\widehat \sigma^2_n ] = \sigma_\star^2$. By Proposition~\ref{prop:least:squares:full:rank}, $\bE[\widehat \param_n] = \param_\star$ and $\bV[\widehat \param_n] = \sigma_\star^2(X^\top X)^{-1}$ and $\widehat \param_n$ is a Gaussian vector as an  affine transformation of a Gaussian vector. Note that $(n-d)\widehat \sigma^2_n = \|(I_n - X(X^\top X)^{-1}X^\top)\varepsilon\|_2^2$ and $\widehat \param_n = (X^\top X)^{-1}X^\top X\param_{\star} + (X^\top X)^{-1}X^\top\varepsilon$ and that $(X^\top X)^{-1}X^\top\varepsilon$ and $(I_n - X(X^\top X)^{-1}X^\top)\varepsilon$ are not correlated as 
 \[
-\bE[(I_n - X(X^TX)^{-1}X^T)\varepsilon \varepsilon^TX(X^TX)^{-1}] = \sigma_\star^2\bE[(I_n - X(X^TX)^{-1}X^T)X(X^TX)^{-1}] = 0\eqsp.
+\bE[(I_n - X(X^\top X)^{-1}X^\top)\varepsilon \varepsilon^\top X(X^\top X)^{-1}] = \sigma_\star^2\bE[(I_n - X(X^\top X)^{-1}X^\top)X(X^\top X)^{-1}] = 0\eqsp.
 \]
 The independence follows from Proposition~\ref{prop:gauss:vec:decor}.
 \end{proof}
@@ -163,7 +163,7 @@ The independence follows from Proposition~\ref{prop:gauss:vec:decor}.
 \label{prop:betaj}
 For all $1\leqslant j \leqslant n$,
 \[
-\frac{\widehat \beta_{n,j} -\beta_{\star,j}}{\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}} \sim \mathcal{S}(n-d)\eqsp,
+\frac{\widehat \param_{n,j} -\param_{\star,j}}{\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}} \sim \mathcal{S}(n-d)\eqsp,
 \]
 where $\mathcal{S}(n-d)$ is the Student's t-distribution with $n-p$ degrees of freedom, i.e. the law of $X/\sqrt{Y/(n-d)}$ where $X\sim\mathcal{N}(0,1)$ is independent of $Y\sim\chi^2(n-d)$.
 \end{proposition}
@@ -171,83 +171,83 @@ where $\mathcal{S}(n-d)$ is the Student's t-distribution with $n-p$ degrees of f
 \begin{proof}
 By definition, for all $1\leqslant j \leqslant d$,  
 \[
-\frac{\widehat \beta_{n,j} -\beta_{\star,j}}{\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}} = \frac{\sigma_\star^{-1}(\widehat \beta_{n,j} -\beta_{\star,j})}{\sigma_\star^{-1}\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}} = \frac{e^T_j(\sigma_\star^{-1}(\widehat \beta_{n} -\beta_{\star}))}{\sigma_\star^{-1}\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}}\eqsp.
+\frac{\widehat \param_{n,j} -\param_{\star,j}}{\widehat\sigma_{n}\sqrt{(X^\top X)_{j,j}^{-1}}} = \frac{\sigma_\star^{-1}(\widehat \param_{n,j} -\param_{\star,j})}{\sigma_\star^{-1}\widehat\sigma_{n}\sqrt{(X^\top X)_{j,j}^{-1}}} = \frac{e^\top_j(\sigma_\star^{-1}(\widehat \param_{n} -\param_{\star}))}{\sigma_\star^{-1}\widehat\sigma_{n}\sqrt{(X^\top X)_{j,j}^{-1}}}\eqsp.
 \]
-Note that $\sigma_\star^{-1}(\widehat \beta_{n} -\beta_{\star}) \sim \mathcal{N}(0,(X^TX)^{-1})$ so that $e^T_j(\sigma_\star^{-1}(\widehat \beta_{n} -\beta_{\star}))\sim \mathcal{N}(0,e^T_j(X^TX)^{-1}e_j)$ and 
+Note that $\sigma_\star^{-1}(\widehat \param_{n} -\param_{\star}) \sim \mathcal{N}(0,(X^\top X)^{-1})$ so that $e^\top_j(\sigma_\star^{-1}(\widehat \param_{n} -\param_{\star}))\sim \mathcal{N}(0,e^\top_j(X^\top X)^{-1}e_j)$ and 
 \[
-\frac{e^T_j(\sigma_\star^{-1}(\widehat \beta_{n} -\beta_{\star}))}{\sqrt{(X^TX)_{j,j}^{-1}}}\sim\mathcal{N}(0,1)\eqsp.
+\frac{e^\top_j(\sigma_\star^{-1}(\widehat \param_{n} -\param_{\star}))}{\sqrt{(X^\top X)_{j,j}^{-1}}}\sim\mathcal{N}(0,1)\eqsp.
 \]
 In addition,
 \[
-\sigma_\star^{-1}\widehat\sigma_{n} = \sqrt{\sigma_\star^{-2}\widehat\sigma^2_{n}} = \sqrt{\|\sigma_\star^{-1}(I_n - X(X^TX)^{-1}X^T)\varepsilon\|^2/(n-d)}\eqsp,
+\sigma_\star^{-1}\widehat\sigma_{n} = \sqrt{\sigma_\star^{-2}\widehat\sigma^2_{n}} = \sqrt{\|\sigma_\star^{-1}(I_n - X(X^\top X)^{-1}X^\top)\varepsilon\|_2^2/(n-d)}\eqsp,
 \]
-where $\sigma_\star^{-2}\widehat\sigma^2_{n} = \|\sigma_\star^{-1}(I_n - X(X^TX)^{-1}X^T)\varepsilon\|^2 \sim \chi^2(n-d)$. The proof is concluded by noting that $\widehat \beta_n$ and  $\widehat\sigma^2_{n}$ are independent.
+where $\sigma_\star^{-2}\widehat\sigma^2_{n} = \|\sigma_\star^{-1}(I_n - X(X^\top X)^{-1}X^\top)\varepsilon\|_2^2 \sim \chi^2(n-d)$. The proof is concluded by noting that $\widehat \param_n$ and  $\widehat\sigma^2_{n}$ are independent.
 \end{proof}
 By Proposition~\ref{prop:betaj}, for $\alpha\in(0,1)$, if $s_{1-\alpha/2}^{n-d}$ denotes the quantile of order $1-\alpha/2$ of the law $\mathcal{S}(n-d)$, then 
 \[
-\bP\left(\left|\frac{\widehat \beta_{n,j} -\beta_{\star,j}}{\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}}\right| \leqslant s_{1-\alpha/2}^{n-d}\right) = 1-\alpha\eqsp.
+\bP\left(\left|\frac{\widehat \param_{n,j} -\param_{\star,j}}{\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}}\right| \leqslant s_{1-\alpha/2}^{n-d}\right) = 1-\alpha\eqsp.
 \]
 Therefore, 
 \[
-I^{n-p}_{n,j}(\beta_{\star}) = \left[\widehat \beta_{n,j} -\widehat\sigma_{n}s_{1-\alpha/2}^{n-d}\sqrt{(X^TX)_{j,j}^{-1}}\eqsp;\eqsp \widehat \beta_{n,j} + \widehat\sigma_{n}s_{1-\alpha/2}^{n-d}\sqrt{(X^TX)_{j,j}^{-1}}\right]
+I^{n-p}_{n,j}(\param_{\star}) = \left[\widehat \param_{n,j} -\widehat\sigma_{n}s_{1-\alpha/2}^{n-d}\sqrt{(X^\top X)_{j,j}^{-1}}\eqsp;\eqsp \widehat \param_{n,j} + \widehat\sigma_{n}s_{1-\alpha/2}^{n-d}\sqrt{(X^\top X)_{j,j}^{-1}}\right]
 \]
- is a confidence interval for $\beta_{\star,j}$ with confidence level $1-\alpha$. The result of Proposition~\ref{prop:betaj} may also be used to perform the test 
+ is a confidence interval for $\param_{\star,j}$ with confidence level $1-\alpha$. The result of Proposition~\ref{prop:betaj} may also be used to perform the test 
 \[
-\mathrm{H}_0:\eqsp \beta_{\star,j} = 0 \quad\mathrm{vs} \quad \mathrm{H}_1:\eqsp \beta_{\star,j} \neq 0\eqsp.
+\mathrm{H}_0:\eqsp \param_{\star,j} = 0 \quad\mathrm{vs} \quad \mathrm{H}_1:\eqsp \param_{\star,j} \neq 0\eqsp.
 \]
 Under $\mathrm{H}_0$, the random variable $T_{n,j}$ defined by 
 \[
-T_{n,j} = \frac{\widehat \beta_{n,j}}{\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}} 
+T_{n,j} = \frac{\widehat \param_{n,j}}{\widehat\sigma_{n}\sqrt{(X^\top X)_{j,j}^{-1}}} 
 \] 
-does not depend  on $\beta_{\star}$ neither on $\sigma_{\star}$ and is distributed as a Student $\mathcal{S}(n-d)$ random variable. A statistical test with statistical signifiance $1-\alpha$ to decide wether $\beta_{\star}\neq 0$ is $T_{n,j}<s_{1-\alpha/2}^{n-d}$. 
+does not depend  on $\param_{\star}$ neither on $\sigma_{\star}$ and is distributed as a Student $\mathcal{S}(n-d)$ random variable. A statistical test with statistical signifiance $1-\alpha$ to decide wether $\param_{\star}\neq 0$ is $T_{n,j}<s_{1-\alpha/2}^{n-d}$. 
 \subsubsection*{Fisher statistics}
 \begin{shaded}
 \begin{proposition}
 \label{prop:Lbeta}
 Let $L$ be a $\rset^{q\times d}$ matrix with rank $q\leqslant d$. Then,
 \[
-\frac{(\widehat \beta_{n} -\beta_{\star})^TL^T(L(X^TX)^{-1}L^T)^{-1}L(\widehat \beta_{n} -\beta_{\star})}{q\widehat\sigma^2_{n}} \sim \mathcal{F}(q,n-d)\eqsp,
+\frac{(\widehat \param_{n} -\param_{\star})^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param_{\star})}{q\widehat\sigma^2_{n}} \sim \mathcal{F}(q,n-d)\eqsp,
 \]
 where $\mathcal{F}(q,n-d)$ is the Fisher distribution with $q$ and $n-d$ degrees of freedom, i.e. the law of $(X/q)/(Y/(n-p))$ where $X\sim\chi^2(q)$ is independent of $Y\sim\chi^2(n-d)$.
 \end{proposition}
 \end{shaded}
 \begin{proof}
-Note that $\mathrm{rank}(L(X^TX)^{-1}L^T) = \mathrm{rank}(LL^T)  = q$. The matrix $L(X^TX)^{-1}L^T$ is therefore positive definite. There exists a diagonal matrix $D\in\rset^{q\times q}$ with positive diagonal terms and an orthogonal matrix $Q\in\rset^{q\times q}$ such that $L(X^TX)^{-1}L^T = QDQ^{-1}$. The matrix $(L(X^TX)^{-1}L^T)^{-1/2}$ may be defined as $(L(X^TX)^{-1}L^T)^{-1/2} = QD^{-1/2}Q^{-1}$. It is then enough to note that $(L(X^TX)^{-1}L^T)^{-1/2}L(\widehat \beta_{n} -\beta_{\star})/\sigma_{\star}\sim \mathcal{N}(0,I_q)$. Therefore,
+Note that $\mathrm{rank}(L(X^\top X)^{-1}L^\top) = \mathrm{rank}(LL^\top)  = q$. The matrix $L(X^\top X)^{-1}L^\top$ is therefore positive definite. There exists a diagonal matrix $D\in\rset^{q\times q}$ with positive diagonal terms and an orthogonal matrix $Q\in\rset^{q\times q}$ such that $L(X^\top X)^{-1}L^\top = QDQ^{-1}$. The matrix $(L(X^\top X)^{-1}L^\top)^{-1/2}$ may be defined as $(L(X^\top X)^{-1}L^\top)^{-1/2} = QD^{-1/2}Q^{-1}$. It is then enough to note that $(L(X^\top X)^{-1}L^\top)^{-1/2}L(\widehat \param_{n} -\param_{\star})/\sigma_{\star}\sim \mathcal{N}(0,I_q)$. Therefore,
 \[
-\sigma^{-2}_{\star}\|(L(X^TX)^{-1}L^T)^{-1/2}L(\widehat \beta_{n} -\beta_{\star})\|^2 = (\widehat \beta_{n} -\beta_{\star})^TL^T(L(X^TX)^{-1}L^T)^{-1}L(\widehat \beta_{n} -\beta_{\star})/\sigma^2_{\star} \sim \chi^2(q)\eqsp.
+\sigma^{-2}_{\star}\|(L(X^\top X)^{-1}L^\top)^{-1/2}L(\widehat \param_{n} -\param_{\star})\|^2 = (\widehat \param_{n} -\param_{\star})^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param_{\star})/\sigma^2_{\star} \sim \chi^2(q)\eqsp.
 \]
 On the other hand, by Proposition~\ref{prop:least:squares:full:rank}, 
 \[
 (n-d)\sigma^{-2}_{\star}\widehat\sigma^2_{n} \sim \chi^2(n-d)\eqsp.
 \]
-The proof is concluded by noting that $\widehat \beta_n$ and  $\widehat\sigma^2_{n}$ are independent.
+The proof is concluded by noting that $\widehat \param_n$ and  $\widehat\sigma^2_{n}$ are independent.
 \end{proof}
 By Proposition~\ref{prop:Lbeta}, for $\alpha\in(0,1)$, if $f_{1-\alpha}^{q,n-d}$ denotes the quantile of order $1-\alpha$ of the law $\mathcal{F}(q,n-p)$, then 
 \[
-\bP\left(\beta_{\star}\in \left\{\beta\in\rset^d\eqsp;\eqsp (\widehat \beta_{n} -\beta)^TL^T(L(X^TX)^{-1}L^T)^{-1}L(\widehat \beta_{n} -\beta)\leqslant q\widehat\sigma^2_{n}f_{1-\alpha}^{q,n-d}\right\}\right) = 1-\alpha\eqsp.
+\bP\left(\param_{\star}\in \left\{\param\in\rset^d\eqsp;\eqsp (\widehat \param_{n} -\param)^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param)\leqslant q\widehat\sigma^2_{n}f_{1-\alpha}^{q,n-d}\right\}\right) = 1-\alpha\eqsp.
 \]
 Therefore, 
 \[
-I^{q,n-d}_{n}(\beta_{\star}) = \left\{\beta\in\rset^d\eqsp;\eqsp (\widehat \beta_{n} -\beta)^TL^T(L(X^TX)^{-1}L^T)^{-1}L(\widehat \beta_{n} -\beta)\leqslant q\widehat\sigma^2_{n}f_{1-\alpha}^{q,n-d}\right\}
+I^{q,n-d}_{n}(\param_{\star}) = \left\{\param\in\rset^d\eqsp;\eqsp (\widehat \param_{n} -\param)^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param)\leqslant q\widehat\sigma^2_{n}f_{1-\alpha}^{q,n-d}\right\}
 \]
- is a confidence region for $\beta_{\star}$ with confidence level $1-\alpha$. The result of Proposition~\ref{prop:Lbeta} may also be used to perform the test 
+ is a confidence region for $\param_{\star}$ with confidence level $1-\alpha$. The result of Proposition~\ref{prop:Lbeta} may also be used to perform the test 
 \[
-\mathrm{H}_0:\eqsp L\beta_{\star} = \bar\beta \quad\mathrm{vs} \quad \mathrm{H}_1:\eqsp L\beta_{\star} \neq \bar \beta\eqsp,
+\mathrm{H}_0:\eqsp L\param_{\star} = \bar\param \quad\mathrm{vs} \quad \mathrm{H}_1:\eqsp L\param_{\star} \neq \bar \param\eqsp,
 \]
-for a given $\bar \beta \in\rset^d$.
+for a given $\bar \param \in\rset^d$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%ù%
 \section{Introduction to regularized multivariate regression}
 \subsection{Ridge regression}
-In the case where $X'X$ is singular (resp. has eigenvalues close to zero), the least squares estimate cannot be computed (resp. is not robust). A common approach to control the estimator variance is to solve the surrogate Ridge regression problem
+In the case where $X^\top X$ is singular (resp. has eigenvalues close to zero), the least squares estimate cannot be computed (resp. is not robust). A common approach to control the estimator variance is to solve the surrogate Ridge regression problem
 \[
-\widehat \beta^{\mathrm{ridge}}_n\in  \argmin_{\beta\in\rset^d}  \|Y - X\beta\|^2 + \lambda\|\beta\|^2\eqsp,
+\widehat \param^{\mathrm{ridge}}_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|_2^2 + \lambda\|\param\|_2^2\eqsp,
 \]
-where $\lambda>0$. The matrix $X'X + \lambda I_n$ is definite positive for all $\lambda>0$ as for all $u\in\rset^d$,
+where $\lambda>0$. The matrix $X^\top X + \lambda I_n$ is definite positive for all $\lambda>0$ as for all $u\in\rset^d$,
 \[
-u'(X'X + \lambda I_n)u = \|Xu\|^2 + \lambda \|u\|^2\eqsp,
+u^\top (X^\top X + \lambda I_n)u = \|Xu\|_2^2 + \lambda \|u\|_2^2\eqsp,
 \]
 which is positive for all $u\neq 0$. This remark allows to obtain the following result.
 
@@ -256,12 +256,12 @@ which is positive for all $u\neq 0$. This remark allows to obtain the following 
 \label{prop:least:squares:ridge}
 The unique solution to the Ridge regression problem is given by
 \[
-\widehat \beta^{\mathrm{ridge}}_n = (X'X + \lambda I_n)^{-1}X'Y\eqsp.
+\widehat \param^{\mathrm{ridge}}_n = (X^\top X + \lambda I_n)^{-1}X^\top Y\eqsp.
 \] 
 This estimator is biased and satisfies 
 \begin{align*}
-\bE[\widehat \beta_n] - \beta_*&= - \lambda(X'X + \lambda I_n)^{-1}\beta_*\eqsp,\\
-\bV[\widehat \beta_n] &= \sigma_\star^2(X'X + \lambda I_n)^{-2}X'X \eqsp.
+\bE[\widehat \param_n] - \param_*&= - \lambda(X^\top X + \lambda I_n)^{-1}\param_*\eqsp,\\
+\bV[\widehat \param_n] &= \sigma_\star^2(X^\top X + \lambda I_n)^{-2}X'X \eqsp.
 \end{align*}
 \end{proposition}
 \end{shaded}
@@ -270,58 +270,58 @@ This estimator is biased and satisfies
 \end{proof}
 The mean square error of the estimator is then given by
 \[
-\bE\left[\left\|\widehat \beta_n-\beta_*\right\|^2\right] = \mathrm{Trace}\left(\bV[\widehat \beta_n]\right) + \left\|\bE[\widehat \beta_n] - \beta_*\right\|^2\eqsp.
+\bE\left[\left\|\widehat \param_n-\param_*\right\|_2^2\right] = \mathrm{Trace}\left(\bV[\widehat \param_n]\right) + \left\|\bE[\widehat \param_n] - \param_*\right\|_2^2\eqsp.
 \]
-Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $X'X$ associated with the eigenvalues $(\gamma_1,\ldots,\gamma_d)\in\rset^d$. Then,
+Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $X^\top X$ associated with the eigenvalues $(\gamma_1,\ldots,\gamma_d)\in\rset^d$. Then,
 \[
-\bE\left[\left\|\widehat \beta_n-\beta_*\right\|^2\right] =  \sigma_\star^2 \sum_{j=1}^d \frac{\gamma_j}{(\gamma_j+\lambda)^2} + \lambda^2  \sum_{j=1}^d \frac{\langle \beta_* \eqsp; \vartheta_j\eqsp\rangle^2}{(\gamma_j+\lambda)^2}\eqsp.
+\bE\left[\left\|\widehat \param_n-\param_*\right\|_2^2\right] =  \sigma_\star^2 \sum_{j=1}^d \frac{\gamma_j}{(\gamma_j+\lambda)^2} + \lambda^2  \sum_{j=1}^d \frac{\langle \param_* \eqsp; \vartheta_j\eqsp\rangle^2}{(\gamma_j+\lambda)^2}\eqsp.
 \]
 The mean square error is therefore a sum of two contributions, a bias related term which increases with $\lambda$ and a variance related term which decreases with $\lambda$. In practice, the value of $\lambda$ is chosen using cross-validation.
 
 \subsection{Lasso regression}
 The Least Absolute Shrinkage and Selection Operator (Lasso) regression is a $\mathrm{L}_1$ based regularized regression which aims at fostering sparsity. The objective is to solve the following minimization problem,
 \[
-\widehat \beta^{\mathrm{lasso}}_n\in  \argmin_{\beta\in\rset^d}  \|Y - X\beta\|^2 + \lambda\|\beta\|_1\eqsp,
+\widehat \param^{\mathrm{lasso}}_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|_2^2 + \lambda\|\param\|_1\eqsp,
 \]
 where $\lambda>0$ and
 \[
-\|\beta\|_1 = \sum_{j=1}^d|\beta_j|\eqsp.
+\|\param\|_1 = \sum_{j=1}^d|\param_j|\eqsp.
 \]
-The function $\beta \mapsto \|Y - X\beta\|^2 + \lambda\|\beta\|_1$ is convex but not differentiable and the solution to this problem may  not be unique. For all $\beta \in \rset^d$,  
+The function $\param \mapsto \|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex but not differentiable and the solution to this problem may  not be unique. For all $\param \in \rset^d$,  
 \[
-\partial_\beta \|Y - X\beta\|^2 = - 2 X' (Y-X\beta)\eqsp.
+\partial_\param \|Y - X\param\|_2^2 = - 2 X^\top (Y-X\param)\eqsp.
 \]
-Then, for all $1\leqslant j \leqslant d$, $(\partial_\beta \|Y - X\beta\|^2)_j = -2 {\bf X}_j' (Y-X\beta)$, where ${\bf X}_j$ is the $j$-th column of the matrix $X$. Define, for all $1\leqslant j \leqslant d$,
+Then, for all $1\leqslant j \leqslant d$, $(\partial_\param \|Y - X\param\|_2^2)_j = -2 {\bf X}^\top_j (Y-X\param)$, where ${\bf X}_j$ is the $j$-th column of the matrix $X$. Define, for all $1\leqslant j \leqslant d$,
 \[
-\upsilon_{j}={\bf X}_{j}'\left(Y-\sum_{\substack{i=1\\ i\neq j}}^n\beta_{i}{\bf X}_{i}\right)\eqsp,
+\upsilon_{j}={\bf X}^\top_{j}\left(Y-\sum_{\substack{i=1\\ i\neq j}}^n\param_{i}{\bf X}_{i}\right)\eqsp,
 \]
 then,
 \[
-(\partial_\beta \|Y - X\beta\|^2)_j = -2( \upsilon_j - \beta_j)\eqsp.
+(\partial_\param \|Y - X\param\|_2^2)_j = -2( \upsilon_j - \param_j)\eqsp.
 \]
-Consequently, for all $\beta_j \neq 0$, 
+Consequently, for all $\param_j \neq 0$, 
 \[
-\partial_j ( \|Y - X\beta\|^2 +  \lambda\|\beta\|_1)= 2( \beta_j - \upsilon_j + \lambda\textrm{sign}(\beta_j)/2)\eqsp.
+\partial_j ( \|Y - X\param\|_2^2 +  \lambda\|\param\|_1)= 2( \param_j - \upsilon_j + \lambda\textrm{sign}(\param_j)/2)\eqsp.
 \]
-For all $1\leqslant j\leqslant d$,  $\beta_j \mapsto  \|Y - X\beta\|^2 + \lambda\|\beta\|_1$ is convex and grows to infinity when $|\beta_j|\to \infty$ and admits thus a minimum at some $\beta_j^{\star}\in\rset$. 
+For all $1\leqslant j\leqslant d$,  $\param_j \mapsto  \|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex and grows to infinity when $|\param_j|\to \infty$ and admits thus a minimum at some $\param_j^{\star}\in\rset$. 
 \begin{enumerate}[-]
-\item If $\beta_j^{\star} \neq 0$, then
+\item If $\param_j^{\star} \neq 0$, then
 \[
-\beta_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda ~\textrm{sign}(\beta_j^{\star})}{2 \upsilon_j}\right)\eqsp,
+\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda ~\textrm{sign}(\param_j^{\star})}{2 \upsilon_j}\right)\eqsp,
 \]
-which yields, as  $\textrm{sign}(\beta_j^{\star}) = \textrm{sign}(\upsilon_j)$,
+which yields, as  $\textrm{sign}(\param_j^{\star}) = \textrm{sign}(\upsilon_j)$,
 \[
-\beta_j^{\star} = \upsilon_j\left(1 - \frac{\lambda}{2 |\upsilon_j|}\right)
+\param_j^{\star} = \upsilon_j\left(1 - \frac{\lambda}{2 |\upsilon_j|}\right)
 \]
 and
 \[
 1 - \frac{\lambda}{2 |\upsilon_j|} \geqslant 0\eqsp.
 \]
-\item If $1 - \lambda/(2 |\upsilon_j|)<0$, there is no solution to $\partial_j ( \|Y - X\beta\|^2 +  \lambda\|\beta\|_1)=0$ for $\beta_j \neq 0$.  Since $\beta_j \mapsto  \|Y - X\beta\|^2 + \lambda\|\beta\|_1$ admits a minimum, $\beta_j^{\star}=0$. 
+\item If $1 - \lambda/(2 |\upsilon_j|)<0$, there is no solution to $\partial_j ( \|Y - X\param\|_2^2 +  \lambda\|\param\|_1)=0$ for $\param_j \neq 0$.  Since $\param_j \mapsto  \|Y - X\param\|_2^2 + \lambda\|\param\|_1$ admits a minimum, $\param_j^{\star}=0$. 
 \end{enumerate}
 Therefore,
 \[
-\beta_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda}{2 |\upsilon_j|}\right)_+\eqsp.
+\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda}{2 |\upsilon_j|}\right)_+\eqsp.
 \]
 An algorithm to approximatively solve the Lasso regression problem proceeds as follows.
 
