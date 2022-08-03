@@ -20,23 +20,38 @@ The unique solution to the Ridge regression problem is given by
 \[
 \widehat \param^{\mathrm{ridge}}_n = (X^\top X + \lambda I_n)^{-1}X^\top Y\eqsp.
 \] 
-This estimator is biased and satisfies 
+In the well-specified setting, this estimator is biased and satisfies 
 \begin{align*}
-\bE[\widehat \param_n] - \param_*&= - \lambda(X^\top X + \lambda I_n)^{-1}\param_*\eqsp,\\
-\bV[\widehat \param_n] &= \sigma_\star^2(X^\top X + \lambda I_n)^{-2}X'X \eqsp.
+\bE[\widehat \param^{\mathrm{ridge}}_n ] - \param_*&= - \lambda(X^\top X + \lambda I_n)^{-1}\param_\star\eqsp,\\
+\bV[\widehat \param^{\mathrm{ridge}}_n ] &= \sigma_\star^2(X^\top X + \lambda I_n)^{-2}X^\top X \eqsp.
 \end{align*}
 \end{proposition}
 \end{shaded}
 \begin{proof}
-
+The unique expression of $\widehat \param^{\mathrm{ridge}}_n $ is obtained similarly as in the proof of Proposition~\ref{prop:least:squares:full:rank}. Then,
+$$
+\bE[\widehat \param^{\mathrm{ridge}}_n] =  (X^\top X + \lambda I_n)^{-1}X^\top \bE[Y] =  (X^\top X + \lambda I_n)^{-1}X^\top X\param_\star \eqsp.
+$$
+As the matrix $X^\top X$ is symmetric and real, there exists nonnegative eigenvalues $\lambda_1\geqslant \ldots \geqslant \lambda_d$ and orthonormal eigenvectors $u_1, \ldots u_d$ in $\rset^d$ such that $X^\top X = \sum_{i=1}^d \lambda_i u_i u_i^\top$ and $(X^\top X + \lambda I_n)^{-1} = \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top$. Therefore, 
+$$
+\bE[\widehat \param^{\mathrm{ridge}}_n] -\param_\star=  \sum_{i=1}^d \lambda_i(\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star -  \sum_{i=1}^d u_i u_i^\top\param_\star =  - \lambda  \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star = - \lambda(X^\top X + \lambda I_n)^{-1}\param_\star\eqsp.
+$$
+Similarly,
+$$
+\bV[\widehat \param^{\mathrm{ridge}}_n]  =  (X^\top X + \lambda I_n)^{-1}X^\top \bV[Y]X  (X^\top X + \lambda I_n)^{-1} = \sigma_\star^{2}(X^\top X + \lambda I_n)^{-1}X^\top X  (X^\top X + \lambda I_n)^{-1}\eqsp.
+$$
+Therefore,
+$$
+\bV[\widehat \param^{\mathrm{ridge}}_n]  =   \sigma_\star^{2}(X^\top X + \lambda I_n)^{-2}X^\top X\eqsp.
+$$
 \end{proof}
 The mean square error of the estimator is then given by
 \[
-\bE\left[\left\|\widehat \param_n-\param_*\right\|_2^2\right] = \mathrm{Trace}\left(\bV[\widehat \param_n]\right) + \left\|\bE[\widehat \param_n] - \param_*\right\|_2^2\eqsp.
+\bE\left[\left\|\widehat \param^{\mathrm{ridge}}_n-\param_*\right\|_2^2\right] = \mathrm{Trace}\left(\bV[\widehat \param^{\mathrm{ridge}}_n]\right) + \left\|\bE[\widehat \param^{\mathrm{ridge}}_n] - \param_*\right\|_2^2\eqsp.
 \]
 Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $X^\top X$ associated with the eigenvalues $(\gamma_1,\ldots,\gamma_d)\in\rset^d$. Then,
 \[
-\bE\left[\left\|\widehat \param_n-\param_*\right\|_2^2\right] =  \sigma_\star^2 \sum_{j=1}^d \frac{\gamma_j}{(\gamma_j+\lambda)^2} + \lambda^2  \sum_{j=1}^d \frac{\langle \param_* \eqsp; \vartheta_j\eqsp\rangle^2}{(\gamma_j+\lambda)^2}\eqsp.
+\bE\left[\left\|\widehat \param^{\mathrm{ridge}}_n-\param_*\right\|_2^2\right] =  \sigma_\star^2 \sum_{j=1}^d \frac{\gamma_j}{(\gamma_j+\lambda)^2} + \lambda^2  \sum_{j=1}^d \frac{\langle \param_* \eqsp; \vartheta_j\eqsp\rangle^2}{(\gamma_j+\lambda)^2}\eqsp.
 \]
 The mean square error is therefore a sum of two contributions, a bias related term which increases with $\lambda$ and a variance related term which decreases with $\lambda$. In practice, the value of $\lambda$ is chosen using cross-validation.
 
