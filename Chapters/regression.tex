@@ -133,7 +133,7 @@ The matrix $X(X^\top X)^{-1}X^\top \in\rset^{n\times n}$ is the matrix of the or
 
 \begin{shaded}
 \begin{proposition}
-\label{prop:least:squares:full:rank}
+\label{prop:least:squares:full:rank:variance}
 In the well-specified setting where $\varepsilon \sim \mathcal{N}(0,\sigma_\star^2I_n)$, the random variable
 \[
 \widehat \sigma^2_n =\frac{\|Y - X\widehat \param_n \|_2^2}{n-d}
@@ -160,6 +160,51 @@ and $\bE[\widehat \sigma^2_n ] = \sigma_\star^2$. By Proposition~\ref{prop:least
 \bE[(I_n - X(X^\top X)^{-1}X^\top)\varepsilon \varepsilon^\top X(X^\top X)^{-1}] = \sigma_\star^2\bE[(I_n - X(X^\top X)^{-1}X^\top)X(X^\top X)^{-1}] = 0\eqsp.
 \]
 The independence follows from Proposition~\ref{prop:gauss:vec:decor}.
+\end{proof}
+
+\section{Risk analysis of the full-rank multivariate regression}
+In our fixed-design setting, where the matrix $X$ is deterministic, our aim is to minimize the fixed design risk:
+$$
+\mathsf{R}(\param) = \frac{1}{n}\bE\left[\left\|Y - X\param\right\|_2^2\right]\eqsp.
+$$
+In the well-specified setting, note that
+$$
+\mathsf{R}(\param_\star) = \frac{1}{n}\bE\left[\left\|Y - X\param_\star\right\|_2^2\right]= \frac{1}{n}\bE\left[\left\|\varepsilon\right\|_2^2\right] = \sigma_\star^2\eqsp.
+$$
+Therefore, for all $\param\in\paramset$,
+\begin{align*}
+\mathsf{R}(\param) - \mathsf{R}(\param_\star) &=    \frac{1}{n}\bE\left[\left\|X\param_\star + \varepsilon - X\param\right\|_2^2\right] - \sigma_\star^2\eqsp,\\
+&=  \frac{1}{n}\bE\left[\left\|X(\param_\star-\param)\right\|_2^2 + \left\|\varepsilon\right\|_2^2 + 2 \left(\param_\star-\param\right)^\top X^\top \varepsilon\right] - \sigma_\star^2\eqsp,\\
+&= \left(\param_\star-\param\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\param\right)\eqsp,
+\end{align*}
+since $\mathbb{E}[\varepsilon] = 0$. On the other hand, a standard bias-variance decomposition yields
+\begin{align*}
+\bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] &=  \bE\left[ \left(\param_\star-\widehat \param_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\widehat \param_n\right)\right]\eqsp,\\
+&=  \bE\left[ \left(\param_\star-\bE\left[\widehat \param_n\right] + \bE\left[\widehat \param_n\right] - \widehat \param_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param_n\right] + \bE\left[\widehat \param_n\right] - \widehat \param_n\right)\right]\eqsp,\\
+&=\left(\param_\star-\bE\left[\widehat \param_n\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param_n\right] \right) + \bE\left[ \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)\right]\eqsp.
+\end{align*}
+
+
+\begin{proposition}
+In the well-specified setting, 
+$$
+\bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] = \sigma_\star^2 \frac{d}{n}\eqsp.
+$$
+\end{proposition}
+
+\begin{proof}
+By Proposition~\ref{prop:least:squares:full:rank}, $\bE[\widehat \param_n] = \param_\star$ so that 
+$$
+\bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] = \bE\left[ \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)\right]\eqsp.
+$$
+In addition, by Proposition~\ref{prop:least:squares:full:rank}, $\bV[\widehat \param_n] = \sigma_\star^2(X^\top X)^{-1}$, hence
+$$
+\bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] = \frac{\sigma_\star^2}{n}\bE\left[ \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)^\top \bV[\widehat \param_n]^{-1} \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)\right]\eqsp.
+$$
+By Lemma~\ref{ref:expectation:quadratic:trasform},
+$$
+\bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] = \frac{\sigma_\star^2}{n}\mathrm{Trace}(\bV[\widehat \param_n]^{-1}\bV[\widehat \param_n]) = \sigma_\star^2 \frac{d}{n}\eqsp.
+$$
 \end{proof}
 
 \subsection{Confidence intervals and tests}
@@ -242,130 +287,9 @@ I^{q,n-d}_{n}(\param_{\star}) = \left\{\param\in\rset^d\eqsp;\eqsp (\widehat \pa
 \]
 for a given $\bar \param \in\rset^d$.
 
-\section{Risk analysis of the full-rank multivariate regression}
-In our fixed-design setting, where the matrix $X$ is deterministic, our aim is to minimize the fixed design risk:
-$$
-\mathsf{R}(\param) = \frac{1}{n}\bE\left[\left\|Y - X\param\right\|_2^2\right]\eqsp.
-$$
-In the well-specified setting, note that
-$$
-\mathsf{R}(\param_\star) = \frac{1}{n}\bE\left[\left\|Y - X\param_\star\right\|_2^2\right]= \frac{1}{n}\bE\left[\left\|\varepsilon\right\|_2^2\right] = \sigma_\star^2\eqsp.
-$$
-Therefore, for all $\param\in\paramset$,
-\begin{align*}
-\mathsf{R}(\param) - \mathsf{R}(\param_\star) &=    \frac{1}{n}\bE\left[\left\|X\param_\star + \varepsilon - X\param\right\|_2^2\right] - \sigma_\star^2\eqsp,\\
-&=  \frac{1}{n}\bE\left[\left\|X(\param_\star-\param)\right\|_2^2 + \left\|\varepsilon\right\|_2^2 + 2 \left(\param_\star-\param\right)^\top X^\top \varepsilon\right] - \sigma_\star^2\eqsp,\\
-&= \left(\param_\star-\param\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\param\right)\eqsp,
-\end{align*}
-since $\mathbb{E}[\varepsilon] = 0$. On the other hand, a standard bias-variance decomposition yields
-\begin{align*}
-\bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] &=  \bE\left[ \left(\param_\star-\widehat \param_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\widehat \param_n\right)\right]\eqsp,\\
-&=  \bE\left[ \left(\param_\star-\bE\left[\widehat \param_n\right] + \bE\left[\widehat \param_n\right] - \widehat \param_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param_n\right] + \bE\left[\widehat \param_n\right] - \widehat \param_n\right)\right]\eqsp,\\
-&=\left(\param_\star-\bE\left[\widehat \param_n\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param_n\right] \right) + \bE\left[ \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)\right]\eqsp.
-\end{align*}
-
-
-\begin{proposition}
-In the well-specified setting, 
-$$
-\bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] = \sigma_\star^2 \frac{d}{n}\eqsp.
-$$
-\end{proposition}
-
-\begin{proof}
-By Proposition~\ref{prop:least:squares:full:rank}, $\bE[\widehat \param_n] = \param_\star$ so that 
-$$
-\bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] = \bE\left[ \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param_n\right] - \widehat \param_n\right)\right]\eqsp.
-$$
-\end{proof}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%ù%
-\section{Introduction to regularized multivariate regression}
-\subsection{Ridge regression}
-In the case where $X^\top X$ is singular (resp. has eigenvalues close to zero), the least squares estimate cannot be computed (resp. is not robust). A common approach to control the estimator variance is to solve the surrogate Ridge regression problem
-\[
-\widehat \param^{\mathrm{ridge}}_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|_2^2 + \lambda\|\param\|_2^2\eqsp,
-\]
-where $\lambda>0$. The matrix $X^\top X + \lambda I_n$ is definite positive for all $\lambda>0$ as for all $u\in\rset^d$,
-\[
-u^\top (X^\top X + \lambda I_n)u = \|Xu\|_2^2 + \lambda \|u\|_2^2\eqsp,
-\]
-which is positive for all $u\neq 0$. This remark allows to obtain the following result.
 
-\begin{shaded}
-\begin{proposition}
-\label{prop:least:squares:ridge}
-The unique solution to the Ridge regression problem is given by
-\[
-\widehat \param^{\mathrm{ridge}}_n = (X^\top X + \lambda I_n)^{-1}X^\top Y\eqsp.
-\] 
-This estimator is biased and satisfies 
-\begin{align*}
-\bE[\widehat \param_n] - \param_*&= - \lambda(X^\top X + \lambda I_n)^{-1}\param_*\eqsp,\\
-\bV[\widehat \param_n] &= \sigma_\star^2(X^\top X + \lambda I_n)^{-2}X'X \eqsp.
-\end{align*}
-\end{proposition}
-\end{shaded}
-\begin{proof}
-
-\end{proof}
-The mean square error of the estimator is then given by
-\[
-\bE\left[\left\|\widehat \param_n-\param_*\right\|_2^2\right] = \mathrm{Trace}\left(\bV[\widehat \param_n]\right) + \left\|\bE[\widehat \param_n] - \param_*\right\|_2^2\eqsp.
-\]
-Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $X^\top X$ associated with the eigenvalues $(\gamma_1,\ldots,\gamma_d)\in\rset^d$. Then,
-\[
-\bE\left[\left\|\widehat \param_n-\param_*\right\|_2^2\right] =  \sigma_\star^2 \sum_{j=1}^d \frac{\gamma_j}{(\gamma_j+\lambda)^2} + \lambda^2  \sum_{j=1}^d \frac{\langle \param_* \eqsp; \vartheta_j\eqsp\rangle^2}{(\gamma_j+\lambda)^2}\eqsp.
-\]
-The mean square error is therefore a sum of two contributions, a bias related term which increases with $\lambda$ and a variance related term which decreases with $\lambda$. In practice, the value of $\lambda$ is chosen using cross-validation.
-
-\subsection{Lasso regression}
-The Least Absolute Shrinkage and Selection Operator (Lasso) regression is a $\mathrm{L}_1$ based regularized regression which aims at fostering sparsity. The objective is to solve the following minimization problem,
-\[
-\widehat \param^{\mathrm{lasso}}_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|_2^2 + \lambda\|\param\|_1\eqsp,
-\]
-where $\lambda>0$ and
-\[
-\|\param\|_1 = \sum_{j=1}^d|\param_j|\eqsp.
-\]
-The function $\param \mapsto \|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex but not differentiable and the solution to this problem may  not be unique. For all $\param \in \rset^d$,  
-\[
-\partial_\param \|Y - X\param\|_2^2 = - 2 X^\top (Y-X\param)\eqsp.
-\]
-Then, for all $1\leqslant j \leqslant d$, $(\partial_\param \|Y - X\param\|_2^2)_j = -2 {\bf X}^\top_j (Y-X\param)$, where ${\bf X}_j$ is the $j$-th column of the matrix $X$. Define, for all $1\leqslant j \leqslant d$,
-\[
-\upsilon_{j}={\bf X}^\top_{j}\left(Y-\sum_{\substack{i=1\\ i\neq j}}^n\param_{i}{\bf X}_{i}\right)\eqsp,
-\]
-then,
-\[
-(\partial_\param \|Y - X\param\|_2^2)_j = -2( \upsilon_j - \param_j)\eqsp.
-\]
-Consequently, for all $\param_j \neq 0$, 
-\[
-\partial_j ( \|Y - X\param\|_2^2 +  \lambda\|\param\|_1)= 2( \param_j - \upsilon_j + \lambda\textrm{sign}(\param_j)/2)\eqsp.
-\]
-For all $1\leqslant j\leqslant d$,  $\param_j \mapsto  \|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex and grows to infinity when $|\param_j|\to \infty$ and admits thus a minimum at some $\param_j^{\star}\in\rset$. 
-\begin{enumerate}[-]
-\item If $\param_j^{\star} \neq 0$, then
-\[
-\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda ~\textrm{sign}(\param_j^{\star})}{2 \upsilon_j}\right)\eqsp,
-\]
-which yields, as  $\textrm{sign}(\param_j^{\star}) = \textrm{sign}(\upsilon_j)$,
-\[
-\param_j^{\star} = \upsilon_j\left(1 - \frac{\lambda}{2 |\upsilon_j|}\right)
-\]
-and
-\[
-1 - \frac{\lambda}{2 |\upsilon_j|} \geqslant 0\eqsp.
-\]
-\item If $1 - \lambda/(2 |\upsilon_j|)<0$, there is no solution to $\partial_j ( \|Y - X\param\|_2^2 +  \lambda\|\param\|_1)=0$ for $\param_j \neq 0$.  Since $\param_j \mapsto  \|Y - X\param\|_2^2 + \lambda\|\param\|_1$ admits a minimum, $\param_j^{\star}=0$. 
-\end{enumerate}
-Therefore,
-\[
-\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda}{2 |\upsilon_j|}\right)_+\eqsp.
-\]
-An algorithm to approximatively solve the Lasso regression problem proceeds as follows.
 
 
 \subsection{Nonparametric regression}

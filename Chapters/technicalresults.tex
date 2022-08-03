@@ -1,0 +1,166 @@
+\chapter{Technical results}
+\minitoc
+
+\section{Probabilistic inequalities}
+\begin{shaded}
+\begin{theorem}[Hoeffding's inequality]
+\label{th:hoeffding}
+Let $(X_i)_{1\leqslant i\leqslant n}$ be $n$ independent random variables such that for all $1\leqslant i\leqslant n$, $\bP(a_i\leqslant X_i\leqslant b_i) = 1$ where $a_i, b_i$ are real numbers such that $a_i<b_i$. Then, for all $t>0$,
+\[
+\bP\left(\left|\sum_{i=1}^n X_i - \sum_{i=1}^n \bE\left[X_i\right]\right|>t\right)\leqslant 2\mathrm{exp}\left(\frac{-2t^2}{\sum_{i=1}^n(b_i-a_i)^2}\right)\eqsp.
+\]
+\end{theorem}
+\end{shaded}
+\begin{proof}
+Without loss of generality, assume that $\PE[X_i]=0$ for all $1\leqslant i\leqslant n$. It is enough to prove that, for all $t>0$,
+\begin{equation}
+\label{eq:hoef}
+\bP\lr{\sum_{i=1}^n X_i>t}\leqslant \mathrm{exp}\left(\frac{-2t^2}{\sum_{i=1}^n(b_i-a_i)^2}\right)\eqsp.
+\end{equation}
+Equation \eqref{eq:hoef} implies Hoeffding's inequality by noting that $\bP\lr{|\sum_{i=1}^n X_i|>t}\leq \bP\lr{\sum_{i=1}^n X_i>t}+\bP\lr{-\sum_{i=1}^n X_i>t}$ and by applying \eqref{eq:hoef} to $(X_i)_{1\leqslant i\leqslant n}$ and $(-X_i)_{1\leqslant i\leqslant n}$.
+ Write, for any $s,t>0$,
+\begin{align*}
+\PP\lr{\sum_{i=1}^n X_i>t}=\PP\lr{\rme^{s \sum_{i=1}^n X_i}>\rme^{st}} < \rme^{-st}\PE\lrb{\rme^{s \sum_{i=1}^n X_i}}=\rme^{-st}\prod_{i=1}^{n}\PE\lrb{\rme^{s X_i}}
+\end{align*}
+To bound the right hand side of this inequality, set, for all $1\leqslant i\leqslant n$, $\phi_i: s\mapsto \log\lr{\PE\lrb{\rme^{s X_i}}}$. Since $X_i$ is almost surely bounded,  $\phi_i$ is differentiable  and for all $s>0$, $\phi_i'(s)=\PE\lrb{X_i \rme^{s X_i}}/\PE\lrb{\rme^{s X_i}}$. Then, differentiating again,
+\begin{align*}
+\phi_i''(s)=\log''\lr{\PE\lrb{\rme^{s X_i}}}=\frac{\PE\lrb{X_i^2 \rme^{s X_i}}}{\PE\lrb{\rme^{s X_i}}} - \lr{\frac{\PE\lrb{X_i \rme^{s X_i}}}{\PE\lrb{\rme^{s X_i}}}}^2=\widetilde \PE_i[X^2]-(\widetilde \PE_i[X])^2 =\widetilde \PE_i[(X-\widetilde \PE_i[X])^2]\eqsp,
+\end{align*}
+where
+\[
+\widetilde \PE_i[Z]=\frac{\PE\lrb{Z \rme^{s X_i}}}{\PE\lrb{\rme^{s X_i}}}\eqsp.
+\]
+Then,
+\[
+\phi_i''(s) = \inf_{x \in [a_i,b_i]}\widetilde \PE_i[(X-x)^2] \leqslant \widetilde \PE_i\lrb{\lr{X-\frac{a_i+b_i}{2}}^2} \leqslant \lr{\frac{b_i-a_i}{2}}^2\eqsp.
+\]
+Finally, using Taylor's expansion,
+\begin{equation}
+\label{eq:hoeffding:loglaplace}
+\phi_i(s)\leq \phi_i(0)+\phi_i'(0)+\frac{s^2}{2} \sup_{\alpha \in [0,1]} \phi_i''(\alpha s) \leq \frac{s^2(b_i-a_i)^2}{8}\eqsp.
+\end{equation}
+This implies
+$$
+\PP\lr{\sum_{i=1}^n X_i>t} \leqslant \rme^{-st} \rme^{s^2 \sum_{i=1}^n  \frac{(b_i-a_i)^2}{8}} \eqsp.
+$$
+Choosing $s=4t/(\sum_{i=1}^n (b_i-a_i)^2)$ minimizes the right hand side and yields \eqref{eq:hoef}.
+
+
+\end{proof}
+
+\begin{shaded}
+\begin{lemma}
+\label{lem:bernoulli:bound}
+Let $X$ be a Bernoulli random variable. Then, for all $t>0$,
+\[
+\Psi(t) = \bE\left[\rme^{t\left(X-\bE[X]\right)}\right] \leqslant \rme^{t^2/8}\eqsp.
+\]
+\end{lemma}
+\end{shaded}
+
+\begin{proof}
+Let $p\in(0,1)$ be such that $p = \bP(X=1)$ (cases $p=0$ and $p=1$ are straightforward). For all $t>0$,
+\[
+\varphi(t) = \log \Psi(t) = \log\left(1-p+p\rme^t\right) - pt\eqsp.
+\]
+The proof then follows from proof of the Hoeffding inequality, i.e. \eqref{eq:hoeffding:loglaplace} with $b_i =1-p$ and $a_i = -p$.
+%The function $\Psi$ is twice continuously differentiable and such that for all $t>0$,
+%\[
+%\varphi'(t) = \frac{p\rme^{t}}{1-p+p\rme^t} - p\quad\mathrm{and}\quad |\varphi''(t)| =\frac{p\rme^{t}(1-p+p\rme^t) - (p \rme^t)^2}{(1-p+p\rme^t)^2} = \frac{p\rme^{t}(1-p)}{(1-p+p\rme^t)^2} \leqslant \frac{1}{4} \eqsp.
+%\]
+%Then, by a second order Taylor expansion, for all $t>0$,
+%\[
+%\varphi(t) \leqslant \varphi(0) + t\varphi'(0) + \frac{t^2}{8}\leqslant \frac{t^2}{8}\eqsp,
+%\]
+%which concludes the proof.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Matrix calculus}
+
+\begin{lemma}
+\label{ref:expectation:quadratic:trasform}
+Let $X$ be a random vector in $\rset^d$ with mean $\mu\in\rset^d$ and covariance matrix $\Sigma\in\rset^{d\times d}$ and $A$ a symmetric matrix in $\rset^{d\times d}$. Then,
+$$
+\bE[X^\top A X] = \mu^\top A \mu + \mathrm{Trace}(A\Sigma)\eqsp.
+$$
+\end{lemma}
+\begin{proof}
+As $X^\top A X$ is a real number, $\bE[X^\top A X] = \bE[\mathrm{Trace}(X^\top A X)] =  \bE[\mathrm{Trace}(AXX^\top )]$. By linearity, $\bE[X^\top A X] = \mathrm{Trace}(A\bE[XX^\top])$ which yields,
+$$
+\bE[X^\top A X] =   \mathrm{Trace}(A\{\bV[X] + \bE[X]\bE[X]^\top\}) =  \mu^\top A \mu + \mathrm{Trace}(A\Sigma)\eqsp.
+$$
+\end{proof}
+
+Let $\Mplus$ the space of real-valued $d \times d$ symmetric positive matrices.
+
+\begin{lemma}
+The function $\Sigma \mapsto \log \det \Sigma$ is concave on $\Mplus$.
+\end{lemma}
+\begin{proof}
+Let $\Sigma,\Gamma \in \Mplus$ and $\lambda \in [0,1]$.  Since $\Sigma^{-1/2}\Gamma\Sigma^{-1/2} \in \Mplus$, it is diagonalisable in some orthonormal basis and write $\mu_1,\ldots, \mu_d$ the (possibly repeated) entries of the diagonal. Note in particular that $\det \lr{\Sigma^{-1/2}\Gamma\Sigma^{-1/2}}=\prod_{i=1}^d \mu_i$. Then,
+\begin{align*}
+\log \det \lr{(1-\lambda)\Sigma+\lambda \Gamma}&=\log \det \lrb{\Sigma^{1/2} \lr{(1-\lambda)I+\lambda \Sigma^{-1/2}\Gamma\Sigma^{-1/2}} \Sigma^{1/2}}\\
+&=\log \det \Sigma + \log \det \lr{(1-\lambda)I+\lambda \Sigma^{-1/2}\Gamma\Sigma^{-1/2}} \nonumber \\
+&=\log \det \Sigma + \sum_{i=1}^d \log(1-\lambda+\lambda \mu_i)\nonumber \\
+& \geq \log \det \Sigma + \sum_{i=1}^d (1-\lambda) \underbrace{\log(1)}_{=0}+\lambda \log( \mu_i) \label{eq:diag}:= D
+\end{align*}
+where the last inequality follows from the concavity of the $\log$. Now, rewrite the rhs $D$ as:
+\begin{align*}
+D&=(1-\lambda) \log \det \Sigma + \lambda \lr{\log \det \Sigma^{1/2}+ \log \det \Sigma^{-1/2}\Gamma\Sigma^{-1/2} + \log \det \Sigma^{1/2}} \\
+&=(1-\lambda) \log \det \Sigma + \lambda \log \det \Gamma
+\end{align*}
+This finishes the proof.
+\end{proof}
+
+
+
+
+
+
+\begin{lemma}
+\label{lem:matrix:calculus}
+Let $\Sigma$ be a symmetric and invertible  matrix in $\rset^{d\times d}$.
+\begin{enumerate}[(i)]
+\item The derivative of the real valued function $\Sigma \mapsto \log\mathrm{det}(\Sigma)$ defined on $\rset^{d\times d}$ is given by:
+\[
+\partial_{\Sigma}\{\log\mathrm{det}(\Sigma)\}= \Sigma^{-1}\eqsp,
+\]
+where, for all real valued function $f$ defined on $\rset^{d\times d}$, $\partial_{\Sigma}f(\Sigma)$ denotes the $\rset^{d\times d}$ matrix such that for all $1\leqslant i,j\leqslant d$, $\{\partial_{\Sigma}f(\Sigma)\}_{i,j}$ is the partial derivative of $f$ with respect to $\Sigma_{i,j}$.
+\item The derivative of the real valued  function  $x\mapsto x'\Sigma x$ defined on $\rset^d$ is given by:
+\[
+\partial_{x}\{x'\Sigma x\} = 2 \Sigma x\eqsp.
+\]
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+  \begin{enumerateList}
+    \item Recall that for all $i \in \{1,\ldots,d\}$ we have
+      $\det(\Sigma)=\sum_{k=1}^d \Sigma_{i,k} \Delta_{i,k}$ where
+      $\Delta_{i,j}$ is the $(i,j)$-cofactor associated to
+      $\Sigma$. For any fixed $i,j$, the component $\Sigma_{i,j}$ does not appear in anywhere in
+      the decomposition $\sum_{k=1}^d \Sigma_{i,k} \Delta_{i,k}$,
+      except for the term $k=j$. This implies
+      $$
+      \frac{\partial \log \det(\Sigma)}{\partial \Sigma_{i,j}}=
+      \frac{1}{\det \Sigma}\frac{\partial  \det(\Sigma)}{\partial
+        \Sigma_{i,j}}=\frac{\Delta_{i,j}}{\det  \Sigma}
+      $$
+      Recalling the identity $\Sigma\; [\Delta_{j,i}]_{1\leq i,j \leq d}=(\det
+      \Sigma)\; I_d$ so that $\Sigma^{-1}=\frac{[\Delta_{j,i}]_{1\leq i,j \leq d}^T}{\det
+      \Sigma}$, we finally get
+      $$
+\lrb{\frac{\partial \log \det(\Sigma)}{\partial \Sigma_{i,j}}}_{1\leq
+  i,j  \leq d}=(\Sigma^{-1})^T=\Sigma^{-1}
+$$
+where the last equality follows from the fact that $\Sigma$ is
+symmetric.
+\item Define $\varphi(x)=x'\Sigma x$. Then, by straightforward
+  algebra, $\varphi(x+h)=\varphi(x)+2h'\Sigma
+  x+\varphi(h)=\varphi(x)+2h'\Sigma x+o(||h||)$, which concludes the
+  proof.
+  \end{enumerateList}
+\end{proof}
