@@ -48,6 +48,7 @@ $$
 
 
 \begin{proposition}
+\label{prop:risk:ridge}
 In the well-specified setting, for all $\lambda>0$,
 $$
 \bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_n) - \mathsf{R}(\param_\star)\right] = \frac{\lambda^2}{n}\param_\star^\top(X^\top X + \lambda I_n)^{-2} X^\top X \param_\star + \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((X^\top X)^2(X^\top X + \lambda I_n)^{-2}\right)\eqsp.
@@ -90,6 +91,27 @@ The mean square error is therefore a sum of two contributions, a bias related te
 \end{remark}
 Using the risk analysis for the Ridge-based estimator, we can tune the regularization parameter $\lambda$ to obtain
 a  better bound than the $\sigma_\star^2 d /n$ bound of the case $\lambda = 0$.
+
+\begin{proposition}
+
+\end{proposition}
+\begin{proof}
+Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $X^\top X$ associated with the eigenvalues $(\lambda_1,\ldots,\lambda_d)\in\rset^d$. Therefore,
+$$
+\frac{\lambda^2}{n}\param_\star^\top(X^\top X + \lambda I_n)^{-2} X^\top X \param_\star = \frac{\lambda}{n}\sum_{i=1}^d \param_\star^\top \frac{\lambda \lambda_i}{(\lambda_i + \lambda)^2} u_iu_i^\top \param_\star \leqslant  \frac{\lambda}{2n}\|\param_\star\|_2^2\eqsp,
+$$
+since for all $1\leqslant i \leqslant d$, $2\lambda \lambda_i \leqslant (\lambda + \lambda_i)^2$ implies $\lambda \lambda_i/(\lambda + \lambda_i)^2 \leqslant 1/2$. On the other hand,
+$$
+\frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((X^\top X)^2(X^\top X + \lambda I_n)^{-2}\right) = \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left(X^\top X\sum_{i=1}^d\frac{\lambda_i}{(\lambda + \lambda_i)^2}u_iu_i^\top\right) \leqslant \frac{\sigma_\star^{2}}{2\lambda n}\mathrm{Trace}\left(X^\top X\right) \eqsp.
+$$
+Therefore, by Proposition~\ref{prop:risk:ridge},
+$$
+\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_n) - \mathsf{R}(\param_\star)\right]  \leqslant \frac{\lambda}{2n}\|\param_\star\|_2^2 + \frac{\sigma_\star^{2}}{2\lambda n}\mathrm{Trace}\left(X^\top X\right)\eqsp.
+$$
+The upper-bound is then minimized by choosing $\lambda_\star = \sigma_\star \mathrm{Trace}\left(X^\top X\right)^{1/2} /\|\param_\star\|_2 $.
+\end{proof}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Lasso regression}
