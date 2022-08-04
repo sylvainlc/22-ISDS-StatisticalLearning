@@ -32,7 +32,7 @@ The unique expression of $\widehat \param^{\mathrm{ridge}}_n $ is obtained simil
 $$
 \bE[\widehat \param^{\mathrm{ridge}}_n] =  (X^\top X + \lambda I_n)^{-1}X^\top \bE[Y] =  (X^\top X + \lambda I_n)^{-1}X^\top X\param_\star \eqsp.
 $$
-As the matrix $X^\top X$ is symmetric and real, there exists nonnegative eigenvalues $\lambda_1\geqslant \ldots \geqslant \lambda_d$ and orthonormal eigenvectors $u_1, \ldots u_d$ in $\rset^d$ such that $X^\top X = \sum_{i=1}^d \lambda_i u_i u_i^\top$ and $(X^\top X + \lambda I_n)^{-1} = \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top$. Therefore, 
+As the matrix $X^\top X$ is symmetric and real,  $X^\top X$ is diagonalizable and $X^\top X$, $X^\top X + \lambda I_n$ and $(X^\top X + \lambda I_n)^{-1}$, are diagonalizable in the same orthonormal basis. Then, there exists nonnegative eigenvalues $\lambda_1\geqslant \ldots \geqslant \lambda_d$ and orthonormal eigenvectors $u_1, \ldots u_d$ in $\rset^d$ such that $X^\top X = \sum_{i=1}^d \lambda_i u_i u_i^\top$ and $(X^\top X + \lambda I_n)^{-1} = \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top$. Therefore, 
 $$
 \bE[\widehat \param^{\mathrm{ridge}}_n] -\param_\star=  \sum_{i=1}^d \lambda_i(\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star -  \sum_{i=1}^d u_i u_i^\top\param_\star =  - \lambda  \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star = - \lambda(X^\top X + \lambda I_n)^{-1}\param_\star\eqsp.
 $$
@@ -45,16 +45,53 @@ $$
 \bV[\widehat \param^{\mathrm{ridge}}_n]  =   \sigma_\star^{2}(X^\top X + \lambda I_n)^{-2}X^\top X\eqsp.
 $$
 \end{proof}
-The mean square error of the estimator is then given by
+
+
+\begin{proposition}
+In the well-specified setting, for all $\lambda>0$,
+$$
+\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_n) - \mathsf{R}(\param_\star)\right] = \frac{\lambda^2}{n}\param_\star^\top(X^\top X + \lambda I_n)^{-2} X^\top X \param_\star + \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((X^\top X)^2(X^\top X + \lambda I_n)^{-2}\right)\eqsp.
+$$
+\end{proposition}
+\begin{proof}
+Following the full-rank risk analysis given in Section~\ref{sec:risk:fullrank}, we have
+\begin{multline*}
+\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_n) - \mathsf{R}(\param_\star)\right] \\
+=\left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_n\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] \right) + \bE\left[ \left(\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] - \widehat \param^{\mathrm{ridge}}_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] - \widehat \param^{\mathrm{ridge}}_n\right)\right]\eqsp.
+\end{multline*}
+By Proposition~\ref{prop:least:squares:ridge}, the bias term is given by
+\begin{align*}
+\left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_n\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] \right) &= \frac{\lambda^2}{n}((X^\top X + \lambda I_n)^{-1}\param_\star)^\top X^\top X  ((X^\top X + \lambda I_n)^{-1}\param_\star)\eqsp,\\
+&= \frac{\lambda^2}{n}\param_\star^\top(X^\top X + \lambda I_n)^{-1} X^\top X  (X^\top X + \lambda I_n)^{-1})\param_\star\eqsp,\\
+&= \frac{\lambda^2}{n}\param_\star^\top(X^\top X + \lambda I_n)^{-2} X^\top X \param_\star\eqsp.
+\end{align*}
+By Lemma~\ref{ref:expectation:quadratic:trasform} and  Proposition~\ref{prop:least:squares:ridge}, the variance term is given by
+\begin{align*}
+\bE\left[ \left(\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] - \widehat \param^{\mathrm{ridge}}_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] - \widehat \param^{\mathrm{ridge}}_n\right)\right] &= \mathrm{Trace}\left(\frac{1}{n}X^\top X \bV[\widehat \param^{\mathrm{ridge}}_n]\right)\eqsp,\\
+&= \sigma_\star^{2}\mathrm{Trace}\left(\frac{1}{n}X^\top X(X^\top X + \lambda I_n)^{-2}X^\top X\right)\eqsp,\\
+&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((X^\top X)^2(X^\top X + \lambda I_n)^{-2}\right)\eqsp,
+\end{align*}
+which concludes the proof.
+\end{proof}
+\begin{remark}
+\begin{itemize}
+\item The bias term increases with $\lambda$. It is 0 when $\lambda = 0$ and it converges to $\param_\star^\top X^\top X\param_\star / n$ when $\lambda\to \infty$.
+\item  The variance term decreases with $\lambda$. It is $\sigma_\star^2 d /n$ when $\lambda = 0$ and it converges to $0$ when $\lambda\to \infty$.
+\item The mean square error of the estimator is then given by
 \[
 \bE\left[\left\|\widehat \param^{\mathrm{ridge}}_n-\param_*\right\|_2^2\right] = \mathrm{Trace}\left(\bV[\widehat \param^{\mathrm{ridge}}_n]\right) + \left\|\bE[\widehat \param^{\mathrm{ridge}}_n] - \param_*\right\|_2^2\eqsp.
 \]
-Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $X^\top X$ associated with the eigenvalues $(\gamma_1,\ldots,\gamma_d)\in\rset^d$. Then,
+Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $X^\top X$ associated with the eigenvalues $(\lambda_1,\ldots,\lambda_d)\in\rset^d$. Then,
 \[
-\bE\left[\left\|\widehat \param^{\mathrm{ridge}}_n-\param_*\right\|_2^2\right] =  \sigma_\star^2 \sum_{j=1}^d \frac{\gamma_j}{(\gamma_j+\lambda)^2} + \lambda^2  \sum_{j=1}^d \frac{\langle \param_* \eqsp; \vartheta_j\eqsp\rangle^2}{(\gamma_j+\lambda)^2}\eqsp.
+\bE\left[\left\|\widehat \param^{\mathrm{ridge}}_n-\param_*\right\|_2^2\right] =  \sigma_\star^2 \sum_{j=1}^d \frac{\lambda_j}{(\lambda_j+\lambda)^2} + \lambda^2  \sum_{j=1}^d \frac{\langle \param_* \eqsp; \vartheta_j\eqsp\rangle^2}{(\lambda_j+\lambda)^2}\eqsp.
 \]
 The mean square error is therefore a sum of two contributions, a bias related term which increases with $\lambda$ and a variance related term which decreases with $\lambda$. In practice, the value of $\lambda$ is chosen using cross-validation.
-
+\end{itemize}
+\end{remark}
+Using the risk analysis for the Ridge-based estimator, we can tune the regularization parameter $\lambda$ to obtain
+a  better bound than the $\sigma_\star^2 d /n$ bound of the case $\lambda = 0$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Lasso regression}
 The Least Absolute Shrinkage and Selection Operator (Lasso) regression is a $\mathrm{L}_1$ based regularized regression which aims at fostering sparsity. The objective is to solve the following minimization problem,
 \[
