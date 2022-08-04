@@ -9,59 +9,59 @@
 \begin{shaded}
 \begin{definition}
 \label{def:gauss:vec}
-A random variable $X\in\rset^n$ is a Gaussian vector if and only if, for all $a\in\rset^n$, the random variable $\langle a\eqsp;\eqsp X\rangle$ is a Gaussian random variable.
+A random variable $X\in\rset^d$ is a Gaussian vector if and only if, for all $a\in\rset^d$, the random variable $\langle a\eqsp;\eqsp X\rangle$ is a Gaussian random variable.
 \end{definition}
 \end{shaded}
-For all random variable $X\in\rset^n$,  $X\sim \mathcal{N}(\mu,\Sigma)$ means that $X$ is a Gaussian vector with mean $\bE[X] = \mu\in\rset^n$ and covariance matrix $\bV[X] = \Sigma\in\rset^{n\times n}$. The characteristic function of $X$ is given (see exercises), for all $t\in\rset^n$, by
+For all random variable $X\in\rset^d$,  $X\sim \mathcal{N}(\mu,\Sigma)$ means that $X$ is a Gaussian vector with mean $\bE[X] = \mu\in\rset^n$ and covariance matrix $\bV[X] = \Sigma\in\rset^{n\times n}$. The characteristic function of $X$ is given (see exercises), for all $t\in\rset^n$, by
 \[
-\bE[\rme^{i\langle t\eqsp;\eqsp X\rangle}] = \rme^{i\langle t\eqsp;\eqsp \mu\rangle - t^T\Sigma t /2}\eqsp.
+\bE[\rme^{i\langle t\eqsp;\eqsp X\rangle}] = \rme^{i\langle t\eqsp;\eqsp \mu\rangle - t^\top\Sigma t /2}\eqsp.
 \]
 Therefore, the law of a Gaussian vector is uniquely defined by its mean vector and its covariance matrix.
 If the covariance matrix $\Sigma$ is nonsingular, then the law of $X$ has a probability density with respect to the Lebesgue measure on $\rset^n$ given by : 
 \[
-x\mapsto \mathrm{det}(2\pi \Sigma)^{-1/2} \exp\left\{-(x-\mu)^T\Sigma^{-1}(x-\mu)/2\right\}\eqsp,
+x\mapsto \mathrm{det}(2\pi \Sigma)^{-1/2} \exp\left\{-(x-\mu)^\top\Sigma^{-1}(x-\mu)/2\right\}\eqsp,
 \]
 where $\mu = \bE[X]$.
 
 \begin{shaded}
 \begin{proposition}
 \label{prop:gauss:vec:decor}
-Let $X\in\rset^n$ be a Gaussian vector. Let $\{i_1,\ldots,i_d\}$ be a subset of $\{1,\ldots,n\}$, $d\geqslant 1$. If for all $1\leqslant k\neq j \leqslant d$, $\mathrm{Cov}(X_{i_k},X_{i_j}) = 0$, then $(X_{i_1},\ldots,X_{i_d})$ are independent.
+Let $X\in\rset^d$ be a Gaussian vector. Let $\{i_1,\ldots,i_p\}$ be a subset of $\{1,\ldots,d\}$, $p\geqslant 1$. If for all $1\leqslant k\neq j \leqslant p$, $\mathrm{Cov}(X_{i_k},X_{i_j}) = 0$, then $(X_{i_1},\ldots,X_{i_p})$ are independent.
 \end{proposition}
 \end{shaded}
 \begin{proof}
-The random vector $(X_{i_1},\ldots,X_{i_d})^T$ is a Gaussian vector with mean $(\bE[X_{i_1}],\ldots,\bE[X_{i_d}])^T$ and diagonal covariance matrix $\mathrm{diag}(\bV[X_{i_1}],\ldots,\bV[X_{i_d}])$. Consider $(\xi_{i_1},\ldots,\xi_{i_d})$ i.i.d. random variables with distribution $\mathcal{N}(0,1)$ and define, for all $1\leqslant j \leqslant d$,
+The random vector $(X_{i_1},\ldots,X_{i_p})^\top$ is a Gaussian vector with mean $(\bE[X_{i_1}],\ldots,\bE[X_{i_p}])^\top$ and diagonal covariance matrix $\mathrm{diag}(\bV[X_{i_1}],\ldots,\bV[X_{i_p}])$. Consider $(\xi_{i_1},\ldots,\xi_{i_p})$ i.i.d. random variables with distribution $\mathcal{N}(0,1)$ and define, for all $1\leqslant j \leqslant p$,
 \[
 Z_{i_j} = \bE[X_{i_j}]  + \sqrt{\bV[X_{i_j}]}\xi_{i_j}\eqsp.
 \]
-Then, the random vector $(Z_{i_1},\ldots,Z_{i_d})^T$ is a Gaussian vector with the same mean and the same covariance matrix as $(X_{i_1},\ldots,X_{i_d})^T$. The two vectors have therefore the same characteristic function and the same law and $(X_{i_1},\ldots,X_{i_d})$  are independent as  $(\xi_{i_1},\ldots,\xi_{i_d})$ are independent.
+Then, the random vector $(Z_{i_1},\ldots,Z_{i_p})^\top$ is a Gaussian vector with the same mean and the same covariance matrix as $(X_{i_1},\ldots,X_{i_p})^\top$. The two vectors have therefore the same characteristic function and the same law and $(X_{i_1},\ldots,X_{i_p})$  are independent as  $(\xi_{i_1},\ldots,\xi_{i_p})$ are independent.
 \end{proof}
 
 \begin{shaded}
 \begin{theorem}[Cochran]
 \label{th:cochran}
-Let $X\sim \mathcal{N}(0,I_n)$ be a Gaussian vector in $\rset^n$, $F$ be a vector subspace of $\rset^n$ and $F^{\perp}$ its orthogonal. Denote by $\pi_F(X)$ (resp. $\pi_{F^{\perp}}(X)$) the orthogonal projection of $X$ on $F$ (resp. on $F^{\perp}$). Then,  $\pi_F(X)$ and $\pi_{F^{\perp}}(X)$ are independent, $\|\pi_F(X)\|^2\sim\chi^2(p)$ and $\|\pi_{F^{\perp}}(X)\|^2 \sim \chi^2(n-p)$, where $p$ is the dimension of $F$.
+Let $X\sim \mathcal{N}(0,I_d)$ be a Gaussian vector in $\rset^d$, $F$ be a vector subspace of $\rset^d$ and $F^{\perp}$ its orthogonal. Denote by $\pi_F(X)$ (resp. $\pi_{F^{\perp}}(X)$) the orthogonal projection of $X$ on $F$ (resp. on $F^{\perp}$). Then,  $\pi_F(X)$ and $\pi_{F^{\perp}}(X)$ are independent, $\|\pi_F(X)\|_2^2\sim\chi^2(p)$ and $\|\pi_{F^{\perp}}(X)\|_2^2 \sim \chi^2(d-p)$, where $p$ is the dimension of $F$.
 \end{theorem}
 \end{shaded}
 \begin{proof}
-Let $(u_1,\ldots,u_n)$ be an orthonormal basis of $\rset^n$ where $(u_1,\ldots,u_p)$ is an orthonormal basis of $F$ and $(u_{p+1},\ldots,u_n)$ and orthonormal basis of $F^{\perp}$. Consider the matrix $U\in\rset^{n\times n}$ such that for all $1\leqslant i\leqslant n$, the $i$-th column of $U$ is $u_i$ and $U_{(p)}$ (reps. $U_{(n-p)}^{\perp}$) the matrix made of the first $p$ (resp. last $n-p$) columns of $U$. Note that
+Let $(u_1,\ldots,u_d)$ be an orthonormal basis of $\rset^d$ where $(u_1,\ldots,u_p)$ is an orthonormal basis of $F$ and $(u_{p+1},\ldots,u_d)$ and orthonormal basis of $F^{\perp}$. Consider the matrix $U\in\rset^{d\times d}$ such that for all $1\leqslant i\leqslant d$, the $i$-th column of $U$ is $u_i$ and $U_{(p)}$ (reps. $U_{(d-p)}^{\perp}$) the matrix made of the first $p$ (resp. last $d-p$) columns of $U$. Note that
 \[
 \pi_F(X) = \sum_{i=1}^p \langle X\eqsp;\eqsp u_i\rangle u_i\eqsp,
 \]
-which can be written $\pi_F(X) = U_{(p)}U_{(p)}^T X$. Similarly, $\pi_{F^{\perp}}(X) = U^{\perp}_{(n-p)}(U^{\perp}_{(n-p)})^T X$
+which can be written $\pi_F(X) = U_{(p)}U_{(p)}^\top X$. Similarly, $\pi_{F^{\perp}}(X) = U^{\perp}_{(d-p)}(U^{\perp}_{(d-p)})^\top X$
 Therefore,
 \[
-\begin{pmatrix}\pi_F(X)\\ \pi_{F^{\perp}}(X)\end{pmatrix}  = \begin{pmatrix} U_{(p)}U_{(p)}^T \\ U^{\perp}_{(n-p)}(U^{\perp}_{(n-p)})^T\end{pmatrix}X
+\begin{pmatrix}\pi_F(X)\\ \pi_{F^{\perp}}(X)\end{pmatrix}  = \begin{pmatrix} U_{(p)}U_{(p)}^\top \\ U^{\perp}_{(d-p)}(U^{\perp}_{(d-p)})^\top\end{pmatrix}X
 \]
 is a centered Gaussian vector with covariance matrix given by
 \[
- \begin{pmatrix} U_{(p)}U_{(p)}^T &  0 \\ 0 & U^{\perp}_{(n-p)}(U^{\perp}_{(n-p)})^T\end{pmatrix}\eqsp.
+ \begin{pmatrix} U_{(p)}U_{(p)}^\top &  0 \\ 0 & U^{\perp}_{(d-p)}(U^{\perp}_{(d-p)})^\top\end{pmatrix}\eqsp.
 \]
 By Proposition~\ref{prop:gauss:vec:decor}, $\pi_F(X)$ and $\pi_{F^{\perp}}(X)$ are independent. On the other hand,
 \[
-\|\pi_F(X)\|^2 = \sum_{i=1}^p \langle X\eqsp;\eqsp u_i\rangle^2 \quad\mathrm{and} \quad \|\pi_{F^{\perp}}(X)\|^2 = \sum_{i=p+1}^n \langle X\eqsp;\eqsp u_i\rangle^2\eqsp. 
+\|\pi_F(X)\|_2^2 = \sum_{i=1}^p \langle X\eqsp;\eqsp u_i\rangle^2 \quad\mathrm{and} \quad \|\pi_{F^{\perp}}(X)\|_2^2 = \sum_{i=p+1}^d \langle X\eqsp;\eqsp u_i\rangle^2\eqsp. 
 \]
-The random vector $(\langle X\eqsp;\eqsp u_i\rangle)_{1\leqslant i \leqslant n}$ is given by $U^TX$: it is a Gaussian random vector with mean $0$ and covariance matrix $I_n$. The random variables $(\langle X\eqsp;\eqsp u_i\rangle)_{1\leqslant i \leqslant n}$ are therefore i.i.d. with distribution $\mathcal{N}(0,1)$, which concludes the proof.
+The random vector $(\langle X\eqsp;\eqsp u_i\rangle)_{1\leqslant i \leqslant d}$ is given by $U^TX$: it is a Gaussian random vector with mean $0$ and covariance matrix $I_d$. The random variables $(\langle X\eqsp;\eqsp u_i\rangle)_{1\leqslant i \leqslant d}$ are therefore i.i.d. with distribution $\mathcal{N}(0,1)$, which concludes the proof.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -91,7 +91,7 @@ The least squares estimate is defined as a solution to
 \[
 \widehat \param_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|_2^2\eqsp.
 \]
-In a well-specified setting, we assumed that  for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. random variables in $\rset^d$. Let  $\varepsilon\in\rset^d$  be the random vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $\varepsilon$  is $\varepsilon_i$. The model is then written
+In a {\em well-specified setting}, we assumed that  for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. random variables in $\rset^d$. Let  $\varepsilon\in\rset^d$  be the random vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $\varepsilon$  is $\varepsilon_i$. The model is then written
 \[
 Y = X \param_{\star} + \varepsilon\eqsp.
 \]
@@ -316,22 +316,22 @@ Then, following the same steps as in Section~\ref{sec:full:rank:reg}, in the cas
 \end{equation}
 where
 \[
-\widehat\alpha_{n} = (\Psi' \Psi)^{-1}\Psi'Y\eqsp.
+\widehat\alpha_{n} = (\Psi^\top \Psi)^{-1}\Psi^\top Y\eqsp.
 \]
-Introducing the function $\varphi: x\mapsto (\varphi_1(x)\ldots,\varphi_M(x))'$ yields the linear estimator 
+Introducing the function $\varphi: x\mapsto (\varphi_1(x)\ldots,\varphi_M(x))^\top$ yields the linear estimator 
 \[
 \widehat f^\varphi_n: x \mapsto \sum_{i = 1}^n w_i(x)Y_i\eqsp,
 \]
 where, for all $1\leqslant i\leqslant n$,
 \[
-w_i(x) = \left(\varphi(x)'(\Psi' \Psi)^{-1}\Psi'\right)_i\eqsp.
+w_i(x) = \left(\varphi(x)^\top(\Psi^\top\Psi)^{-1}\Psi^\top\right)_i\eqsp.
 \]
 
 \begin{shaded}
 \begin{proposition}
-Let  $W = (w_i(X_j))_{1\leqslant i,j \leqslant n}$ and $\bar f^* = (f^*(X_1),\ldots,f^*(X_n))'$. Then,
+Let  $W = (w_i(X_j))_{1\leqslant i,j \leqslant n}$ and $\bar f^* = (f^*(X_1),\ldots,f^*(X_n))^\top$. Then,
 \[
-\frac{1}{n}\bE\left[\sum_{i=1}^n(\widehat f^\varphi_n(X_i) - f^*(X_i))^2\right] = \frac{1}{n}\sum_{i=1}^n((W\bar f^*)_i - f^*(X_i))^2 + \frac{\sigma^2}{n}\mathrm{Trace}(W'W)\eqsp,
+\frac{1}{n}\bE\left[\sum_{i=1}^n(\widehat f^\varphi_n(X_i) - f^*(X_i))^2\right] = \frac{1}{n}\sum_{i=1}^n((W\bar f^*)_i - f^*(X_i))^2 + \frac{\sigma^2}{n}\mathrm{Trace}(W^\top W)\eqsp,
 \]
 where $\widehat f^\varphi_n$  is defined by \eqref{eq:def:nonparam:reg}.
 \end{proposition}
