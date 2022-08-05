@@ -3,46 +3,49 @@
 
 
 \section{Ridge regression}
-In the case where $X^\top X$ is singular (resp. has eigenvalues close to zero), the least squares estimate cannot be computed (resp. is not robust). A common approach to control the estimator variance is to solve the surrogate Ridge regression problem
+In the case where $X^\top X$ is singular (resp. has eigenvalues close to zero), the least squares estimate cannot be computed (resp. is not robust). A common approach to control the estimator variance is to solve the surrogate Ridge regression problem:
 \[
-\widehat \param^{\mathrm{ridge}}_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|_2^2 + \lambda\|\param\|_2^2\eqsp,
+\widehat \param^{\mathrm{ridge}}_{n,\lambda}\in  \argmin_{\param\in\rset^d}  \left\{\frac{1}{n}\|Y - X\param\|_2^2 + \lambda\|\param\|_2^2\right\}\eqsp,
 \]
-where $\lambda>0$. The matrix $X^\top X + \lambda I_n$ is definite positive for all $\lambda>0$ as for all $u\in\rset^d$,
+where $\lambda>0$. 
+\begin{remark}
+The matrix $n^{-1}X^\top X + \lambda  I_n$ is definite positive for all $\lambda>0$ as for all $u\in\rset^d$,
 \[
-u^\top (X^\top X + \lambda I_n)u = \|Xu\|_2^2 + \lambda \|u\|_2^2\eqsp,
+u^\top (n^{-1}X^\top X + \lambda I_n)u = n^{-1}\|Xu\|_2^2 + \lambda  \|u\|_2^2\eqsp,
 \]
 which is positive for all $u\neq 0$. This remark allows to obtain the following result.
+\end{remark}
 
 \begin{shaded}
 \begin{proposition}
 \label{prop:least:squares:ridge}
 The unique solution to the Ridge regression problem is given by
 \[
-\widehat \param^{\mathrm{ridge}}_n = (X^\top X + \lambda I_n)^{-1}X^\top Y\eqsp.
+\widehat \param^{\mathrm{ridge}}_{n,\lambda} = \frac{1}{n}\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}X^\top Y\eqsp.
 \] 
 In the well-specified setting, this estimator is biased and satisfies 
 \begin{align*}
-\bE[\widehat \param^{\mathrm{ridge}}_n ] - \param_*&= - \lambda(X^\top X + \lambda I_n)^{-1}\param_\star\eqsp,\\
-\bV[\widehat \param^{\mathrm{ridge}}_n ] &= \sigma_\star^2(X^\top X + \lambda I_n)^{-2}X^\top X \eqsp.
+\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda} ] - \param_*&= - \lambda\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\param_\star\eqsp,\\
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda} ] &= \frac{\sigma_\star^{2}}{n}\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2}\frac{1}{n}X^\top X\eqsp.
 \end{align*}
 \end{proposition}
 \end{shaded}
 \begin{proof}
-The unique expression of $\widehat \param^{\mathrm{ridge}}_n $ is obtained similarly as in the proof of Proposition~\ref{prop:least:squares:full:rank}. Then,
+The unique expression of $\widehat \param^{\mathrm{ridge}}_{n,\lambda} $ is obtained similarly as in the proof of Proposition~\ref{prop:least:squares:full:rank}. Then,
 $$
-\bE[\widehat \param^{\mathrm{ridge}}_n] =  (X^\top X + \lambda I_n)^{-1}X^\top \bE[Y] =  (X^\top X + \lambda I_n)^{-1}X^\top X\param_\star \eqsp.
+\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] =  \frac{1}{n}\left (\frac{1}{n}X^\top X + \lambda  I_n \right)^{-1}X^\top \bE[Y] =  \frac{1}{n}\left(\frac{1}{n} X^\top X + \lambda  I_n\right )^{-1}X^\top X\param_\star \eqsp.
 $$
-As the matrix $X^\top X$ is symmetric and real,  $X^\top X$ is diagonalizable and $X^\top X$, $X^\top X + \lambda I_n$ and $(X^\top X + \lambda I_n)^{-1}$, are diagonalizable in the same orthonormal basis. Then, there exists nonnegative eigenvalues $\lambda_1\geqslant \ldots \geqslant \lambda_d$ and orthonormal eigenvectors $u_1, \ldots u_d$ in $\rset^d$ such that $X^\top X = \sum_{i=1}^d \lambda_i u_i u_i^\top$ and $(X^\top X + \lambda I_n)^{-1} = \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top$. Therefore, 
+As the matrix $n^{-1}X^\top X$ is symmetric and real,  $ n^{-1}X^\top X$ is diagonalizable and $n^{-1}X^\top X$, $n^{-1}X^\top X + \lambda I_n$ and $(n^{-1} X^\top X + \lambda I_n)^{-1}$, are diagonalizable in the same orthonormal basis. Then, there exists nonnegative eigenvalues $\lambda_1\geqslant \ldots \geqslant \lambda_d$ and orthonormal eigenvectors $u_1, \ldots u_d$ in $\rset^d$ such that $n^{-1} X^\top X = \sum_{i=1}^d \lambda_i u_i u_i^\top$ and $(n^{-1}X^\top X + \lambda I_n)^{-1} = \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top$. Therefore, 
 $$
-\bE[\widehat \param^{\mathrm{ridge}}_n] -\param_\star=  \sum_{i=1}^d \lambda_i(\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star -  \sum_{i=1}^d u_i u_i^\top\param_\star =  - \lambda  \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star = - \lambda(X^\top X + \lambda I_n)^{-1}\param_\star\eqsp.
+\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] -\param_\star=  \sum_{i=1}^d \lambda_i(\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star -  \sum_{i=1}^d u_i u_i^\top\param_\star =  - \lambda  \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star = - \lambda\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\param_\star\eqsp.
 $$
 Similarly,
 $$
-\bV[\widehat \param^{\mathrm{ridge}}_n]  =  (X^\top X + \lambda I_n)^{-1}X^\top \bV[Y]X  (X^\top X + \lambda I_n)^{-1} = \sigma_\star^{2}(X^\top X + \lambda I_n)^{-1}X^\top X  (X^\top X + \lambda I_n)^{-1}\eqsp.
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  =  \frac{1}{n^2}\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}X^\top \bV[Y]X  \left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1} = \frac{\sigma_\star^{2}}{n^2}\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}X^\top X  \left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\eqsp.
 $$
 Therefore,
 $$
-\bV[\widehat \param^{\mathrm{ridge}}_n]  =   \sigma_\star^{2}(X^\top X + \lambda I_n)^{-2}X^\top X\eqsp.
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  =   \frac{\sigma_\star^{2}}{n}\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2}\frac{1}{n}X^\top X\eqsp.
 $$
 \end{proof}
 
@@ -51,26 +54,26 @@ $$
 \label{prop:risk:ridge}
 In the well-specified setting, for all $\lambda>0$,
 $$
-\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_n) - \mathsf{R}(\param_\star)\right] = \frac{\lambda^2}{n}\param_\star^\top(X^\top X + \lambda I_n)^{-2} X^\top X \param_\star + \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((X^\top X)^2(X^\top X + \lambda I_n)^{-2}\right)\eqsp.
+\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_{n,\lambda}) - \mathsf{R}(\param_\star)\right] = \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2} \frac{1}{n}X^\top X \param_\star +\frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_n)^{-2}\right)\eqsp.
 $$
 \end{proposition}
 \begin{proof}
 Following the full-rank risk analysis given in Section~\ref{sec:risk:fullrank}, we have
 \begin{multline*}
-\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_n) - \mathsf{R}(\param_\star)\right] \\
-=\left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_n\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] \right) + \bE\left[ \left(\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] - \widehat \param^{\mathrm{ridge}}_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] - \widehat \param^{\mathrm{ridge}}_n\right)\right]\eqsp.
+\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_{n,\lambda}) - \mathsf{R}(\param_\star)\right] \\
+=\left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] \right) + \bE\left[ \left(\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] - \widehat \param^{\mathrm{ridge}}_{n,\lambda}\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] - \widehat \param^{\mathrm{ridge}}_{n,\lambda}\right)\right]\eqsp.
 \end{multline*}
 By Proposition~\ref{prop:least:squares:ridge}, the bias term is given by
 \begin{align*}
-\left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_n\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] \right) &= \frac{\lambda^2}{n}((X^\top X + \lambda I_n)^{-1}\param_\star)^\top X^\top X  ((X^\top X + \lambda I_n)^{-1}\param_\star)\eqsp,\\
-&= \frac{\lambda^2}{n}\param_\star^\top(X^\top X + \lambda I_n)^{-1} X^\top X  (X^\top X + \lambda I_n)^{-1})\param_\star\eqsp,\\
-&= \frac{\lambda^2}{n}\param_\star^\top(X^\top X + \lambda I_n)^{-2} X^\top X \param_\star\eqsp.
+\left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] \right) &= \frac{\lambda^2}{n}\left(\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\param_\star\right)^\top X^\top X  \left(\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\param_\star\right)\eqsp,\\
+&= \frac{\lambda^2}{n}\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1} X^\top X \left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\param_\star\eqsp,\\
+&= \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2} \frac{1}{n}X^\top X \param_\star\eqsp.
 \end{align*}
 By Lemma~\ref{ref:expectation:quadratic:trasform} and  Proposition~\ref{prop:least:squares:ridge}, the variance term is given by
 \begin{align*}
-\bE\left[ \left(\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] - \widehat \param^{\mathrm{ridge}}_n\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param^{\mathrm{ridge}}_n\right] - \widehat \param^{\mathrm{ridge}}_n\right)\right] &= \mathrm{Trace}\left(\frac{1}{n}X^\top X \bV[\widehat \param^{\mathrm{ridge}}_n]\right)\eqsp,\\
-&= \sigma_\star^{2}\mathrm{Trace}\left(\frac{1}{n}X^\top X(X^\top X + \lambda I_n)^{-2}X^\top X\right)\eqsp,\\
-&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((X^\top X)^2(X^\top X + \lambda I_n)^{-2}\right)\eqsp,
+\bE\left[ \left(\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] - \widehat \param^{\mathrm{ridge}}_{n,\lambda}\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] - \widehat \param^{\mathrm{ridge}}_{n,\lambda}\right)\right] &= \mathrm{Trace}\left(\frac{1}{n}X^\top X \bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]\right)\eqsp,\\
+&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left(\frac{1}{n}X^\top X\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2}\frac{1}{n}X^\top X\right)\eqsp,\\
+&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_n)^{-2}\right)\eqsp,
 \end{align*}
 which concludes the proof.
 \end{proof}
@@ -93,22 +96,32 @@ Using the risk analysis for the Ridge-based estimator, we can tune the regulariz
 a  better bound than the $\sigma_\star^2 d /n$ bound of the case $\lambda = 0$.
 
 \begin{proposition}
-
+Choosing $\lambda = \lambda_\star$ where 
+$$
+\lambda_\star = \frac{\sigma_\star \mathrm{Trace}\left(X^\top X\right)^{1/2}}{\sqrt{n}\|\param_\star\|_2} \eqsp.
+$$
+yields
+$$
+\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_{\lambda_\star}) - \mathsf{R}(\param_\star)\right]  \leqslant \frac{\sigma_\star \|\param_\star\|_2 \mathrm{Trace}\left(X^\top X\right)^{1/2}}{\sqrt{n}}  \eqsp.
+$$
 \end{proposition}
 \begin{proof}
-Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $X^\top X$ associated with the eigenvalues $(\lambda_1,\ldots,\lambda_d)\in\rset^d$. Therefore,
+Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $n^{-1}X^\top X$ associated with the eigenvalues $(\lambda_1,\ldots,\lambda_d)\in\rset^d$. Therefore,
 $$
-\frac{\lambda^2}{n}\param_\star^\top(X^\top X + \lambda I_n)^{-2} X^\top X \param_\star = \frac{\lambda}{n}\sum_{i=1}^d \param_\star^\top \frac{\lambda \lambda_i}{(\lambda_i + \lambda)^2} u_iu_i^\top \param_\star \leqslant  \frac{\lambda}{2n}\|\param_\star\|_2^2\eqsp,
+ \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2} \frac{1}{n}X^\top X \param_\star = \lambda\sum_{i=1}^d \param_\star^\top \frac{\lambda \lambda_i}{(\lambda_i + \lambda)^2} u_iu_i^\top \param_\star \leqslant  \frac{\lambda}{2}\|\param_\star\|_2^2\eqsp,
 $$
 since for all $1\leqslant i \leqslant d$, $2\lambda \lambda_i \leqslant (\lambda + \lambda_i)^2$ implies $\lambda \lambda_i/(\lambda + \lambda_i)^2 \leqslant 1/2$. On the other hand,
 $$
-\frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((X^\top X)^2(X^\top X + \lambda I_n)^{-2}\right) = \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left(X^\top X\sum_{i=1}^d\frac{\lambda_i}{(\lambda + \lambda_i)^2}u_iu_i^\top\right) \leqslant \frac{\sigma_\star^{2}}{2\lambda n}\mathrm{Trace}\left(X^\top X\right) \eqsp.
+\frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_n)^{-2}\right) = \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left(n^{-1}X^\top X\sum_{i=1}^d\frac{\lambda_i}{(\lambda + \lambda_i)^2}u_iu_i^\top\right) \leqslant \frac{\sigma_\star^{2}}{2n\lambda }\mathrm{Trace}\left(n^{-1}X^\top X\right) \eqsp.
 $$
 Therefore, by Proposition~\ref{prop:risk:ridge},
 $$
-\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_n) - \mathsf{R}(\param_\star)\right]  \leqslant \frac{\lambda}{2n}\|\param_\star\|_2^2 + \frac{\sigma_\star^{2}}{2\lambda n}\mathrm{Trace}\left(X^\top X\right)\eqsp.
+\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_n) - \mathsf{R}(\param_\star)\right]  \leqslant \frac{\lambda}{2}\|\param_\star\|_2^2 + \frac{\sigma_\star^{2}}{2n\lambda}\mathrm{Trace}\left(n^{-1}X^\top X\right)\eqsp.
 $$
-The upper-bound is then minimized by choosing $\lambda_\star = \sigma_\star \mathrm{Trace}\left(X^\top X\right)^{1/2} /\|\param_\star\|_2 $.
+The upper-bound is then minimized by choosing 
+$$
+\lambda_\star = \frac{\sigma_\star \mathrm{Trace}\left(X^\top X\right)^{1/2}}{\sqrt{n}\|\param_\star\|_2} \eqsp.
+$$
 \end{proof}
 
 
