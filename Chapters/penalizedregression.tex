@@ -129,47 +129,134 @@ $$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Lasso regression}
 The Least Absolute Shrinkage and Selection Operator (Lasso) regression is a $\mathrm{L}_1$ based regularized regression which aims at fostering sparsity. The objective is to solve the following minimization problem,
-\[
-\widehat \param^{\mathrm{lasso}}_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|_2^2 + \lambda\|\param\|_1\eqsp,
-\]
+\begin{equation}
+\label{eq:lasso:obj}
+\widehat \param^{\mathrm{lasso}}_{\lambda,n}\in  \argmin_{\param\in\rset^d}  \left\{\frac{1}{n}\|Y - X\param\|_2^2 + \lambda\|\param\|_1\right\}\eqsp,
+\end{equation}
 where $\lambda>0$ and
 \[
 \|\param\|_1 = \sum_{j=1}^d|\param_j|\eqsp.
 \]
-The function $\param \mapsto \|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex but not differentiable and the solution to this problem may  not be unique. For all $\param \in \rset^d$,  
+The function $\param \mapsto n^{-1}\|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex but not differentiable and the solution to this problem may  not be unique. 
+
+
+\subsection{Computational issues}
+A coordinate descent can be applied to solve the LASSO optimization problem. In this case, solving \eqref{eq:lasso:obj} amounts to producing iterative estimators, where at each iteration, a coordinate is selected to be updated. Then, the objective function  is optimized explicitly  with respect to the selected coordinate. For all $\param \in \rset^d$,  
 \[
-\partial_\param \|Y - X\param\|_2^2 = - 2 X^\top (Y-X\param)\eqsp.
+\nabla_\param \|Y - X\param\|_2^2 = - 2 X^\top (Y-X\param)\eqsp.
 \]
-Then, for all $1\leqslant j \leqslant d$, $(\partial_\param \|Y - X\param\|_2^2)_j = -2 {\bf X}^\top_j (Y-X\param)$, where ${\bf X}_j$ is the $j$-th column of the matrix $X$. Define, for all $1\leqslant j \leqslant d$,
+Then, for all $1\leqslant j \leqslant d$, $(\nabla_\param \|Y - X\param\|_2^2)_j = -2 {\bf X}^\top_j (Y-X\param)$, where ${\bf X}_j$ is the $j$-th column of the matrix $X$. 
+Define, for all $1\leqslant j \leqslant d$,
 \[
-\upsilon_{j}={\bf X}^\top_{j}\left(Y-\sum_{\substack{i=1\\ i\neq j}}^n\param_{i}{\bf X}_{i}\right)\eqsp,
+\upsilon_{j}={\bf X}^\top_{j}\left(Y-\sum_{\substack{i=1\\ i\neq j}}^d\param_{i}{\bf X}_{i}\right)\eqsp.
 \]
-then,
+Assuming that the columns of $X$ are normalized, i.e. for all $1\leqslant k \leqslant d$, ${\bf X}^\top_{k}{\bf X}_{k}=1$, yields
 \[
-(\partial_\param \|Y - X\param\|_2^2)_j = -2( \upsilon_j - \param_j)\eqsp.
+(\nabla_\param \|Y - X\param\|_2^2)_j = -2( \upsilon_j - \param_j)\eqsp.
 \]
 Consequently, for all $\param_j \neq 0$, 
 \[
-\partial_j ( \|Y - X\param\|_2^2 +  \lambda\|\param\|_1)= 2( \param_j - \upsilon_j + \lambda\textrm{sign}(\param_j)/2)\eqsp.
+(\nabla_\param ( n^{-1}\|Y - X\param\|_2^2 +  \lambda\|\param\|_1))_j= \frac{2}{n}( \param_j - \upsilon_j + \lambda n\textrm{sign}(\param_j)/2)\eqsp.
 \]
-For all $1\leqslant j\leqslant d$,  $\param_j \mapsto  \|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex and grows to infinity when $|\param_j|\to \infty$ and admits thus a minimum at some $\param_j^{\star}\in\rset$. 
+For all $1\leqslant j\leqslant d$,  $\param_j \mapsto  n^{-1}\|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex and grows to infinity when $|\param_j|\to \infty$ and admits thus a minimum at some $\param_j^{\star}\in\rset$. 
 \begin{enumerate}[-]
 \item If $\param_j^{\star} \neq 0$, then
 \[
-\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda ~\textrm{sign}(\param_j^{\star})}{2 \upsilon_j}\right)\eqsp,
+\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda n~\textrm{sign}(\param_j^{\star})}{2 \upsilon_j}\right)\eqsp,
 \]
 which yields, as  $\textrm{sign}(\param_j^{\star}) = \textrm{sign}(\upsilon_j)$,
 \[
-\param_j^{\star} = \upsilon_j\left(1 - \frac{\lambda}{2 |\upsilon_j|}\right)
+\param_j^{\star} = \upsilon_j\left(1 - \frac{\lambda n }{2 |\upsilon_j|}\right)
 \]
 and
 \[
-1 - \frac{\lambda}{2 |\upsilon_j|} \geqslant 0\eqsp.
+1 - \frac{\lambda n }{2 |\upsilon_j|} \geqslant 0\eqsp.
 \]
-\item If $1 - \lambda/(2 |\upsilon_j|)<0$, there is no solution to $\partial_j ( \|Y - X\param\|_2^2 +  \lambda\|\param\|_1)=0$ for $\param_j \neq 0$.  Since $\param_j \mapsto  \|Y - X\param\|_2^2 + \lambda\|\param\|_1$ admits a minimum, $\param_j^{\star}=0$. 
+\item If $1 - \lambda n/(2 |\upsilon_j|)<0$, there is no solution to $(\nabla_\param ( n^{-1}\|Y - X\param\|_2^2 +  \lambda\|\param\|_1))_j=0$ for $\param_j \neq 0$.  Since $\param_j \mapsto  n^{-1}\|Y - X\param\|_2^2 + \lambda\|\param\|_1$ admits a minimum, $\param_j^{\star}=0$. 
 \end{enumerate}
 Therefore,
 \[
-\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda}{2 |\upsilon_j|}\right)_+\eqsp.
+\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda n}{2 |\upsilon_j|}\right)_+\eqsp.
 \]
-An algorithm to approximatively solve the Lasso regression problem proceeds as follows.
+An algorithm to approximatively solve the Lasso regression problem proceeds as described in Algorithm~\ref{alg:lasso}.
+\begin{algorithm}
+\centering
+\begin{algorithmic}
+\State Choose randomly an initial estimate $\widehat \param_n^{(0)}\in\rset^d$.
+\For{$p=1$ to $p = n_\mathrm{iter}$}
+\State Choose randomly a coordinate $j\in\{1,\ldots, d\}$.
+\State Compute
+\[
+\upsilon_{j}={\bf X}^\top_{j}\left(Y-\sum_{\substack{i=1\\ i\neq j}}^d\widehat\param^{(p-1)}_{n,i}{\bf X}_{i}\right)\eqsp.
+\]
+\State If $1 - \lambda n/(2 |\upsilon_j|)>0$, set 
+\[
+\widehat\param^{(p)}_{n,j}= \upsilon_j\left(1 - \frac{\lambda n }{2 |\upsilon_j|}\right)
+\]
+\State If $1 - \lambda n/(2 |\upsilon_j|)<0$, set $\widehat\param^{(p)}_{n,j}=0$.
+\State For all $1\leqslant k \leqslant d$, $k\neq j$, set $\widehat\param^{(p)}_{n,k} = \widehat\param^{(p-1)}_{n,k}$.
+\EndFor
+\end{algorithmic}
+\caption{Coordinate descent LASSO solver}
+\label{alg:lasso}
+\end{algorithm}
+
+\subsection{Risk analysis of LASSO regression problem}
+\begin{proposition}
+Consider a well specified model where $\varepsilon \sim \mathcal{N}(0,\sigma_\star^2 I_n)$. Then, choosing $n\lambda_\star^2/(16\sigma_\star^2  \|\Sigma\|_\infty) = \log(dn)$ yields
+$$
+\frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  16\sigma_\star\sqrt{\frac{\log(dn)}{n}}\|\Sigma\|_\infty^{1/2}\|\param_\star\|_1  + 3\sqrt{2}\frac{\sigma_\star^2}{n\sqrt{d}} \eqsp.
+$$
+\end{proposition}
+
+\begin{proof}
+By definition of $\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}$, for all $\param\in\rset^d$,
+$$
+\frac{1}{n}\|Y - X\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_2^2 + \lambda\|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1 \leqslant \frac{1}{n}\|Y - X\param_\star\|_2^2 + \lambda\|\param_\star\|_1\eqsp.
+$$
+As $Y = X\param_\star + \varepsilon$, this yields
+$$
+\frac{1}{n}\|\varepsilon - X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2 + \lambda\|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1 \leqslant \frac{1}{n}\|\varepsilon\|_2^2 + \lambda\|\param_\star\|_1\eqsp.
+$$
+Therefore,
+$$
+\frac{1}{n}\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2 + \lambda\|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1 \leqslant \frac{2}{n}\varepsilon^\top X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star) + \lambda\|\param_\star\|_1\eqsp.
+$$
+and
+\begin{align}
+\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2  &\leqslant 2\varepsilon^\top X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star) + \lambda n \|\param_\star\|_1 - \lambda n \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1\eqsp,\label{eq:lasso:general:bound}\\
+&\leqslant 2 \|X^\top \varepsilon\|_\infty \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star\|_1   + \lambda n \|\param_\star\|_1 - \lambda n \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1\eqsp.\nonumber
+\end{align}
+On the other hand, writing $\Sigma = n^{-1}X^\top X$,
+$$
+\bP\left(\|X^\top\varepsilon\|_\infty \geqslant \frac{n\lambda}{2}\right) \leqslant \sum_{j=1}^{d} \bP\left(|X^\top\varepsilon|_j \geqslant \frac{n\lambda}{2}\right) \leqslant 2\sum_{j=1}^{d}\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \Sigma_{jj})\right\} \leqslant 2 d\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \|\Sigma\|_\infty\right\}\eqsp,
+$$
+as for all $1\leqslant j\leqslant d$, $X^\top\varepsilon\sim \mathcal{N}(0,\sigma_\star^2 X^\top X)$. Therefore, with probability at least $1 - 2 d\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \|\Sigma\|_\infty\right\}$,
+$$
+\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2  \leqslant  \lambda n  \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star\|_1   + \lambda n \|\param_\star\|_1 - \lambda n \|\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1
+$$
+and
+$$
+\frac{1}{n}\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2  \leqslant 2\lambda \|\param_\star\|_1 \eqsp.
+$$
+Let $A = \{\|X^\top\varepsilon\|_\infty < n\lambda / 2\}$. Then,
+\begin{align*}
+\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant 2 n \lambda \|\param_\star\|_1 + \bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2 \1_{A^c}\right]\eqsp.
+\end{align*}
+Note that, by \eqref{eq:lasso:general:bound}, $\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2 \leqslant 2 \|\varepsilon \|_2 \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2 + \lambda n \|\param_\star\|_1 \leqslant  \|\varepsilon \|_2^2/2 +  \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2/2 + \lambda n \|\param_\star\|_1$. Then,
+$$
+\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant 2 n \lambda \|\param_\star\|_1 + \bE\left[ (\|\varepsilon \|_2^2 + 2\lambda n \|\param_\star\|_1) \1_{A^c}\right]
+$$
+and by Cauchy-Schwarz inequality,
+$$
+\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant 4 n \lambda \|\param_\star\|_1 + \bE\left[\|\varepsilon \|_2^4\right]^{1/2} \bP\left(A^c\right)^{1/2}\eqsp.
+$$
+Using that $\bE[\|\varepsilon \|_2^4]^{1/2}\leqslant 3n\sigma_\star^2$ yields
+$$
+\frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  4\lambda \|\param_\star\|_1  + 3\sigma_\star^2 \cdot \sqrt{2 d}\mathrm{exp}\left\{-n\lambda^2/(16\sigma_\star^2  \|\Sigma\|_\infty\right\}\eqsp.
+$$
+By choosing $\lambda$ so that $n\lambda^2/(16\sigma_\star^2  \|\Sigma\|_\infty) = \log(dn)$, we obtain
+$$
+\frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  16\sigma_\star\sqrt{\frac{\log(dn)}{n}}\|\Sigma\|_\infty^{1/2}\|\param_\star\|_1  + 3\sqrt{2}\frac{\sigma_\star^2}{n\sqrt{d}} \eqsp.
+$$
+\end{proof}

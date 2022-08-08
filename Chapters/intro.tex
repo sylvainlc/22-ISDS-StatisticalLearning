@@ -5,19 +5,19 @@ Bayes classifier, empirical risk, oracle inequality, linear discriminant analysi
 \end{kwd}
 
 
-In a supervised learning framework, a set $\{(X_i,Y_i)\}_{1\leqslant i \leqslant n}$  of input data (also referred to as {\em features}) $X_i\in\xset$ and output data $Y_i\in\yset$ (also referred to as {\em observations}), $1\leqslant i \leqslant n$, is available, where $\xset$ is a general feture space and $\yset$ is a general observation space. In a supervised classification setting, the problem is to learn wether an individual from a given state space $\xset$ belongs to some class, so that $\yset = \{1,\ldots,M\}$ for some $M\geqslant 1$. In a regression framework, the observation set $\yset$ is usually a subset of $\rset^m$. The state space $\xset$ is usually a subset of $\rset^d$ and an element of $\xset$ contains all the features the observation prediction has to be based on.
+In a supervised learning framework, a set $\{(X_i,Y_i)\}_{1\leqslant i \leqslant n}$  of input data (also referred to as {\em features}) $X_i\in\xset$ and output data $Y_i\in\yset$ (also referred to as {\em observations}), $1\leqslant i \leqslant n$, is available, where $\xset$ is a general feture space and $\yset$ is a general observation space. In a supervised classification setting, the problem is to learn wether an individual from a given state space $\xset$ belongs to some class, so that $\yset = \{1,\ldots,M\}$ for some $M\geqslant 1$. In a regression framework, the observation set $\yset$ is usually a subset of $\rset^m$. The state space $\xset$ is usually a subset of $\rset^d$ and an element of $\xset$ contains all the features the observation prediction is  based on.
 
 One of the main goals of supervised learning is to design an automatic procedure, based on  the {\em training dataset} $\{(X_i,Y_i)\}_{1\leqslant i \leqslant n}$,  to predict the observation $y\in\yset$ associated with an input $x\in\xset$ which is not in the training dataset.
 
 \medskip
 
-The simulations presented in these notes can be found at \url{https://sylvainlc.github.io/}. Most elementary numerical solutions are based on scikit-learn, \url{https://scikit-learn.org/stable/supervised\_learning.html} provides many helpful comments and advices.
+The simulations presented in these notes can be found at \url{https://sylvainlc.github.io/}. Most elementary numerical solutions are based on scikit-learn, the website \url{https://scikit-learn.org/stable/supervised\_learning.html} provides many helpful comments and advices.
 
 
 \section{Losses and risks}
 In these notes, we consider that $\{(X_i,Y_i)\}_{1\leqslant i \leqslant n}$ are i.i.d.with the same distribution as a couple of random variables $(X,Y)$ defined on  a measured space $(\Omega,\calF,\bP)$ and taking values in $\xset\times\yset$. The joint distribution of $(X,Y)$ is unknown. A loss function is used to evaluate the prediction of the observations: $\ell: \yset\times \yset \to \rset$.
 \begin{itemize}
-\item In a classification setting, a common loss function is $\ell : (y,y')\mapsto \1_{y\neq y'}$. This 0-1 loss outputs 1 if the prediction $y'\in\yset$ is different from the true class $y\in\yset$.
+\item In a classification setting where $\yset = \{1,\ldots,M\}$ for some $M\geqslant 1$, a common loss function is $\ell : (y,y')\mapsto \1_{y\neq y'}$. This 0-1 loss outputs 1 if the prediction $y'\in\yset$ is different from the true class $y\in\yset$.
 \item In a regression setting,  common loss functions are $\ell : (y,y')\mapsto \|y-y'\|_2^2$ and $\ell : (y,y')\mapsto \|y-y'\|_1$.
 \end{itemize}
 Once the loss function is chosen, the expected risk allows to evaluate all predictors $f: \xset\to \yset$ as the expected loss between the observation $Y$ and the prediction $f(X)$:
@@ -31,6 +31,10 @@ $$
 This risk is typically unknown as the joint distribution of $(X,Y)$ is unknown. Therefore, a classical surrogate is given by the empirical risk:
 $$
 \mathsf{R}_n(f) = \frac{1}{n}\sum_{i=1}^n\ell(Y_i,f(X_i))\eqsp.
+$$
+In empirical risk minimization, we often define a parameterized family of predictors $\{f_\param\}_{\param\in \paramset}$ where $\paramset\in \rset^q$ and for all $\param\in\paramset$, $f_\param: \xset\to \yset$ and seek to minimize the empirical risk over this parameterized family:
+$$
+\widehat\param_n \in\argmin_{\param\in\paramset} \left\{\mathsf{R}_n(f_\param) = \frac{1}{n}\sum_{i=1}^n\ell(Y_i,f_\param(X_i)) \right\}\eqsp.
 $$
 
 \section{Bayes classifier}
