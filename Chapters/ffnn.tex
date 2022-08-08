@@ -1,0 +1,296 @@
+\chapter{Feed Forward and convolutional neural networks}
+\minitoc
+\begin{kwd}
+Multi-layer Perceptron, Feed Forward Neural Networks, Convolution
+\end{kwd}
+
+
+
+\section{Feed Forward Neural Networks - Multi layer perceptron} 
+\subsection{Classification: loss function and gradient}
+Following the logistic regression approach, the Multi-layer Perceptron (MLP) provides a parametric function to model $\mathbb{P}(Y=k | X)$ for each possible class $k$.
+The first  mathematical model for a neuron was the Threshold Logic Unit (McCulloch and Pitts, 1943), with Boolean inputs and outputs. In this setting, the response associated with an input $x\in\{0,1\}^d$ is defined as 
+$$
+f: x\mapsto \1_{\omega\sum_{j=1}^dx_j + b \geqslant 0}\eqsp.
+$$ 
+This construction allows to build any boolean function from elementary units
+\[
+x\vee y = \1_{x+y-1/2 \geqslant 0}\eqsp,\quad x\wedge y = \1_{x+y-3/2 \geqslant 0}\quad\mathrm{and}\quad  1-x = \1_{-x+1/2 \geqslant 0}
+\] 
+This elementary model can be extended to real valued inputs (Rosenblatt, 1957) with 
+$$
+f: x\mapsto \1_{\sum_{j=1}^d\omega_jx_j + b \geqslant 0}\eqsp.
+$$
+In this case, the nonlinear activation function is $\sigma: x \mapsto \1_{x\geqslant 0}$ and the ouput in $\{0,1\}$ defined as:
+\[
+f:x \mapsto \sigma(\omega^Tx + b)\eqsp.
+\]
+Linear discriminant analysis and logistic regression are other instances with the sigmoid activation function $\sigma: x\mapsto \rme^x/(1+\rme^x)$ and the output $ \sigma(\omega^TX + b)$ in $(0,1)$ is $\mathbb{P}(Y=1 | X)$.
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale = .5]{./Data/onelayer.png}
+%\end{center}
+%\caption{Perceptron/LDA/Logistice regression. Schematic view of one layer.}
+%\end{figure}
+The Multi-layer Perceptron (MLP) or Feed Forward Neural Network (FFNN) weakens the modeling assumptions of LDA or logistic regression and composed in parallel  $L$ of these perceptron units to produce the output. Let $x\in\rset^d$ be the input and define all layers as follows.
+\begin{align*}
+h_{\theta}^0(x) &= x\eqsp,\\
+z_{\theta}^k(x)  &= b^k + W^kh_{\theta}^{k-1}(x)\quad \mathrm{for\;all\;} 1\leqslant k\leqslant L\eqsp,\\
+h_{\theta}^k(x)  &= \varphi_k(z_{\theta}^{k}(x))\quad \mathrm{for\;all\;}1\leqslant k\leqslant L\eqsp,
+\end{align*}
+where $b^1\in\rset^{d_1}$, $W^1\in\rset^{d_1\times d}$ and for all $2\leqslant k\leqslant L$, $b^k\in\rset^{d_k}$, $W^k\in\rset^{d_k\times d_{k-1}}$. For all $1\leqslant k\leqslant L$, $\varphi_k: \rset^{d_k} \to \rset^{d_k}$ is a nonlinear activation function. Let $\theta = \{b^1,W^1,\ldots,b^L,W^L\}$ be the unknown parameters of the MLP and $f_{\theta}(x) = h_{\theta}^L(x)$ be the output layer of the MLP. As there is no modelling assumptions anymore, virtually any activation functions $\varphi^m$, $1\leqslant m\leqslant L-1$ may be used. In this section, it is assumed that these intermediate activation functions apply elementwise and, with a minor abuse of notations, we write for all $1\leqslant m\leqslant L-1$ and all $z\in\rset^{d_m}$,
+$$
+\varphi^m(z) = (\varphi^m(z_1),\ldots, \varphi^m(z_{d_m}))\eqsp,
+$$
+with $\varphi^m: \rset\to \rset$ the seleced scalar activation function. The rectified linear unit (RELU) activation function $x \mapsto \mathrm{max}(0,x)$ and its extensions are the default recommendation in modern implementations  (Jarrettet al., 2009; Nair and Hinton, 2010; Glorot et al., 2011a), (Maas et al.,2013),  (He et al., 2015). One of the major motivations arise from the gradient based parameter optimization which is numerically more stable with this choice. The choice of the last activation function $\varphi^L$ greatly relies on the task the network is assumed to perform.
+\begin{enumerate}[-]
+\item {\bf biclass classification}. The output $h_{\theta}^L(x)$ is the estimate of the probability that the class is $1$ given the input $x$. The common choice in this case is the sigmoid function. Then, $d_L = 1$ and $h_{\theta}^L(x)$ contains $\mathbb{P}(Y=1 | X)$ and is enough to use as a plug-in Bayes classifier.
+\[
+\varphi^m(z) =  \frac{\rme^{z}}{1 + \rme^{z}}\eqsp.
+\]
+\item {\bf multiclass classification}. The output $h_{\theta}^L(x)$ is the estimate of the probability that the class is  $k$ for all $1\leqslant k\leqslant M$, given the input $x$. The common choice in this case is the softmax function: for all $1\leqslant i\leqslant M$
+\[
+\varphi^m(z)_i = \mathrm{softmax}(z)_i = \frac{\rme^{z_i}}{\sum_{j=1}^M\rme^{z_j}}\eqsp.
+\]
+In this case $d_L = M$ and each component $k$ of $h_{\theta}^L(x)$ contains $\mathbb{P}(Y=k | X)$.
+\end{enumerate}
+The standard approach to estimate the parameters is by maximizing the logarithm of the likelihood i.e. by minimizing the opposite of the normalized loglikelihood:
+$$
+\ell_n:\theta \mapsto -\frac{1}{n} \sum_{i=1}^n\sum_{k=1}^{M} \1_{Y_i=k}\log \mathbb{P}_{\theta}(Y_i = k | \bX_i) = -\frac{1}{n} \sum_{i=1}^n\sum_{k=1}^{M} \1_{Y_i=k}\log f_{\theta}(\bX_i)_k\eqsp.
+$$
+Assume in this section that the last activation function is the softmax function. The output $h_{\theta}^L(x)= f_{\theta}(x) $ is the estimate of the probability that the class is  $k$ for all $1\leqslant k\leqslant M$, given the input $x$ which is obtained with
+\[
+(\varphi_L(z))_i = \mathrm{softmax}(z)_i = \frac{\rme^{z_i}}{\sum_{j=1}^M\rme^{z_j}}\eqsp.
+\]
+Therefore, for all $1\leqslant i,j\leqslant M$,
+$$
+\partial_{z_i}(\varphi_L(z))_j =  \left\{
+    \begin{array}{ll}
+        \mathrm{softmax}(z)_i (1-\mathrm{softmax}(z)_i ) & \mbox{if } i=j\eqsp,\\
+        - \mathrm{softmax}(z)_i \mathrm{softmax}(z)_j & \mbox{otherwise.}
+    \end{array}
+\right.
+$$
+
+\begin{shaded}
+\begin{proposition}[Back propagation - classification]
+\label{prop:backpropagation:classif}
+Write $\ell_{\theta}(\bX,Y) =  -\sum_{k=1}^{M} \1_{Y=k}\log f_{\theta}(\bX)_k$ so that 
+$$
+\ell_n:\theta \mapsto \frac{1}{n} \sum_{i=1}^n \ell_{\theta}(\bX_i,Y_i)\eqsp. 
+$$
+Therefore, the gradient with respect to all parameters can be computed as follows.
+\begin{align*}
+\nabla_{W^L} \ell_{\theta}(\bX,Y) &= (\ell_{\theta}(\bX,Y) - \1_Y)(h_{\theta}^{L-1}(\bX))^T\eqsp,\\
+\nabla_{b^L} \ell_{\theta}(\bX,Y) &= \ell_{\theta}(\bX,Y) - \1_Y\eqsp,
+\end{align*}
+where $\1_Y$ is the vector where all entries equal to 0 except the entry with index $Y$ which equals 1. Then, for all $1\leqslant m\leqslant L-1$,
+\begin{align*}
+\nabla_{W^m} \ell_{\theta}(\bX,Y) &= \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)(h_{\theta}^{m-1}(\bX))^T\eqsp,\\
+\nabla_{b^m} \ell_{\theta}(\bX,Y) &=  \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)\eqsp,
+\end{align*}
+where $\nabla_{z_{\theta}^m(\bX)}$ is computed recursively as follows.
+\begin{align*}
+\nabla_{z^L(\bX)} \ell_{\theta}(\bX,Y) &= \ell_{\theta}(\bX,Y) - \1_Y\eqsp,\\
+\nabla_{h_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) &= (W^{m+1})^T\nabla_{z_{\theta}^{m+1}(\bX)} \ell_{\theta}(\bX,Y) \eqsp,\\
+\nabla_{z_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) &= \nabla_{h_{\theta}^m(\bX)}\ell_{\theta}(X,Y) \odot \varphi_m'(z_{\theta}^{m}(\bX))\eqsp,
+\end{align*}
+where $\odot$ is the elementwise multiplication.
+\end{proposition}
+\end{shaded}
+\begin{proof}
+For all $1\leqslant j\leqslant M$,
+\begin{align*}
+\partial_{(z^L(\bX))_j}\ell_{\theta}(X,Y) &=  -\sum_{k=1}^{M} \1_{Y=k}\partial_{(z^L(\bX))_j}\log f_{\theta}(\bX)_k\eqsp,\\
+&=  -\sum_{k=1}^{M} \1_{Y=k}\partial_{(z^L(\bX))_j}\log \mathrm{softmax}(z^L(\bX))_k\eqsp,\\
+&=  -\sum_{k=1}^{M} \1_{Y=k}\frac{\mathrm{softmax}(z^L(\bX))_j (1-\mathrm{softmax}(z^L(\bX))_j )\1_{j=k} - \mathrm{softmax}(z^L(\bX))_j \mathrm{softmax}(z^L(\bX))_k\1_{j\neq k}}{\mathrm{softmax}(z^L(\bX))_k}\eqsp,\\
+&=  -\sum_{k=1}^{M} \1_{Y=k}\left\{(1-\mathrm{softmax}(z^L(\bX))_k )\1_{j=k} -  \mathrm{softmax}(z^L(\bX))_k\1_{j\neq k}\right\}\eqsp.
+\end{align*}
+Therefore,
+$$
+\nabla_{z^L(\bX)} \ell_{\theta}(\bX,Y) = \ell_{\theta}(\bX,Y) - \1_Y\eqsp.
+$$
+Then, for all $1\leqslant i\leqslant M$ and all $1\leqslant j \leqslant d_{L-1}$, by the chain rule, and using that $z_{\theta}^L(\bX) = b^L + W^Lh_{\theta}^{L-1}(\bX)$,
+\begin{align*}
+\partial_{W^L_{i,j}}\ell_{\theta}(X,Y) &=  \sum_{k=1}^{M} \partial_{(z_{\theta}^L(\bX))_k}\ell_{\theta}(X,Y)\partial_{W^L_{i,j}}(z_{\theta}^L(\bX))_k\eqsp,\\
+&=  \sum_{k=1}^{M} (\ell_{\theta}(\bX,Y) - \1_Y)_k\1_{i=k}(h_{\theta}^{L-1}(\bX))_j\eqsp,\\
+&=  (\ell_{\theta}(\bX,Y) - \1_Y)_i(h_{\theta}^{L-1}(\bX))_j\eqsp.
+\end{align*}
+Therefore,
+$$
+\nabla_{W^L} \ell_{\theta}(\bX,Y) = (\ell_{\theta}(\bX,Y) - \1_Y)(h_{\theta}^{L-1}(\bX))^T\eqsp.
+$$
+Similarly, for all $1\leqslant i\leqslant M$,  using that $z_{\theta}^L(\bX) = b^L + W^Lh_{\theta}^{L-1}(\bX)$,
+\begin{align*}
+\partial_{b^L_{i}}\ell_{\theta}(X,Y) &=  \sum_{k=1}^{M} \partial_{(z_{\theta}^L(\bX))_k}\ell_{\theta}(X,Y)\partial_{b^L_{i}}(z_{\theta}^L(\bX))_k\eqsp,\\
+&=  \sum_{k=1}^{M} (\ell_{\theta}(\bX,Y) - \1_Y)_k\1_{i=k}\eqsp,\\
+&=  (\ell_{\theta}(\bX,Y) - \1_Y)_i\eqsp.
+\end{align*}
+Therefore,
+$$
+\nabla_{b^L} \ell_{\theta}(\bX,Y) = \ell_{\theta}(\bX,Y) - \1_Y\eqsp.
+$$
+To obtain the recursive formulation of the gradient computations, known as the {\em back propagation} of the gradient, write, for all $1\leqslant m \leqslant L-1$ and all $1\leqslant j \leqslant d_m$, ,  using that $z_{\theta}^{m+1}(\bX) = b^{m+1} + W^{m+1}h_{\theta}^{m}(\bX)$,
+\begin{align*}
+\partial_{(h_{\theta}^m(\bX))_j}\ell_{\theta}(X,Y) &=  \sum_{i=1}^{d_{m+1}} \partial_{(z_{\theta}^{m+1}(\bX))_i}\ell_{\theta}(X,Y)\partial_{(h_{\theta}^m(\bX))_j}(z_{\theta}^{m+1}(\bX))_i\eqsp,\\
+&=  \sum_{i=1}^{d_{m+1}} \partial_{(z_{\theta}^{m+1}(\bX))_i}\ell_{\theta}(X,Y)W^{m+1}_{i,j}\eqsp.
+\end{align*}
+Therefore,
+$$
+\nabla_{h_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) = (W^{m+1})^T\nabla_{z_{\theta}^{m+1}(\bX)} \ell_{\theta}(\bX,Y) \eqsp.
+$$
+Then, for all $1\leqslant m \leqslant L-1$ and all $1\leqslant j \leqslant d_m$, ,  using that $h_{\theta}^{m}(\bX)_j =\varphi_m(z_{\theta}^{m}(\bX)_j)$,
+\begin{align*}
+\partial_{(z_{\theta}^m(\bX))_j}\ell_{\theta}(X,Y) &=  \sum_{i=1}^{d_{m+1}} \partial_{(h_{\theta}^m(\bX))_i}\ell_{\theta}(X,Y)\partial_{(z_{\theta}^m(\bX))_j}(h_{\theta}^m(\bX))_i\eqsp,\\
+&=  \sum_{i=1}^{d_{m+1}} \partial_{(h_{\theta}^m(\bX))_i}\ell_{\theta}(X,Y) \1_{i=j}\varphi_m'(z_{\theta}^{m}(\bX)_i)\eqsp,\\
+&= \partial_{(h_{\theta}^m(\bX))_j}\ell_{\theta}(X,Y) \varphi_m'(z_{\theta}^{m}(\bX)_j)\eqsp.
+\end{align*}
+Therefore,
+$$
+\nabla_{z_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) = \nabla_{h_{\theta}^m(\bX)}\ell_{\theta}(X,Y) \odot \varphi_m'(z_{\theta}^{m}(\bX))\eqsp.
+$$
+Then, for all $1\leqslant i\leqslant d_m$ and all $1\leqslant j \leqslant d_{m-1}$, and using that $z_{\theta}^m(\bX) = b^m + W^mh_{\theta}^{m-1}(\bX)$,
+\begin{align*}
+\partial_{W^m_{i,j}}\ell_{\theta}(X,Y) &=  \sum_{k=1}^{d_m} \partial_{(z_{\theta}^m(\bX))_k}\ell_{\theta}(X,Y)\partial_{W^m_{i,j}}(z_{\theta}^m(\bX))_k\eqsp,\\
+&=  \sum_{k=1}^{d_m} \partial_{(z_{\theta}^m(\bX))_k}\ell_{\theta}(X,Y)\1_{i=k}(h_{\theta}^{m-1}(\bX))_j\eqsp,\\
+&=  \partial_{(z_{\theta}^m(\bX))_i}\ell_{\theta}(X,Y)(h_{\theta}^{m-1}(\bX))_j\eqsp.
+\end{align*}
+Therefore,
+$$
+\nabla_{W^m} \ell_{\theta}(\bX,Y) = \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)(h_{\theta}^{m-1}(\bX))^T\eqsp.
+$$
+Similarly, for all $1\leqslant i\leqslant d_m$,  using that $z_{\theta}^m(\bX) = b^m + W^mh_{\theta}^{m-1}(\bX)$,
+\begin{align*}
+\partial_{b^m_{i}}\ell_{\theta}(X,Y) &=  \sum_{k=1}^{d_m} \partial_{(z_{\theta}^m(\bX))_k}\ell_{\theta}(X,Y)\partial_{b^m_{i}}(z_{\theta}^m(\bX))_k\eqsp,\\
+&=  \sum_{k=1}^{d_m} \partial_{(z_{\theta}^m(\bX))_k}\ell_{\theta}(X,Y)\1_{i=k}\eqsp,\\
+&=  \partial_{(z_{\theta}^m(\bX))_k}\ell_{\theta}(X,Y)_i\eqsp.
+\end{align*}
+Therefore,
+$$
+\nabla_{b^m} \ell_{\theta}(\bX,Y) =  \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)\eqsp.
+$$
+\end{proof}
+%Each component $k$ of $z_L$ contains $\mathbb{P}(Y=k | X)$.
+%
+%Then, $x = h_0\in\rset^d$, $b_1\in \rset^q$, $\omega_1\in\rset^{d\times q}$ and 
+%\[
+%h_1 = \sigma(\omega_1^Tx + b_1)\eqsp,
+%\]
+%with $\sigma$ the elementwise activation function. For all $1\leqslant q$, the $j$-th component of $h_1$ is is obtained by an application of the activation transform to an affine transform of $x$. The multi-layer perceptron, also known as the fully connected feed forward network, connects these units in series. For a given number $L$ of layers,
+%\[
+%h_1 = \sigma(\omega_1^Tx + b_1) \eqsp, \quad h_2 = \sigma(\omega_2^Th_1 + b_2)\eqsp,\quad\ldots\eqsp,\quad  h_L = \sigma(\omega_L^Th_{L-1} + b_L)\eqsp.  
+%\]
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale = .7]{./Data/multiplelayer.png}
+%\end{center}
+%\caption{Multiple layer perceptron.}
+%\end{figure}
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale = .8]{./Data/graphicalmodelmlp.png}
+%\end{center}
+%\caption{Graphical model of the multiple layer perceptron.}
+%\end{figure}
+%As there is no modelling assumptions anymore, virtually any activation function may be used. The rectified linear unit (RELU) activation function $\sigma(x) = \mathrm{max}(0,x)$ and its extensions are the default recommendation in modern implementations  (Jarrettet al., 2009; Nair and Hinton, 2010; Glorot et al., 2011a), (Maas et al.,2013),  (He et al., 2015). One of the major motivations arise from the gradient based parameter optimization which is numerically more stable with this choice. Assume that the network contains $L$ layers, then the output layer is of the form:
+%\[
+%h_L = \sigma(\omega^T_Lh_{L-1} + b_L)\eqsp.
+%\]
+%The choice of this last activation function greatly relies on the task the network is assumed to perform.
+%\begin{enumerate}[-]
+%\item {\bf biclass classification}. The output $h_L$ is the estimate of the probability that the class is $1$ given the input $X$. The common choice in this case is the sigmoid function. Then, $h_L$ contains $\mathbb{P}(Y=1 | X)$ and is enough to use as a plug-in Bayes classifier.
+%\item {\bf multiclass classification}. The output $h_L$ is the estimate of the probability that the class is  $k$ for all $1\leqslant k\leqslant M$, given the input $x$. The common choice in this case is the softmax function: for all $1\leqslant i\leqslant M$
+%\[
+%\sigma(z)_i = \frac{\rme^{z_i}}{\sum_{j=1}^M\rme^{z_j}}\eqsp.
+%\]
+%Each component $k$ of $z_L$ contains $\mathbb{P}(Y=k | X)$.
+%\end{enumerate}
+
+These Feed Forward Neural Networks may be used to perform classification on the MNIST dataset. This dataset contains images representing handwritten digits. Each image is made of $28$ x $28$ pixels, and each pixel is represented by an integer (gray level). These arrays can be flattened into vectors in $\rset^{784}$. Visualisations of this vector space are given here: \url{http://colah.github.io/posts/2014-10-Visualizing-MNIST/}.
+The labels in $\{0,\ldots,9\}$ are represented using one-hot-encoding and grayscale of each pixel in $\{0,\ldots, 255\}$ are normalized to be in $(0,1)$.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = .9\linewidth]{./Data/MNIST_data1.png}
+\includegraphics[width = .9\linewidth]{./Data/MNIST_data2.png}
+\end{center}
+\caption{MNIST dataset.}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = .9\linewidth]{./Data/MNIST_ffnn1.png}
+\includegraphics[width = .9\linewidth]{./Data/MNIST_ffnn2.png}
+\end{center}
+\caption{Feed Forward Neural network. $h_1$ is obtained with the RELU activation function and is in $\rset^{128}$. The last layer is $h_2\in\rset^{10}$ and is obtained with the softmax activation function so that each component $k$ models $\mathbb{P}(Y=k|X)$. This neural network with one hidden layer relies on 101.770 parameters.}
+\end{figure}
+
+This models relies on more than 100.000 unknown parameters which should be estimated. As for the logistic regression and the discriminant analysis, a common choice is to minimize the negative loglikelihood of the data:
+$$
+\theta \mapsto -\frac{1}{n} \sum_{i=1}^n\sum_{k=1}^{10} \1_{Y_i=k}\log \mathbb{P}_{\theta}(Y_i = k | \bX_i)\eqsp.
+$$
+The negative loglikelihood is computed using $n = 60.000$ training samples and minimized using gradient descent algorithms. Then, the performance of the model is assessed using $10.000$ new (test) samples: the accuracy is the frequency of labels which are well predicted by the model with the estimated parameters.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = .9\linewidth]{./Data/MNIST_ffnn3.png}
+\includegraphics[width = .9\linewidth]{./Data/MNIST_ffnn4.png}
+\end{center}
+\caption{Minimization of the negative liglikelihood using a gradient descent algorithm (here AdaGrad). The gradient is computed using batches of $32$ observations and the whole data set is used $8$ times.}
+\end{figure}
+
+\subsection{Regression: loss function and gradient}
+In a regression setting, it is assumed that the observations satisfy for all $1\leqslant i \leqslant n$, $Y_i = f_\star(\bX_i) + \varepsilon_i$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. centered random variables in $\rset^M$, $X_i\in\rset^d$ and $f_{\star}$ is an unknown function.  A Feed Forward Neural Network may be used to estimate $f_\star(\bX_i)$ (i.e. $Y_i$) as follows. 
+\begin{align*}
+h_{\theta}^0(\bX_i) &= \bX_i\eqsp,\\
+z_{\theta}^k(\bX_i)  &= b^k + W^kh_{\theta}^{k-1}(\bX_i)\quad \mathrm{for\;all\;} 1\leqslant k\leqslant L\eqsp,\\
+h_{\theta}^k(\bX_i)  &= \varphi_k(z_{\theta}^{k}(\bX_i))\quad \mathrm{for\;all\;}1\leqslant k\leqslant L\eqsp,
+\end{align*}
+where $b^1\in\rset^{d_1}$, $W^1\in\rset^{d_1\times d}$ and for all $2\leqslant k\leqslant L$, $b^k\in\rset^{d_k}$, $W^k\in\rset^{d_k\times d_{k-1}}$.  Let $\theta = \{b^1,W^1,\ldots,b^L,W^L\}$ be the unknown parameters of the MLP and $f_{\theta}(x) = h_{\theta}^L(x)$ be the output layer of the MLP. The standard approach to estimate the parameters is by minimizing the mean square error:
+$$
+\ell_n:\theta \mapsto  \frac{1}{n} \sum_{i=1}^n\left\|f_{\theta}(\bX_i) - Y_i\right\|^2\eqsp.
+$$
+In a regression setting, the last activation function is usually the identity function (i.e. the output is the linear transform $z_{\theta}^L(\bX_i)$). The output $h_{\theta}^L(\bX_i)= f_{\theta}(\bX_i) $ is the estimate of $Y_i$.
+
+\begin{shaded}
+\begin{proposition}[Back propagation - regression]
+\label{prop:backpropagation:classif}
+Write $\ell_{\theta}(\bX,Y) =  \left\|f_{\theta}(\bX) - Y\right\|^2$ so that 
+$$
+\ell_n:\theta \mapsto \frac{1}{n} \sum_{i=1}^n \ell_{\theta}(\bX_i,Y_i)\eqsp. 
+$$
+Therefore, the gradient with respect to all parameters can be computed as follows.
+\begin{align*}
+\nabla_{W^L} \ell_{\theta}(\bX,Y) &= -2(Y - f_{\theta}(\bX))(h^{L-1}_{\theta}(\bX))^T\eqsp,\\
+\nabla_{b^L} \ell_{\theta}(\bX,Y) &=-2(Y - f_{\theta}(\bX))\eqsp.
+\end{align*}
+Then, for all $1\leqslant m\leqslant L-1$,
+\begin{align*}
+\nabla_{W^m} \ell_{\theta}(\bX,Y) &= \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)(h_{\theta}^{m-1}(\bX))^T\eqsp,\\
+\nabla_{b^m} \ell_{\theta}(\bX,Y) &=  \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)\eqsp,
+\end{align*}
+where $\nabla_{z_{\theta}^m(\bX)}$ is computed recursively as follows.
+\begin{align*}
+\nabla_{h_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) &= (W^{m+1})^T\nabla_{z_{\theta}^{m+1}(\bX)} \ell_{\theta}(\bX,Y) \eqsp,\\
+\nabla_{z_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) &= \nabla_{h_{\theta}^m(\bX)}\ell_{\theta}(X,Y) \odot \varphi_m'(z_{\theta}^{m}(\bX))\eqsp,
+\end{align*}
+where $\odot$ is the elementwise multiplication.
+\end{proposition}
+\end{shaded}
+\begin{proof}
+By definition, $\ell_{\theta}(\bX,Y) =  \left\|f_{\theta}(\bX) - Y\right\|^2 = \left\|b^L + W^Lh_{\theta}^{L-1}(X) - Y\right\|^2$.
+For all $1\leqslant i\leqslant M$ and $1\leqslant j\leqslant d_{L-1}$,
+$$
+\partial_{W^L_{i,j}}\ell_{\theta}(X,Y) = -2(Y_i - (f_{\theta}(\bX))_i)h^{L-1}_{\theta}(\bX)_j\eqsp,
+$$
+where $Y_i$ is the $i$-th coordinate of $Y$. Therefore,
+$$
+\nabla_{W^L} \ell_{\theta}(\bX,Y) = -2(Y - f_{\theta}(\bX))(h^{L-1}_{\theta}(\bX))^T\eqsp.
+$$
+Similarly, 
+$$
+\nabla_{b^L} \ell_{\theta}(\bX,Y) =-2(Y - f_{\theta}(\bX))\eqsp.
+$$
+The other identities are the same as in the classification setting.
+\end{proof}
+
