@@ -83,11 +83,11 @@ which concludes the proof.
 \item  The variance term decreases with $\lambda$. It is $\sigma_\star^2 d /n$ when $\lambda = 0$ and it converges to $0$ when $\lambda\to \infty$.
 \item The mean square error of the estimator is then given by
 \[
-\bE\left[\left\|\widehat \param^{\mathrm{ridge}}_n-\param_*\right\|_2^2\right] = \mathrm{Trace}\left(\bV[\widehat \param^{\mathrm{ridge}}_n]\right) + \left\|\bE[\widehat \param^{\mathrm{ridge}}_n] - \param_*\right\|_2^2\eqsp.
+\bE\left[\left\|\widehat \param^{\mathrm{ridge}}_{n,\lambda}-\param_*\right\|_2^2\right] = \mathrm{Trace}\left(\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]\right) + \left\|\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] - \param_*\right\|_2^2\eqsp.
 \]
 Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $X^\top X$ associated with the eigenvalues $(\lambda_1,\ldots,\lambda_d)\in\rset^d$. Then,
 \[
-\bE\left[\left\|\widehat \param^{\mathrm{ridge}}_n-\param_*\right\|_2^2\right] =  \sigma_\star^2 \sum_{j=1}^d \frac{\lambda_j}{(\lambda_j+\lambda)^2} + \lambda^2  \sum_{j=1}^d \frac{\langle \param_* \eqsp; \vartheta_j\eqsp\rangle^2}{(\lambda_j+\lambda)^2}\eqsp.
+\bE\left[\left\|\widehat \param^{\mathrm{ridge}}_{n,\lambda}-\param_*\right\|_2^2\right] =  \sigma_\star^2 \sum_{j=1}^d \frac{\lambda_j}{(\lambda_j+\lambda)^2} + \lambda^2  \sum_{j=1}^d \frac{\langle \param_* \eqsp; \vartheta_j\eqsp\rangle^2}{(\lambda_j+\lambda)^2}\eqsp.
 \]
 The mean square error is therefore a sum of two contributions, a bias related term which increases with $\lambda$ and a variance related term which decreases with $\lambda$. In practice, the value of $\lambda$ is chosen using cross-validation.
 \end{itemize}
@@ -123,6 +123,17 @@ $$
 \lambda_\star = \frac{\sigma_\star \mathrm{Trace}\left(X^\top X\right)^{1/2}}{\sqrt{n}\|\param_\star\|_2} \eqsp.
 $$
 \end{proof}
+
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = .45\linewidth]{./Illustrations/ridge_coef.png}
+\includegraphics[width = .45\linewidth]{./Illustrations/ridge_pred_inflation.png}
+\end{center}
+\caption{Ridge regression is used to predict the Brazilian inflation based on many observed variables, see \url{https://github.com/gabrielrvsc/HDeconometrics/}. The model is trained using $n=140$ data with for each $1\leqslant i \leqslant n$, $X_i\in\rset^{93}$, i.e. $d  =93$. The features are econometric data available each month. (Left) Estimated coefficient $\widehat \param^{\mathrm{ridge}}_{n,\lambda}$ as a function of $\lambda$. (Right) 15 new data points in a test set are used to evaluate the Ridge estimator. We present an ordinary least squares estimate (i.e with $\lambda = 0$) and the estimate obtained by selecting $\lambda$ with a leave-one-out Cross-Validation.}
+\end{figure}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
