@@ -25,7 +25,7 @@ $$
 \mathsf{R}(f) = \bE\left[\ell(Y,f(X))\right]\eqsp.
 $$
 \begin{itemize}
-\item In a classification setting using the 0-1 loss, the risk function is $\mathsf{R}(f) = \bP(Y\neq f(X))$.
+\item In a classification setting using the 0-1 loss, the risk function is $\mathsf{R}_{}(f) = \bE\left[\1_{Y\neq h(X)}\right]= \bP(Y\neq f(X))$.
 \item In a regression setting using the square loss,   the risk function is $\mathsf{R}(f) = \bE[\|Y-f(X)\|^2_2]$.
 \end{itemize}
 This risk is typically unknown as the joint distribution of $(X,Y)$ is unknown. Therefore, a classical surrogate is given by the empirical risk:
@@ -39,9 +39,9 @@ $$
 
 \section{Bayes classifier}
 \index{Bayes!classifier}
-Let $(\Omega,\calF,\bP)$ be a probability space. Assume that $(X,Y)$ is a couple of random variables defined on  $(\Omega,\calF,\bP)$ and taking values in $\xset\times\{-1,1\}$ where $\xset$ is a given state space, which means that the focus is set on a two-class classification problem. One aim of supervised classification is to define a function $h: \xset \to \{-1,1\}$, called {\em classifier}, such that $h(X)$ is the best prediction of $Y$ in a given context. For instance, the probability of misclassification of $h$ is \index{classification risk}
+Let $(\Omega,\calF,\bP)$ be a probability space. Assume that $(X,Y)$ is a couple of random variables defined on  $(\Omega,\calF,\bP)$ and taking values in $\xset\times\{-1,1\}$ where $\xset$ is a given state space, which means that the focus is set on a two-class classification problem. One aim of supervised classification is to define a function $h: \xset \to \{-1,1\}$, called {\em classifier}, such that $h(X)$ is the best prediction of $Y$ in a given context. For instance, the risk of misclassification of $h$ is \index{classification risk}
 \[
-L_{\mathrm{miss}}(h) = \bP\left(Y\neq h(X)\right)\eqsp.
+\mathsf{R}_{\mathrm{miss}}(h) = \bE\left[\1_{Y\neq h(X)}\right] =  \bP\left(Y\neq h(X)\right)\eqsp.
 \]
 Note that $\bE[Y|X]$ is a random variable measurable with respect to the $\sigma$-algebra $\sigma(X)$. Therefore, there exists a function $\eta:\xset \to [-1,1]$ so that $\bE[Y|X] = \eta(X)$ almost surely.
 \begin{shaded}
@@ -57,7 +57,7 @@ h_{\star}(x) = \left\{
 \]
 is such that
 \[
-h_{\star} = \underset{h:\xset\to\{-1,1\}}{\argmin}L_{\mathrm{miss}}(h)\eqsp.
+h_{\star} = \underset{h:\xset\to\{-1,1\}}{\argmin}\mathsf{R}_{\mathrm{miss}}(h)\eqsp.
 \]
 \end{lemma}
 \end{shaded}
@@ -128,7 +128,7 @@ h_{\star}(X) = \left\{
 %\[
 %\bE\left[Y\middle|X\right] = \bP\left(Y=1\middle|X\right) - \bP\left(Y=-1\middle|X\right) = 2 \bP\left(Y=1\middle|X\right) - 1 \eqsp.
 %\]
-The Bayes classifier is the optimal choice to minimize the probability of misclassification $L_{\mathrm{miss}}$. However, as the conditional distribution of $Y$ given $X$ is usually unknown, it cannot be computed explicitly. Supervised classification aims at designing an approximate classifier $\widehat h_n$ using independent observations $(X_i,Y_i)_{1\leqslant i\leqslant n}$ with the same distribution as $(X,Y)$ so that the error $L_{\mathrm{miss}}(\widehat h_n)-L_{\mathrm{miss}}(h_{\star})$ may be controlled.
+The Bayes classifier is the optimal choice to minimize the probability of misclassification $\Lmiss$. However, as the conditional distribution of $Y$ given $X$ is usually unknown, it cannot be computed explicitly. Supervised classification aims at designing an approximate classifier $\widehat h_n$ using independent observations $(X_i,Y_i)_{1\leqslant i\leqslant n}$ with the same distribution as $(X,Y)$ so that the error $\Lmiss(\widehat h_n)-\Lmiss(h_{\star})$ may be controlled.
 
 \section{Parametric and semiparametric classifiers}
 \subsection{Mixture of Gaussian distributions}
@@ -140,12 +140,12 @@ $$
 where $\sigma: x\mapsto (1 + \mathrm{e}^{-x})^{-1}$ is the sigmoid function. Then,
 \begin{equation}
 \label{eq:prob:lda}
-\mathbb{P}\left(Y=1\middle | X\right) = \sigma\left( X^T\omega+ b\right)\eqsp,
+\mathbb{P}\left(Y=1\middle | X\right) = \sigma\left( X^\top\omega+ b\right)\eqsp,
 \end{equation}
 where
 $$
 \omega =  \Sigma^{-1}\left(\mu_{1} - \mu_{-1}\right)\,,
-b = \log(\pi_1/\pi_{-1}) +  \frac{1}{2}\left(\mu_{1}+\mu_{-1}\right)'\Sigma^{-1}\left(\mu_{-1}-\mu_{1}\right)\eqsp.
+b = \log(\pi_1/\pi_{-1}) +  \frac{1}{2}\left(\mu_{1}+\mu_{-1}\right)^\top\Sigma^{-1}\left(\mu_{-1}-\mu_{1}\right)\eqsp.
 $$
 Since
 \[
@@ -154,9 +154,9 @@ Since
 the Bayes classifier is such that for all $x\in \xset$,
 \begin{align*}
 h_{\star}(x) = 1& \Leftrightarrow \left. \bP\left(Y=1\middle | X\right)\right|_{X=x} > \left. \bP\left(Y=-1\middle | X\right) \right|_{X=x}\eqsp,\\
-& \Leftrightarrow \pi_1 \exp\left\{-\frac{1}{2}\left(x-\mu_1\right)^T\Sigma^{-1}\left(x-\mu_1\right)\right\} > \pi_{-1} \exp\left\{-\frac{1}{2}\left(x-\mu_{-1}\right)^T\Sigma^{-1}\left(x-\mu_{-1}\right)\right\}\eqsp,\\
-& \Leftrightarrow \log\left(\frac{\pi_{1}}{\pi_{-1}}\right) > -\frac{1}{2}\left(x-\mu_{-1}\right)^T\Sigma^{-1}\left(x-\mu_{-1}\right) + \frac{1}{2}\left(x-\mu_1\right)^T\Sigma^{-1}\left(x-\mu_1\right)\eqsp,\\
-& \Leftrightarrow \log\left(\frac{\pi_{1}}{\pi_{-1}}\right) > x^T \Sigma^{-1}\left(\mu_{-1} - \mu_{1}\right) + \frac{1}{2}\left(\mu_{1}+\mu_{-1}\right)^T\Sigma^{-1}\left(\mu_{1}-\mu_{-1}\right)\eqsp.
+& \Leftrightarrow \pi_1 \exp\left\{-\frac{1}{2}\left(x-\mu_1\right)^\top\Sigma^{-1}\left(x-\mu_1\right)\right\} > \pi_{-1} \exp\left\{-\frac{1}{2}\left(x-\mu_{-1}\right)^\top\Sigma^{-1}\left(x-\mu_{-1}\right)\right\}\eqsp,\\
+& \Leftrightarrow \log\left(\frac{\pi_{1}}{\pi_{-1}}\right) > -\frac{1}{2}\left(x-\mu_{-1}\right)^\top\Sigma^{-1}\left(x-\mu_{-1}\right) + \frac{1}{2}\left(x-\mu_1\right)^\top\Sigma^{-1}\left(x-\mu_1\right)\eqsp,\\
+& \Leftrightarrow \log\left(\frac{\pi_{1}}{\pi_{-1}}\right) > x^\top \Sigma^{-1}\left(\mu_{-1} - \mu_{1}\right) + \frac{1}{2}\left(\mu_{1}+\mu_{-1}\right)^\top\Sigma^{-1}\left(\mu_{1}-\mu_{-1}\right)\eqsp.
 \end{align*}
 In this case, the Bayes classifier is given by
 \[
@@ -170,22 +170,22 @@ h_{\star}: x\mapsto  \left\{
 When $\Sigma$ and $\mu_1$ and $\mu_{-1}$ are unknown, this classifier cannot be computed explicitely. We will approximate it using the observations. Assume that  $(X_i,Y_i)_{1\leqslant i\leqslant n}$ are independent observations with the same distribution as $(X,Y)$. The loglikelihood of these observations is given by
 \begin{align*}
 \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right) &=\sum_{i=1}^n \log \bP_{\theta} \left(X_{i},Y_{i}\right)\eqsp,\\
-&= - \frac{nd}{2} \log(2\pi)+\sum_{i=1}^n\sum_{k\in\{-1,1\}}\1_{Y_i=k}\left(\log \pi_{k} -\frac{\log \det \Sigma}{2} - \frac{1}{2}\left(X_i - \mu_{k}\right)^T\Sigma^{-1}\left(X_i - \mu_{k}\right)\right) \eqsp,\\
+&= - \frac{nd}{2} \log(2\pi)+\sum_{i=1}^n\sum_{k\in\{-1,1\}}\1_{Y_i=k}\left(\log \pi_{k} -\frac{\log \det \Sigma}{2} - \frac{1}{2}\left(X_i - \mu_{k}\right)^\top\Sigma^{-1}\left(X_i - \mu_{k}\right)\right) \eqsp,\\
 &= - \frac{nd}{2} \log(2\pi)-\frac{n}2 \log\det\Sigma + \left(\sum_{i=1}^n\1_{Y_i=1}\right)\log \pi_1 + \left(\sum_{i=1}^n\1_{Y_i=-1}\right)\log (1-\pi_{1})\\
-& \hspace{1cm}-  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=1}\left(X_i - \mu_{1}\right)^T\Sigma^{-1}\left(X_i - \mu_{1}\right) -  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=-1}\left(X_i - \mu_{-1}\right)^T\Sigma^{-1}\left(X_i - \mu_{-1}\right)\eqsp.
+& \hspace{1cm}-  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=1}\left(X_i - \mu_{1}\right)^\top\Sigma^{-1}\left(X_i - \mu_{1}\right) -  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=-1}\left(X_i - \mu_{-1}\right)^\top\Sigma^{-1}\left(X_i - \mu_{-1}\right)\eqsp.
 \end{align*}
 By Lemma~\ref{lem:matrix:calculus}, the gradient of $\log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)$ with respect to $\theta$ is therefore given by
 \begin{align*}
 \frac{\partial \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)}{\partial \pi_1} &= \left(\sum_{i=1}^n\1_{Y_i=1}\right)\frac{1}{\pi_1} - \left(\sum_{i=1}^n\1_{Y_i=-1}\right)\frac{1}{1-\pi_{1}}\eqsp,\\
 \frac{\partial \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)}{\partial \mu_1} &= \sum_{i=1}^n\1_{Y_i=1}\left(2\Sigma^{-1}X_i - 2\Sigma^{-1}\mu_{1}\right)\eqsp,\\
 \frac{\partial \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)}{\partial \mu_{-1}} &= \sum_{i=1}^n\1_{Y_i=-1}\left(2\Sigma^{-1}X_i - 2\Sigma^{-1}\mu_{-1}\right)\eqsp,\\
-\frac{\partial \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)}{\partial \Sigma^{-1}} &= \frac{n}{2}\Sigma -  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=1}\left(X_i - \mu_{1}\right)\left(X_i - \mu_{1}\right)^T -  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=-1}\left(X_i - \mu_{-1}\right)\left(X_i - \mu_{-1}\right)^T\eqsp.
+\frac{\partial \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)}{\partial \Sigma^{-1}} &= \frac{n}{2}\Sigma -  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=1}\left(X_i - \mu_{1}\right)\left(X_i - \mu_{1}\right)^\top -  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=-1}\left(X_i - \mu_{-1}\right)\left(X_i - \mu_{-1}\right)^\top\eqsp.
 \end{align*}
 The maximum likelihood estimator is defined as the only parameter $\widehat \theta^n$ such that all these equations are set to 0. For $k\in\{-1,1\}$,  it is given by
 \begin{align*}
 \widehat \pi_k^n &= \frac{1}{n}\sum_{i=1}^n\1_{Y_i=k}\eqsp,\\
 \widehat \mu_k^n &= \frac{1}{\sum_{i=1}^n\1_{Y_i=k}}\sum_{i=1}^n\1_{Y_i=k}\,X_i\eqsp,\\
-\widehat\Sigma^n &= \frac{1}{n}\sum_{i=1}^n \left(X_i - \widehat \mu_{Y_i}^n\right)\left(X_i - \widehat \mu_{Y_i}^n\right)^T\eqsp.
+\widehat\Sigma^n &= \frac{1}{n}\sum_{i=1}^n \left(X_i - \widehat \mu_{Y_i}^n\right)\left(X_i - \widehat \mu_{Y_i}^n\right)^\top\eqsp.
 \end{align*}
 Therefore, a natural surrogate for the bayes classifier is
 \[
@@ -200,10 +200,13 @@ where $\widehat{\Omega}^n = (\widehat\Sigma^n)^{-1}$. From the asymptotic proper
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale = .8]{./Data/lda_plot.png}
+\includegraphics[width = .8\linewidth]{./Illustrations/lda_plot.png}
 \end{center}
-\caption{(Top) linear discriminant analysis when both classes are parameterized by the same covariance matrix with the true parameters (left) and maximum likelihood estimates (right). (Bottom) quadratic classification frontier when classes are parameterized by difference covariance matrices  with the true parameters (left) and maximum likelihood estimates (right).}
+\caption{(Top) Data are generated with the same covrariance matrix in each group. (Bottom) Data are generated with different covrariance matrices in the two groups.  (Left) Classification boundary obtained with LDA, assuming the covariance matrix is the same in each group. (Right)  Classification boundary obtained with QDA, assuming the covariance matrices are different in each group. Crosses are all false positives i.e. all data wrongly classified by the discriminant analysis. Simulations are inspired by \url{https://scikit-learn.org/stable/modules/lda_qda.html\#mathematical-formulation-of-the-lda-and-qda-classifiers} and can be found here \cite{https://sylvainlc.github.io/}.}
 \end{figure}
+
+Additional numerical considerations can be found for instance here \url{https://scikit-learn.org/stable/modules/lda_qda.html#mathematical-formulation-of-the-lda-and-qda-classifiers}.
+
 
 \subsection{Logistic regression}
 \label{regression!logistic}
@@ -235,6 +238,14 @@ h_{\star}: x\mapsto  \left\{
     \end{array}
 \right.
 \]
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = .7\linewidth]{./Illustrations/logistic_function.png}
+\end{center}
+\caption{Logistic function $\sigma: x \mapsto \rme^x/(1+\rme^x)$.}
+\end{figure}
+
 When $\alpha$ and $\beta$ are unknown, this classifier cannot be computed explicitely and is approximated using the observations. Assume that  $(X_i,Y_i)_{1\leqslant i\leqslant n}$ are independent observations with the same distribution as $(X,Y)$. The conditional  likelihood of the observations $Y_{1:n}$  given $X_{1:n}$ is:
 \begin{align*}
 \bP_{\theta}\left(Y_{1:n}\middle |X_{1:n}\right) &=\prod_{i=1}^n \bP_{\theta}\left(Y_{i} \middle |X_{i}\right)\eqsp,\\
@@ -261,6 +272,16 @@ then the associated logistic regression classifier is given by
 \right.
 \]
 Even though, the model is semiparametric (and not parametric), it can be shown that, specifically for logistic regression model, the approximated classifier almost surely tends to the Bayes classifier as the number of observations $n$ tends to infinity.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = .7\linewidth]{./Illustrations/logistic_decision.png}
+\end{center}
+\caption{Logistic decision boundary. Detailed simulations can be found here \cite{https://sylvainlc.github.io/}.}
+\end{figure}
+
+
+Additional numerical considerations can be found for instance here \url{https://scikit-learn.org/stable/modules/linear\_model.html#logistic-regression}.
 
 
 %The universal approximation theorem sets a theoretical guarentee that feedforward networks with hidden layers provide a universal approximation framework. The first result of (Horniket al., 1989; Cybenko, 1989) states that a feedforward network with a linear output layer and at least one hidden layer  can approximate any Borel measurable function from one finite-dimensional space to another, provided that the network is given enough hidden units. The derivatives of the feedforward network can also approximate the derivatives of the function arbitrarily well (Hornik et al., 1990). 
@@ -437,126 +458,126 @@ Even though, the model is semiparametric (and not parametric), it can be shown t
 %\end{figure}
 %
 %
-%\section{Nonparametric Bayes classifier}
-%\index{models!nonparametric}
-%In the case of {\em nonparametric} models, it is not assumed anymore that the joint law of $(X,Y)$ belongs to any parametric or semiparametric family of models. The assumption on the distribution of $(X,Y)$ is relaxed but instead, we will make some restrictions on the set of classifiers on which the optimisation occurs.
-%
-%%Another approach which allows to weaken the assumptions on the joint distribution of $(X,Y)$ is to 
-%More precisely, we consider that the optimization of classifiers holds on a specific set $\calH$ of classifiers (often called the {\em dictionary}\index{dictionary}), which may possibly not contain the Bayes classifier. Moreover, since in most cases, the classification risk $L_{\mathrm{miss}}$ cannot be computed nor  minimized, it is instead estimated by the empirical classification risk \index{classification risk!empirical} defined as
+\section{Nonparametric Bayes classifier}
+\index{models!nonparametric}
+In the case of {\em nonparametric} models, it is not assumed anymore that the joint law of $(X,Y)$ belongs to any parametric or semiparametric family of models. The assumption on the distribution of $(X,Y)$ is relaxed but instead, we will make some restrictions on the set of classifiers on which the optimisation occurs.
+
+%Another approach which allows to weaken the assumptions on the joint distribution of $(X,Y)$ is to 
+More precisely, we consider that the optimization of classifiers holds on a specific set $\calH$ of classifiers (often called the {\em dictionary}\index{dictionary}), which may possibly not contain the Bayes classifier. Moreover, since in most cases, the classification risk $\Lmiss$ cannot be computed nor  minimized, it is instead estimated by the empirical classification risk \index{classification risk!empirical} defined as
+\[
+\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h) = \frac{1}{n}\sum_{i=1}^n \1_{Y_i \neq h(X_i)}\eqsp,
+\]
+where  $(X_i,Y_i)_{1\leqslant i\leqslant n}$ are independent observations with the same distribution as $(X,Y)$. The classification problem then boilds down to solving
+\begin{equation}
+\label{eq:empirical:classif}
+\widehat h^n_{\calH} \in \underset{h\in\calH}{\argmin}\;\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h)\eqsp.
+\end{equation}
+In this context several practical and theoretical challenges arise from the minimization of the empirical classification risk. The choice of $\calH$ is pivotal in designing an efficient classification procedure. Note that choosing $\calH$ as all possible classifiers is meaningless, in this case, $\widehat h^n_{\calH}$ is such that $\widehat h^n_{\calH}(X_i) = Y_i$ for all $1 \leqslant i\leqslant n$ and $\widehat h^n_{\calH}(x)$ is any element of $\{-1,1\}$ for all $x\notin\{X_1,\ldots,X_n\}$. Although $\widehat{\mathsf{R}}^n_{\mathrm{miss}}(h^n_{\calH}) = 0$,  is likely to be  a poor approximation of $\mathsf{R}_{\mathrm{miss}}(h^n_{\calH})$. To understand this, the excess misclassification risk may be decomposed as follows
+\[
+\mathsf{R}_{\mathrm{miss}}\left(\widehat h^n_{\calH}\right) - \mathsf{R}_{\mathrm{miss}}\left(h_{\star}\right) = \mathsf{R}_{\mathrm{miss}}\left(\widehat h^n_{\calH}\right) - \underset{h\in\calH}{\min}\; \mathsf{R}_{\mathrm{miss}}\left(h\right)  + \underset{h\in\calH}{\min}\; \mathsf{R}_{\mathrm{miss}}\left(h\right)  -  \mathsf{R}_{\mathrm{miss}}\left(h_{\star}\right) \geqslant 0\eqsp.
+\]
+The first term of the decomposition $\mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH}) - \min_{h\in\calH}\; \mathsf{R}_{\mathrm{miss}}\left(h\right)$ is a \textbf{stochastic error} which is likely to grow when the size of $\calH$ grows while $\min_{h\in\calH}\; \mathsf{R}_{\mathrm{miss}}\left(h\right)  -  \mathsf{R}_{\mathrm{miss}}\left(h_{\star}\right)$ is \textbf{deterministic} and likely to decrease as the size of $\calH$ grows.
+%\rd{J ai pas compris pourquoi cette erreur stochastique devrait augmenter avec la taille du dictionary}
+\begin{shaded}
+\begin{lemma}
+\label{lem:missclassif:ub}
+For all set $\calH$ of classifiers and all $n\geqslant 1$,
+\begin{equation}
+\label{eq:stochError}
+\mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH}) - \underset{h\in\calH}{\min}\; \mathsf{R}_{\mathrm{miss}}\left(h\right) \leqslant 2 \underset{h\in\calH}{\sup}\left|\widehat{\mathsf{R}}^n_{\mathrm{miss}}(h) - \mathsf{R}_{\mathrm{miss}}\left(h\right)\right| \eqsp.
+\end{equation}
+\end{lemma}
+\end{shaded}
+\begin{proof}
+By definition of $\widehat h^n_{\calH}$, for any $h\in\calH$,
+\begin{align*}
+\mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH}) - \underset{h\in\calH}{\min}\; \mathsf{R}_{\mathrm{miss}}\left(h\right) &=  \mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH})  - \widehat {\mathsf{R}}^n_{\mathrm{miss}}(\widehat h^n_{\calH}) + \widehat {\mathsf{R}}^n_{\mathrm{miss}}(\widehat h^n_{\calH}) - \underset{h\in\calH}{\min}\; \mathsf{R}_{\mathrm{miss}}\left(h\right)\eqsp,\\
+&\leqslant \mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH})  - \widehat {\mathsf{R}}^n_{\mathrm{miss}}(\widehat h^n_{\calH}) + \widehat {\mathsf{R}}^n_{\mathrm{miss}}(h) - \underset{h\in\calH}{\min}\; \mathsf{R}_{\mathrm{miss}}\left(h\right)\eqsp.
+\end{align*}
+For all $\varepsilon>0$ there exists $h_{\varepsilon}\in\calH$ such that  $\mathsf{R}_{\mathrm{miss}}(h_{\varepsilon})< \min_{h\in\calH}\; \mathsf{R}_{\mathrm{miss}}\left(h\right) + \varepsilon$ so that
+\begin{align*}
+\mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH}) - \underset{h\in\calH}{\min}\; \mathsf{R}_{\mathrm{miss}}\left(h\right) &\leqslant \mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH})  - \widehat {\mathsf{R}}^n_{\mathrm{miss}}(\widehat h^n_{\calH}) + \widehat {\mathsf{R}}^n_{\mathrm{miss}}(h_{\varepsilon}) - \mathsf{R}_{\mathrm{miss}}(h_{\varepsilon}) + \varepsilon\eqsp,\\
+&\leqslant   2 \underset{h\in\calH}{\sup}\left|\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h) - \mathsf{R}_{\mathrm{miss}}\left(h\right)\right| + \varepsilon\eqsp,
+\end{align*}
+which concludes the proof.
+\end{proof}
+
+\subsection*{Oracle inequality when $\calH$ is finite}
+This section considers the simple case where the dictionary is finite, i.e., $\calH = \{h_1,\ldots,h_M\}$ where $M\geqslant 1$ and for all $1\leqslant j\leqslant M$, $h_j:\xset \to\{-1,1\}$ is a given classifier.
+%Let $h_{\calH}$ be such as
 %\[
-%\widehat L^n_{\mathrm{miss}}(h) = \frac{1}{n}\sum_{i=1}^n \1_{Y_i \neq h(X_i)}\eqsp,
+%L_{\mathrm{miss}}(h_{\calH}) = \underset{1\leqslant j \leqslant M}{\min}L_{\mathrm{miss}}(h_j)\eqsp.
 %\]
-%where  $(X_i,Y_i)_{1\leqslant i\leqslant n}$ are independent observations with the same distribution as $(X,Y)$. The classification problem then boilds down to solving
-%\begin{equation}
-%\label{eq:empirical:classif}
-%\widehat h^n_{\calH} \in \underset{h\in\calH}{\argmin}\;\widehat L^n_{\mathrm{miss}}(h)\eqsp.
-%\end{equation}
-%In this context several practical and theoretical challenges arise from the minimization of the empirical classification risk. The choice of $\calH$ is pivotal in designing an efficient classification procedure. Note that choosing $\calH$ as all possible classifiers is meaningless, in this case, $\widehat h^n_{\calH}$ is such that $\widehat h^n_{\calH}(X_i) = Y_i$ for all $1 \leqslant i\leqslant n$ and $\widehat h^n_{\calH}(x)$ is any element of $\{-1,1\}$ for all $x\notin\{X_1,\ldots,X_n\}$. Although $\widehat L^n_{\mathrm{miss}}(h^n_{\calH}) = 0$,  is likely to be  a poor approximation of $L_{\mathrm{miss}}(h^n_{\calH})$. To understand this, the excess misclassification risk may be decomposed as follows
-%\[
-%L_{\mathrm{miss}}\left(\widehat h^n_{\calH}\right) - L_{\mathrm{miss}}\left(h_{\star}\right) = L_{\mathrm{miss}}\left(\widehat h^n_{\calH}\right) - \underset{h\in\calH}{\min}\; L_{\mathrm{miss}}\left(h\right)  + \underset{h\in\calH}{\min}\; L_{\mathrm{miss}}\left(h\right)  -  L_{\mathrm{miss}}\left(h_{\star}\right) \geqslant 0\eqsp.
-%\]
-%The first term of the decomposition $L_{\mathrm{miss}}(\widehat h^n_{\calH}) - \min_{h\in\calH}\; L_{\mathrm{miss}}\left(h\right)$ is a \textbf{stochastic error} which is likely to grow when the size of $\calH$ grows while $\min_{h\in\calH}\; L_{\mathrm{miss}}\left(h\right)  -  L_{\mathrm{miss}}\left(h_{\star}\right)$ is \textbf{deterministic} and likely to decrease as the size of $\calH$ grows.
-%%\rd{J ai pas compris pourquoi cette erreur stochastique devrait augmenter avec la taille du dictionary}
-%\begin{shaded}
-%\begin{lemma}
-%\label{lem:missclassif:ub}
-%For all set $\calH$ of classifiers and all $n\geqslant 1$,
-%\begin{equation}
-%\label{eq:stochError}
-%L_{\mathrm{miss}}(\widehat h^n_{\calH}) - \underset{h\in\calH}{\min}\; L_{\mathrm{miss}}\left(h\right) \leqslant 2 \underset{h\in\calH}{\sup}\left|\widehat L^n_{\mathrm{miss}}(h) - L_{\mathrm{miss}}\left(h\right)\right| \eqsp.
-%\end{equation}
-%\end{lemma}
-%\end{shaded}
-%\begin{proof}
-%By definition of $\widehat h^n_{\calH}$, for any $h\in\calH$,
-%\begin{align*}
-%L_{\mathrm{miss}}(\widehat h^n_{\calH}) - \underset{h\in\calH}{\min}\; L_{\mathrm{miss}}\left(h\right) &=  L_{\mathrm{miss}}(\widehat h^n_{\calH})  - \widehat L^n_{\mathrm{miss}}(\widehat h^n_{\calH}) + \widehat L^n_{\mathrm{miss}}(\widehat h^n_{\calH}) - \underset{h\in\calH}{\min}\; L_{\mathrm{miss}}\left(h\right)\eqsp,\\
-%&\leqslant L_{\mathrm{miss}}(\widehat h^n_{\calH})  - \widehat L^n_{\mathrm{miss}}(\widehat h^n_{\calH}) + \widehat L^n_{\mathrm{miss}}(h) - \underset{h\in\calH}{\min}\; L_{\mathrm{miss}}\left(h\right)\eqsp.
-%\end{align*}
-%For all $\varepsilon>0$ there exists $h_{\varepsilon}\in\calH$ such that  $L_{\mathrm{miss}}(h_{\varepsilon})< \min_{h\in\calH}\; L_{\mathrm{miss}}\left(h\right) + \varepsilon$ so that
-%\begin{align*}
-%L_{\mathrm{miss}}(\widehat h^n_{\calH}) - \underset{h\in\calH}{\min}\; L_{\mathrm{miss}}\left(h\right) &\leqslant L_{\mathrm{miss}}(\widehat h^n_{\calH})  - \widehat L^n_{\mathrm{miss}}(\widehat h^n_{\calH}) + \widehat L^n_{\mathrm{miss}}(h_{\varepsilon}) - L_{\mathrm{miss}}(h_{\varepsilon}) + \varepsilon\eqsp,\\
-%&\leqslant   2 \underset{h\in\calH}{\sup}\left|\widehat L^n_{\mathrm{miss}}(h) - L_{\mathrm{miss}}\left(h\right)\right| + \varepsilon\eqsp,
-%\end{align*}
-%which concludes the proof.
-%\end{proof}
-%
-%\subsection*{Oracle inequality when $\calH$ is finite}
-%This section considers the simple case where the dictionary is finite, i.e., $\calH = \{h_1,\ldots,h_M\}$ where $M\geqslant 1$ and for all $1\leqslant j\leqslant M$, $h_j:\xset \to\{-1,1\}$ is a given classifier.
-%%Let $h_{\calH}$ be such as
-%%\[
-%%L_{\mathrm{miss}}(h_{\calH}) = \underset{1\leqslant j \leqslant M}{\min}L_{\mathrm{miss}}(h_j)\eqsp.
-%%\]
-%
-%\begin{shaded}
-%\begin{proposition}
-%\label{prop:oracle:finite:prob}
-%Assume that  $\calH = \{h_1,\ldots,h_M\}$, then, for all $\delta>0$,
-%\[
-%\bP\left(L_{\mathrm{miss}}(\widehat h^n_{\calH}) \leqslant \underset{1\leqslant j \leqslant M}{\min}L_{\mathrm{miss}}(h_j) + \sqrt{\frac{2}{n}\log\left(\frac{2M}{\delta}\right)}\right)\geqslant 1-\delta\eqsp.
-%\]
-%\end{proposition}
-%\end{shaded}
-%\begin{proof}
-%By \Cref{lem:missclassif:ub}, for all $u>0$,
-%\[
-%\bP\left(L_{\mathrm{miss}}(\widehat h^n_{\calH}) > \underset{1\leqslant j \leqslant M}{\min}L_{\mathrm{miss}}(h_j) + u\right) \leqslant \bP\left( \underset{h\in\calH}{\sup}\left|\widehat L^n_{\mathrm{miss}}(h) - L_{\mathrm{miss}}\left(h\right)\right|  > \frac{u}{2}\right) \leqslant \sum_{j=1}^M  \bP\left(\left|\widehat L^n_{\mathrm{miss}}(h_j) - L_{\mathrm{miss}}\left(h_j\right)\right|  > \frac{u}{2}\right)\eqsp.
-%\]
-%By Hoeffding's inequality, see Theorem~\ref{th:hoeffding},
-%\[
-%\bP\left(L_{\mathrm{miss}}(\widehat h^n_{\calH}) > \underset{1\leqslant j \leqslant M}{\min}L_{\mathrm{miss}}(h_j) + u\right) \leqslant 2M\rme^{-nu^2/2}\eqsp,
-%\]
-%which concludes the proof by choosing
-%\[
-%u = \sqrt{\frac{2}{n}\log\left(\frac{2M}{\delta}\right)}\eqsp.
-%\]
-%\end{proof}
-%
-%\begin{shaded}
-%\begin{proposition}
-%\label{prop:oracle:finite:expectation}
-%Assume that  $\calH = \{h_1,\ldots,h_M\}$, then,
-%\[
-%\bE\left[L_{\mathrm{miss}}(\widehat h^n_{\calH})\right] \leqslant \underset{1\leqslant j \leqslant M}{\min}L_{\mathrm{miss}}(h_j) + \sqrt{\frac{2\log\left(2M\right)}{n}}\eqsp.
-%\]
-%\end{proposition}
-%\end{shaded}
-%
-%
-%
-%\begin{proof}
-%By \Cref{lem:missclassif:ub},
-%$$
-%\bE\left[L_{\mathrm{miss}}(\widehat h^n_{\calH})\right]  - \underset{1\leqslant j \leqslant M}{\min}L_{\mathrm{miss}}(h_j) \leqslant  2 \bE\left[\underset{h\in\calH}{\sup}\left|\widehat L^n_{\mathrm{miss}}(h) - L_{\mathrm{miss}}\left(h\right)\right|  \right]=\frac{2 }{n} \bE\left[ \underset{1\leqslant j\leqslant M}{\max}\left\{n\left|\widehat L^n_{\mathrm{miss}}(h_j) - L_{\mathrm{miss}}\left(h_j\right)\right| \right\}\right]\eqsp.
-%$$
-%Note that
-%\[
-%n\left\{\widehat L^n_{\mathrm{miss}}(h_j) -  L_{\mathrm{miss}}\left(h_j\right)\right\} = \sum_{i=1}^n \left\{\1_{Y_i \neq h_j(X_i)}  -  L_{\mathrm{miss}}\left(h_j\right)\right\}\eqsp,
-%\]
-%where the random variables $(\1_{Y_i \neq h_j(X_i)})_{1\leqslant i \leqslant n}$ are independent Bernoulli random variables with mean $L_{\mathrm{miss}}(h_j)$. By Lemma~\ref{lem:bernoulli:bound}, for all $t>0$,
-%\[
-%\bE\left[\mathrm{exp}\left\{t\sum_{i=1}^n \left\{\1_{Y_i \neq h_j(X_i)}  -  L_{\mathrm{miss}}\left(h_j\right)\right\}\right\}\right] = \prod_{i=1}^n \bE\left[\mathrm{exp}\left\{t\left(\1_{Y_i \neq h_j(X_i)}  -  L_{\mathrm{miss}}\left(h_j\right)\right)\right\}\right] \leqslant \rme^{nt^2/8}
-%\]
-%and similarly
-%\[
-%\bE\left[\mathrm{exp}\left\{-t\sum_{i=1}^n \left\{\1_{Y_i \neq h_j(X_i)}  -  L_{\mathrm{miss}}\left(h_j\right)\right\}\right\}\right] \leqslant \rme^{nt^2/8}\eqsp.
-%\]
-%Then, for all $t>0$, by Jensen's inequality,
-%\begin{align*}
-%\mathrm{exp}\left\{t \bE\left[ \underset{1\leqslant j\leqslant M}{\max}\left\{n\left|\widehat L^n_{\mathrm{miss}}(h_j) - L_{\mathrm{miss}}\left(h_j\right)\right| \right\}\right]\right\} &\leqslant \bE\left[\mathrm{exp}\left\{t\underset{1\leqslant j\leqslant M}{\max}\left\{n\left|\widehat L^n_{\mathrm{miss}}(h_j) - L_{\mathrm{miss}}\left(h_j\right)\right|\right\}\right\}\right] \eqsp,\\
-%%&\leqslant \sum_{j=1}^M  \bE\left[\mathrm{exp}\left\{t\left\{n\left(\widehat L^n_{\mathrm{miss}}(h_j) - L_{\mathrm{miss}}\left(h_j\right)\right)\right\}\right\}\right]\eqsp,\\
-%&\leqslant 2M\rme^{nt^2/8}\eqsp,
-%\end{align*}
-%which yields
-%\[
-% \bE\left[ \underset{1\leqslant j\leqslant M}{\max}\left\{n\left|\widehat L^n_{\mathrm{miss}}(h_j) - L_{\mathrm{miss}}\left(h_j\right)\right| \right\}\right] \leqslant \frac{\log (2M)}{t} + \frac{nt}{8}\eqsp.
-%\]
-%Choosing $t= \sqrt{8\log (2M)/n}$,
-%\[
-% \bE\left[ \underset{1\leqslant j\leqslant M}{\max}\left\{n\left|\widehat L^n_{\mathrm{miss}}(h_j) - L_{\mathrm{miss}}\left(h_j\right)\right|\right\}\right] \leqslant \sqrt{n\log(2M)/2}\eqsp,
-%\]
-%which concludes the proof.
-%\end{proof}
+
+\begin{shaded}
+\begin{proposition}
+\label{prop:oracle:finite:prob}
+Assume that  $\calH = \{h_1,\ldots,h_M\}$, then, for all $\delta>0$,
+\[
+\bP\left(\mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH}) \leqslant \underset{1\leqslant j \leqslant M}{\min}\mathsf{R}_{\mathrm{miss}}(h_j) + \sqrt{\frac{2}{n}\log\left(\frac{2M}{\delta}\right)}\right)\geqslant 1-\delta\eqsp.
+\]
+\end{proposition}
+\end{shaded}
+\begin{proof}
+By \Cref{lem:missclassif:ub}, for all $u>0$,
+\[
+\bP\left(\mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH}) > \underset{1\leqslant j \leqslant M}{\min}\mathsf{R}_{\mathrm{miss}}(h_j) + u\right) \leqslant \bP\left( \underset{h\in\calH}{\sup}\left|\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h) - \mathsf{R}_{\mathrm{miss}}\left(h\right)\right|  > \frac{u}{2}\right) \leqslant \sum_{j=1}^M  \bP\left(\left|\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h_j) - \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right|  > \frac{u}{2}\right)\eqsp.
+\]
+By Hoeffding's inequality, see Theorem~\ref{th:hoeffding},
+\[
+\bP\left(\mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH}) > \underset{1\leqslant j \leqslant M}{\min}\mathsf{R}_{\mathrm{miss}}(h_j) + u\right) \leqslant 2M\rme^{-nu^2/2}\eqsp,
+\]
+which concludes the proof by choosing
+\[
+u = \sqrt{\frac{2}{n}\log\left(\frac{2M}{\delta}\right)}\eqsp.
+\]
+\end{proof}
+
+\begin{shaded}
+\begin{proposition}
+\label{prop:oracle:finite:expectation}
+Assume that  $\calH = \{h_1,\ldots,h_M\}$, then,
+\[
+\bE\left[\mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH})\right] \leqslant \underset{1\leqslant j \leqslant M}{\min}\mathsf{R}_{\mathrm{miss}}(h_j) + \sqrt{\frac{2\log\left(2M\right)}{n}}\eqsp.
+\]
+\end{proposition}
+\end{shaded}
+
+
+
+\begin{proof}
+By \Cref{lem:missclassif:ub},
+$$
+\bE\left[\mathsf{R}_{\mathrm{miss}}(\widehat h^n_{\calH})\right]  - \underset{1\leqslant j \leqslant M}{\min}\mathsf{R}_{\mathrm{miss}}(h_j) \leqslant  2 \bE\left[\underset{h\in\calH}{\sup}\left|\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h) - \mathsf{R}_{\mathrm{miss}}\left(h\right)\right|  \right]=\frac{2 }{n} \bE\left[ \underset{1\leqslant j\leqslant M}{\max}\left\{n\left|\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h_j) - \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right| \right\}\right]\eqsp.
+$$
+Note that
+\[
+n\left\{\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h_j) -  \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right\} = \sum_{i=1}^n \left\{\1_{Y_i \neq h_j(X_i)}  -  \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right\}\eqsp,
+\]
+where the random variables $(\1_{Y_i \neq h_j(X_i)})_{1\leqslant i \leqslant n}$ are independent Bernoulli random variables with mean $\mathsf{R}_{\mathrm{miss}}(h_j)$. By Lemma~\ref{lem:bernoulli:bound}, for all $t>0$,
+\[
+\bE\left[\mathrm{exp}\left\{t\sum_{i=1}^n \left\{\1_{Y_i \neq h_j(X_i)}  -  \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right\}\right\}\right] = \prod_{i=1}^n \bE\left[\mathrm{exp}\left\{t\left(\1_{Y_i \neq h_j(X_i)}  -  \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right)\right\}\right] \leqslant \rme^{nt^2/8}
+\]
+and similarly
+\[
+\bE\left[\mathrm{exp}\left\{-t\sum_{i=1}^n \left\{\1_{Y_i \neq h_j(X_i)}  -  \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right\}\right\}\right] \leqslant \rme^{nt^2/8}\eqsp.
+\]
+Then, for all $t>0$, by Jensen's inequality,
+\begin{align*}
+\mathrm{exp}\left\{t \bE\left[ \underset{1\leqslant j\leqslant M}{\max}\left\{n\left|\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h_j) - \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right| \right\}\right]\right\} &\leqslant \bE\left[\mathrm{exp}\left\{t\underset{1\leqslant j\leqslant M}{\max}\left\{n\left|\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h_j) - \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right|\right\}\right\}\right] \eqsp,\\
+%&\leqslant \sum_{j=1}^M  \bE\left[\mathrm{exp}\left\{t\left\{n\left(\widehat L^n_{\mathrm{miss}}(h_j) - L_{\mathrm{miss}}\left(h_j\right)\right)\right\}\right\}\right]\eqsp,\\
+&\leqslant 2M\rme^{nt^2/8}\eqsp,
+\end{align*}
+which yields
+\[
+ \bE\left[ \underset{1\leqslant j\leqslant M}{\max}\left\{n\left|\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h_j) - \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right| \right\}\right] \leqslant \frac{\log (2M)}{t} + \frac{nt}{8}\eqsp.
+\]
+Choosing $t= \sqrt{8\log (2M)/n}$,
+\[
+ \bE\left[ \underset{1\leqslant j\leqslant M}{\max}\left\{n\left|\widehat {\mathsf{R}}^n_{\mathrm{miss}}(h_j) - \mathsf{R}_{\mathrm{miss}}\left(h_j\right)\right|\right\}\right] \leqslant \sqrt{n\log(2M)/2}\eqsp,
+\]
+which concludes the proof.
+\end{proof}
 %
 %\section{Classification based on convexification}
 %
