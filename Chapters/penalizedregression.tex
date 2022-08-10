@@ -1,4 +1,4 @@
-\chapter{Penalized multivariate regression}
+\chapter{Penalized and sparse multivariate regression}
 \minitoc
 
 
@@ -195,7 +195,7 @@ and
 \end{enumerate}
 Therefore,
 \[
-\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda n}{2 |\upsilon_j|}\right)_+\eqsp.
+\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda n}{2 |\upsilon_j|}\right)_+ = \mathrm{max}\left(0;\upsilon_j\left( 1 - \frac{\lambda n}{2 |\upsilon_j|}\right)\right)\eqsp.
 \]
 An algorithm to approximatively solve the Lasso regression problem proceeds as described in Algorithm~\ref{alg:lasso}.
 \begin{algorithm}
@@ -210,7 +210,7 @@ An algorithm to approximatively solve the Lasso regression problem proceeds as d
 \]
 \State If $1 - \lambda n/(2 |\upsilon_j|)>0$, set 
 \[
-\widehat\param^{(p)}_{n,j}= \upsilon_j\left(1 - \frac{\lambda n }{2 |\upsilon_j|}\right)
+\widehat\param^{(p)}_{n,j}= \upsilon_j\left(1 - \frac{\lambda n }{2 |\upsilon_j|}\right)\eqsp.
 \]
 \State If $1 - \lambda n/(2 |\upsilon_j|)<0$, set $\widehat\param^{(p)}_{n,j}=0$.
 \State For all $1\leqslant k \leqslant d$, $k\neq j$, set $\widehat\param^{(p)}_{n,k} = \widehat\param^{(p-1)}_{n,k}$.
@@ -279,3 +279,19 @@ $$
 \frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  16\sigma_\star\sqrt{\frac{\log(dn)}{n}}\|\Sigma\|_\infty^{1/2}\|\param_\star\|_1  + 3\sqrt{2}\frac{\sigma_\star^2}{n\sqrt{d}} \eqsp.
 $$
 \end{proof}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = .7\linewidth]{./Illustrations/lasso_coef.png}
+\includegraphics[width = .7\linewidth]{./Illustrations/lasso_rmse_test.png}
+\end{center}
+\caption{Lasso regression is used to predict the Brazilian inflation based on many observed variables, see \url{https://github.com/gabrielrvsc/HDeconometrics/}. The model is trained using $n=140$ data with for each $1\leqslant i \leqslant n$, $X_i\in\rset^{93}$, i.e. $d  =93$. The features are econometric data available each month. (Top) Estimated coefficient $\widehat \param^{\mathrm{lasso}}_{n,\lambda}$ as a function of $\lambda$. (Bottom) Mean squared error between the true observations and the predictions over the test set with $15$ new data points.}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = .7\linewidth]{./Illustrations/lasso_nbzeros.png}
+\end{center}
+\caption{Lasso regression is used to predict the Brazilian inflation based on many observed variables, see \url{https://github.com/gabrielrvsc/HDeconometrics/}. The model is trained using $n=140$ data with for each $1\leqslant i \leqslant n$, $X_i\in\rset^{93}$, i.e. $d  =93$. The features are econometric data available each month. Number of null coefficient in $\widehat \param^{\mathrm{lasso}}_{n,\lambda}$ as a function of $\lambda$.}
+\end{figure}
