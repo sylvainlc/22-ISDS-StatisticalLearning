@@ -128,10 +128,18 @@ $$
 
 \begin{figure}
 \begin{center}
-\includegraphics[width = .45\linewidth]{./Illustrations/ridge_coef.png}
-\includegraphics[width = .45\linewidth]{./Illustrations/ridge_pred_inflation.png}
+\includegraphics[width = .7\linewidth]{./Illustrations/ridge_coef.png}
+\includegraphics[width = .7\linewidth]{./Illustrations/ridge_rmse_test.png}
 \end{center}
-\caption{Ridge regression is used to predict the Brazilian inflation based on many observed variables, see \url{https://github.com/gabrielrvsc/HDeconometrics/}. The model is trained using $n=140$ data with for each $1\leqslant i \leqslant n$, $X_i\in\rset^{93}$, i.e. $d  =93$. The features are econometric data available each month. (Left) Estimated coefficient $\widehat \param^{\mathrm{ridge}}_{n,\lambda}$ as a function of $\lambda$. (Right) 15 new data points in a test set are used to evaluate the Ridge estimator. We present an ordinary least squares estimate (i.e with $\lambda = 0$) and the estimate obtained by selecting $\lambda$ with a leave-one-out Cross-Validation.}
+\caption{Ridge regression is used to predict the Brazilian inflation based on many observed variables, see \url{https://github.com/gabrielrvsc/HDeconometrics/}. The model is trained using $n=140$ data with for each $1\leqslant i \leqslant n$, $X_i\in\rset^{93}$, i.e. $d  =93$. The features are econometric data available each month. (Top) Estimated coefficient $\widehat \param^{\mathrm{ridge}}_{n,\lambda}$ as a function of $\lambda$. (Bottom) Mean squared error between the true observations and the predictions over the test set with $15$ new data points.}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = .7\linewidth]{./Illustrations/ridge_pred_inflation.png}
+\end{center}
+\caption{Ridge regression is used to predict the Brazilian inflation based on many observed variables, see \url{https://github.com/gabrielrvsc/HDeconometrics/}. The model is trained using $n=140$ data with for each $1\leqslant i \leqslant n$, $X_i\in\rset^{93}$, i.e. $d  =93$. The features are econometric data available each month. In this experiment, 15 new data points in a test set are used to evaluate the Ridge estimator. We present an ordinary least squares estimate (i.e with $\lambda = 0$) and the estimate obtained by selecting $\lambda$ with a leave-one-out Cross-Validation. The MSE on the test set are 0.016 for the cross-validated $\lambda$ and 0.398 for $\lambda = 0$.}
 \end{figure}
 
 

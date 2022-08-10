@@ -28,7 +28,7 @@ $$
 \item In a classification setting using the 0-1 loss, the risk function is $\mathsf{R}_{}(f) = \bE\left[\1_{Y\neq h(X)}\right]= \bP(Y\neq f(X))$.
 \item In a regression setting using the square loss,   the risk function is $\mathsf{R}(f) = \bE[\|Y-f(X)\|^2_2]$.
 \end{itemize}
-This risk is typically unknown as the joint distribution of $(X,Y)$ is unknown. Therefore, a classical surrogate is given by the empirical risk:
+This risk is typically unknown as the joint distribution of $(X,Y)$ is unknown, i.e. the expectation cannot be computed explicitly. Therefore, a classical surrogate is given by the empirical risk:
 $$
 \mathsf{R}_n(f) = \frac{1}{n}\sum_{i=1}^n\ell(Y_i,f(X_i))\eqsp.
 $$
