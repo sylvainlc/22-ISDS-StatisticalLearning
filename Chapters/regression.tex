@@ -81,7 +81,7 @@ $$
 
 
 \subsection{Least squares estimator}
-In a linear regression setting, we assume that $\paramset = \rset^d$ and that  for all $\param\in\paramset$, $f_\param: x \mapsto \param^\top x$.  Let $Y\in\rset^d$  be the random (column) vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $Y$ is $Y_i$  and $X\in\rset^{n\times d}$ the matrix with line $i$ equal to $X^T_i$. 
+In a linear regression setting, we assume that $\paramset = \rset^d$ and that  for all $\param\in\paramset$, $f_\param: x \mapsto \param^\top x$.  Let $Y\in\rset^d$  be the random (column) vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $Y$ is $Y_i$  and $X\in\rset^{n\times d}$ the matrix with line $i$ equal to $X^\top_i$. 
 %It is assumed that for all $1\leqslant i \leqslant n$, $Y_i = X^T_i \beta_{\star} + \varepsilon_i$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. random variables in $\rset^d$, $X_i\in\rset^d$ and $\beta_{\star}$ is an unknown vector in $\rset^d$. Let $Y\in\rset^d$ (resp. $\varepsilon\in\rset^d$)  be the random vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $Y$ (resp. $\varepsilon$) is $Y_i$ (resp. $\varepsilon_i$) and $X\in\rset^{n\times d}$ the matrix with line $i$ equal to $X^T_i$. The model is then written
 %\[
 %Y = X \beta_{\star} + \varepsilon\eqsp.
@@ -91,7 +91,7 @@ The least squares estimate is defined as a solution to
 \[
 \widehat \param_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|_2^2\eqsp.
 \]
-In a {\em well-specified setting}, we assumed that  for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. random variables in $\rset^d$. Let  $\varepsilon\in\rset^d$  be the random vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $\varepsilon$  is $\varepsilon_i$. The model is then written
+In a {\em well-specified setting}, we assumed that  for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. random variables in $\rset$. Let  $\varepsilon\in\rset^d$  be the random vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $\varepsilon$  is $\varepsilon_i$. The model is then written
 \[
 Y = X \param_{\star} + \varepsilon\eqsp.
 \]
@@ -173,7 +173,15 @@ The independence follows from Proposition~\ref{prop:gauss:vec:decor}.
 \subsection{Computational issues}
 Eventhough it is possible to compute  the inverse of $X^\top X$ in a full rank setting, this matrix can be ill conditioned which may lead to numericla instability. 
 \begin{itemize}
-\item In Scikit-learn, the fit function of \url{https://scikit-learn.org/stable/modules/generated/sklearn.linear\_model.LinearRegression.html} uses a SVD-based solver.
+\item In Scikit-learn, the fit function of \url{https://scikit-learn.org/stable/modules/generated/sklearn.linear\_model.LinearRegression.html} uses a SVD-based solver. By Proposition~\ref{prop:acp:svd}, if $X$ has  rank $r\geqslant 1$, there exist $\sigma_1\geqslant \ldots \geqslant \sigma_r>0$ such that
+\[
+X = \sum_{k=1}^r \sigma_k u_k v^\top_k\eqsp,
+\]
+where $\{u_1,\ldots,u_r\}\in (\rset^n)^r$ and $\{v_1,\ldots,v_r\}\in (\rset^d)^r$ are two orthonormal families. The vectors $\{\sigma_1,\ldots,\sigma_r\}$ are called singular values of $A$ and $\{u_1,\ldots,u_r\}$ (resp. $\{v_1,\ldots,v_r\}$) are the left-singular (resp. right-singular) vectors of $X$. If $U$ denotes the $\rset^{n\times r}$ matrix with columns given by $\{u_1,\ldots,u_r\}$ and $V$ denotes the $\rset^{p \times r}$ matrix with columns given by $\{v_1,\ldots,v_r\}$, then the singular value decomposition of $A$ may also be written as
+\[
+X = UD_rV^\top\eqsp,
+\]
+where $D_r = \mathrm{diag}(\sigma_1,\ldots,\sigma_r)$.
 \item Using QR decomposition, we know that there exist an orthogonal matrix $Q\in\rset^{n\times d}$, $Q^\top Q = I_d$, and an upper triangular matrix $R\in\rset^{d\times d}$ such that $X = QR$. Then,
 $$
 X^\top X \widehat\param_n = X^\top Y \Leftrightarrow R\widehat \param_n = Q^\top Y\eqsp.

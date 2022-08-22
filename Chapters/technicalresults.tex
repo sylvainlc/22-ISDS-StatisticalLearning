@@ -95,7 +95,81 @@ $$
 $$
 \end{proof}
 
-Let $\Mplus$ the space of real-valued $d \times d$ symmetric positive matrices.
+\begin{lemma}
+\label{lem:im:transpose}
+Let $A$ be a $n\times d$ matrix with real entries. Then, $\mathrm{range}(A)=\mathrm{range}(A A^\top)$.
+\end{lemma}
+\begin{proof}
+First note that for all $x\in\rset^n$, $AA^\top x=0$ implies $\langle A^\top x; A^\top x\rangle=0$ so that $A^\top x=0$. The converse is obvious. Therefore, $\mathrm{Ker}(A A^\top)= \mathrm{Ker}(A^\top)$. Using that for any matrix $B$, $\mathrm{Ker}(B^\top)=(\mathrm{range}(B))^\perp$, yields $\mathrm{range}(A A^\top)^\perp=\mathrm{range}(A)^\perp$, which concludes the proof.
+\end{proof}
+
+\begin{lemma}
+\label{lem:ortho:proj}
+Let $\{U_k\}_{1\leqslant k \leqslant r}$ be a family of $r$ orthonormal vectors of $\rset^d$.
+Then, $\sum_{k=1}^{r} U_k U_k^\top$ is the matrix of the orthogonal projection onto 
+$$
+\mathbf{H}=\left\{\sum_{k=1}^r \alpha_k U_k\,; \ \alpha_1,\ldots,\alpha_r \in \rset\right\}\eqsp.
+$$ 
+\end{lemma}
+\begin{remark}
+If $A$ is a $n\times d$ matrix with real entries such that each column of $A$ is in $\mathrm{H}$, then,
+$$
+\left(\sum_{k=1}^r U_k U_k^\top\right) A = A\eqsp.
+$$
+\end{remark}
+\begin{proof}
+For all $X\in\rset^d$, let $\pi_\mathbf{H}(X)$ be the orthogonal projection of $X$ onto $\mathbf{H}$. Since $\{U_k\}_{1\leqslant k \leqslant r}$  is an orthonormal basis of $\mathbf{H}$,
+$$
+\pi_\mathbf{H}(X)=\sum_{k=1}^{r} \langle X; U_k\rangle U_k=\left(\sum_{k=1}^{r} U_k U_k^\top\right)X\eqsp.
+$$
+This implies in particular that for each $X \in \mathbf{H}$, $X=\left(\sum_{k=1}^{r} U_k U_k^\top\right)X$. %Since all the column vectors of $A$ are in $\mathbf{H}$, this yields $\left(\sum_{k=1}^r U_k U_k^T\right) A=A$.
+\end{proof}
+
+\begin{shaded}
+\begin{proposition}[Singular value decomposition] 
+\label{prop:acp:svd}
+For all $\rset^{n \times d}$ matrix $A$ with rank $r$, there exist $\sigma_1\geqslant \ldots \geqslant \sigma_r>0$ such that
+\[
+A = \sum_{k=1}^r \sigma_k u_k v^\top_k\eqsp,
+\]
+where $\{u_1,\ldots,u_r\}\in (\rset^n)^r$ and $\{v_1,\ldots,v_r\}\in (\rset^d)^r$ are two orthonormal families. The vectors $\{\sigma_1,\ldots,\sigma_r\}$ are called singular values of $A$ and $\{u_1,\ldots,u_r\}$ (resp. $\{v_1,\ldots,v_r\}$) are the left-singular (resp. right-singular) vectors of $A$.
+\end{proposition}
+\end{shaded}
+\begin{remark}
+If $U$ denotes the $\rset^{n\times r}$ matrix with columns given by $\{u_1,\ldots,u_r\}$ and $V$ denotes the $\rset^{p \times r}$ matrix with columns given by $\{v_1,\ldots,v_r\}$, then the singular value decomposition of $A$ may also be written as
+\[
+A = UD_rV^\top\eqsp,
+\]
+where $D_r = \mathrm{diag}(\sigma_1,\ldots,\sigma_r)$.
+\end{remark}
+\begin{remark}
+The singular value decomposition is closely related to the spectral theorem for symmetric semipositive definite matrices. In the framework of Proposition~\ref{prop:acp:svd}, $A^\top A$ and $AA^\top$ are positive semidefinite such that
+\[
+A^\top A = VD_r^2V^\top\quad\mathrm{and}\quad AA^\top = UD_r^2U^\top\eqsp.
+\]
+\end{remark}
+\begin{proof}
+Since the matrix $AA^\top$ is positive semidefinite, its spectral decomposition is given by
+\[
+AA^\top = \sum_{k=1}^r \lambda_k u_k u^\top_k\eqsp,
+\]
+where $\lambda_1\geqslant \ldots\geqslant \lambda_r>0$ are the nonzero eigenvalues of $AA^\top$ and $\{u_1,\ldots,u_r\}$ is an orthonormal family of $\rset^n$. For all $1\leqslant k\leqslant r$, define $v_k = \lambda_k^{-1/2}A^\top u_k$ so that
+\begin{align*}
+\|v_k\|^2&=\lambda_k^{-1}\langle A^\top u_k;A^\top u_k\rangle = \lambda_k^{-1} u^\top_kAA^\top u_k = 1\eqsp, \\
+A^\top Av_k & = \lambda_k^{-1/2}A^\top A A^\top u_k  = \lambda_k v_k\eqsp.
+\end{align*}
+On the other hand, for all $1\leqslant k\neq j\leqslant r$, $\langle v_k;v_j\rangle = \lambda_k^{-1/2}\lambda_j^{-1/2}u^\top_kA A^\top u_j =\lambda_k^{-1/2}\lambda_j^{1/2}u^\top_ku_j = 0$. Therefore, $\{v_1,\ldots,v_r\}$ is an orthonormal family of eigenvectors of $A^\top A$ associated with the eigenvalues $\lambda_1\geqslant \ldots\geqslant \lambda_r>0$. 
+Define, for all $1\leqslant k\leqslant r$, $\sigma_k = \lambda_k^{1/2}$ which yields
+\[
+\sum_{k=1}^r \sigma_k u_k v^\top_k = \sum_{k=1}^r  u_k u^\top_kA = \left(\sum_{k=1}^r  u_k u^\top_k\right)A\eqsp.
+\]
+As $\{u_1,\ldots,u_r\}$ is an orthonormal family, by Lemma~\ref{lem:ortho:proj}$UU^\top = \sum_{k=1}^r u_ku^\top_k$ is the orthogonal projection onto the $\mathrm{range}(AA^\top)$. And, by Lemma~\ref{lem:im:transpose},  $\mathrm{range}(AA^\top)= \mathrm{range}(A)$, which implies
+\[
+\sum_{k=1}^r \sigma_k u_k v^\top_k = \left(\sum_{k=1}^r  u_k u^\top_k\right)A = A\eqsp.
+\]
+\end{proof}
+
+\noindent Let $\Mplus$ the space of real-valued $d \times d$ symmetric positive matrices.
 
 \begin{lemma}
 The function $\Sigma \mapsto \log \det \Sigma$ is concave on $\Mplus$.
@@ -130,9 +204,9 @@ Let $\Sigma$ be a symmetric and invertible  matrix in $\rset^{d\times d}$.
 \partial_{\Sigma}\{\log\mathrm{det}(\Sigma)\}= \Sigma^{-1}\eqsp,
 \]
 where, for all real valued function $f$ defined on $\rset^{d\times d}$, $\partial_{\Sigma}f(\Sigma)$ denotes the $\rset^{d\times d}$ matrix such that for all $1\leqslant i,j\leqslant d$, $\{\partial_{\Sigma}f(\Sigma)\}_{i,j}$ is the partial derivative of $f$ with respect to $\Sigma_{i,j}$.
-\item The derivative of the real valued  function  $x\mapsto x'\Sigma x$ defined on $\rset^d$ is given by:
+\item The derivative of the real valued  function  $x\mapsto x^\top\Sigma x$ defined on $\rset^d$ is given by:
 \[
-\partial_{x}\{x'\Sigma x\} = 2 \Sigma x\eqsp.
+\partial_{x}\{x^\top\Sigma x\} = 2 \Sigma x\eqsp.
 \]
 \end{enumerate}
 \end{lemma}
@@ -150,17 +224,17 @@ where, for all real valued function $f$ defined on $\rset^{d\times d}$, $\partia
         \Sigma_{i,j}}=\frac{\Delta_{i,j}}{\det  \Sigma}
       $$
       Recalling the identity $\Sigma\; [\Delta_{j,i}]_{1\leq i,j \leq d}=(\det
-      \Sigma)\; I_d$ so that $\Sigma^{-1}=\frac{[\Delta_{j,i}]_{1\leq i,j \leq d}^T}{\det
+      \Sigma)\; I_d$ so that $\Sigma^{-1}=\frac{[\Delta_{j,i}]_{1\leq i,j \leq d}^\top}{\det
       \Sigma}$, we finally get
       $$
 \lrb{\frac{\partial \log \det(\Sigma)}{\partial \Sigma_{i,j}}}_{1\leq
-  i,j  \leq d}=(\Sigma^{-1})^T=\Sigma^{-1}
+  i,j  \leq d}=(\Sigma^{-1})^\top=\Sigma^{-1}
 $$
 where the last equality follows from the fact that $\Sigma$ is
 symmetric.
-\item Define $\varphi(x)=x'\Sigma x$. Then, by straightforward
-  algebra, $\varphi(x+h)=\varphi(x)+2h'\Sigma
-  x+\varphi(h)=\varphi(x)+2h'\Sigma x+o(||h||)$, which concludes the
+\item Define $\varphi(x)=x^\top\Sigma x$. Then, by straightforward
+  algebra, $\varphi(x+h)=\varphi(x)+2h^\top\Sigma
+  x+\varphi(h)=\varphi(x)+2h^\top\Sigma x+o(\|h\|)$, which concludes the
   proof.
   \end{enumerateList}
 \end{proof}
