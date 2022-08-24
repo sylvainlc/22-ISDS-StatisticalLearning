@@ -78,7 +78,7 @@ Our aim is to introduce a regression function using the training dataset $\{(X_i
 $$
 \widehat \param_n\in  \argmin_{\param\in\paramset}  \frac{1}{n}\sum_{i=1}^n\left(Y_i-f_\param(X_i)\right)^2\eqsp.
 $$
-
+The components of the vector $\widehat \param_n$ are often referred to as the {\em weights} or the {\em regression coefficients}. Each component $\widehat \param_n(j)$, $1\leqslant j \leqslant d$, specifies the expected change in the output when the input $X(j)$ is changed by one unit.
 
 \subsection{Least squares estimator}
 In a linear regression setting, we assume that $\paramset = \rset^d$ and that  for all $\param\in\paramset$, $f_\param: x \mapsto \param^\top x$.  Let $Y\in\rset^d$  be the random (column) vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $Y$ is $Y_i$  and $X\in\rset^{n\times d}$ the matrix with line $i$ equal to $X^\top_i$. 
@@ -91,10 +91,15 @@ The least squares estimate is defined as a solution to
 \[
 \widehat \param_n\in  \argmin_{\param\in\rset^d}  \|Y - X\param\|_2^2\eqsp.
 \]
-In a {\em well-specified setting}, we assumed that  for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. random variables in $\rset$. Let  $\varepsilon\in\rset^d$  be the random vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $\varepsilon$  is $\varepsilon_i$. The model is then written
+In a {\em well-specified setting}, we assumed that  for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. random variables in $\rset$. Let  $\varepsilon\in\rset^n$  be the random vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $\varepsilon$  is $\varepsilon_i$. The model is then written
 \[
 Y = X \param_{\star} + \varepsilon\eqsp.
 \]
+
+\begin{remark}
+If the matrix $X$ has full rank, i.e. its columns are linearly independent, then $X^\top X$ is positive definite since for all $u\in\rset^d$, $u^\top X^\top X u = \|Xu\|_2^2$ and therefore  $u^\top X^\top X u \geqslant 0$ and $u^\top X^\top X u = 0$ if and only if $Xu = 0$ i.e. if $u=0$.
+\end{remark}
+
 \begin{shaded}
 \begin{proposition}
 \label{prop:least:squares:full:rank}
@@ -124,6 +129,14 @@ In addition,
 \bV[\widehat \param_n] = (X^\top X)^{-1}X^\top\bV[Y]X(X^\top X)^{-1}= \sigma_\star^2(X^\top X)^{-1}X^\top X(X^\top X)^{-1} = \sigma_\star^2(X^\top X)^{-1}\eqsp.
 \]
 \end{proof}
+
+\begin{remark}
+If we assume that  for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. random variables in $\rset$ with distribution $\mathcal{N}(0,\sigma_*^2)$, $\widehat \param_n$ is the maximum likelihood estimator of $\param_\star$. The loglikelihood of the observations writes, for all $\param\in\paramset$,
+$$
+\log p_\theta(Y_{1:n}) = \sum_{i=1}^{n}\log p_\theta(Y_{i}) =  \sum_{i=1}^{n}\left\{- \frac{1}{2}\log(2\pi \sigma_\star^2) - \frac{1}{2}\left(Y_i - \param^\top X_i\right)^2\right\}\eqsp.
+$$
+Therefore, maximizing $\param\mapsto \log p_\theta(Y_{1:n})$ amounts to minimizing $\param \mapsto \sum_{i=1}^{n}(Y_i - \param^\top X_i)^2 = \|Y - X\param\|_2^2$.
+\end{remark}
 
 \begin{remark}
 \label{reg:linear:projX}
@@ -171,17 +184,21 @@ The independence follows from Proposition~\ref{prop:gauss:vec:decor}.
 \end{proof}
 
 \subsection{Computational issues}
-Eventhough it is possible to compute  the inverse of $X^\top X$ in a full rank setting, this matrix can be ill conditioned which may lead to numericla instability. 
+Eventhough it is possible to compute  the inverse of $X^\top X$ in a full rank setting, this matrix can be ill conditioned which may lead to numerical instability. 
 \begin{itemize}
 \item In Scikit-learn, the fit function of \url{https://scikit-learn.org/stable/modules/generated/sklearn.linear\_model.LinearRegression.html} uses a SVD-based solver. By Proposition~\ref{prop:acp:svd}, if $X$ has  rank $r\geqslant 1$, there exist $\sigma_1\geqslant \ldots \geqslant \sigma_r>0$ such that
 \[
 X = \sum_{k=1}^r \sigma_k u_k v^\top_k\eqsp,
 \]
-where $\{u_1,\ldots,u_r\}\in (\rset^n)^r$ and $\{v_1,\ldots,v_r\}\in (\rset^d)^r$ are two orthonormal families. The vectors $\{\sigma_1,\ldots,\sigma_r\}$ are called singular values of $A$ and $\{u_1,\ldots,u_r\}$ (resp. $\{v_1,\ldots,v_r\}$) are the left-singular (resp. right-singular) vectors of $X$. If $U$ denotes the $\rset^{n\times r}$ matrix with columns given by $\{u_1,\ldots,u_r\}$ and $V$ denotes the $\rset^{p \times r}$ matrix with columns given by $\{v_1,\ldots,v_r\}$, then the singular value decomposition of $A$ may also be written as
+where $\{u_1,\ldots,u_r\}\in (\rset^n)^r$ and $\{v_1,\ldots,v_r\}\in (\rset^d)^r$ are two orthonormal families. The vectors $\{\sigma_1,\ldots,\sigma_r\}$ are called singular values of $A$ and $\{u_1,\ldots,u_r\}$ (resp. $\{v_1,\ldots,v_r\}$) are the left-singular (resp. right-singular) vectors of $X$. If $U$ denotes the $\rset^{n\times r}$ matrix with columns given by $\{u_1,\ldots,u_r\}$ and $V$ denotes the $\rset^{d \times r}$ matrix with columns given by $\{v_1,\ldots,v_r\}$, then the singular value decomposition of $A$ may also be written as
 \[
 X = UD_rV^\top\eqsp,
 \]
-where $D_r = \mathrm{diag}(\sigma_1,\ldots,\sigma_r)$.
+where $D_r = \mathrm{diag}(\sigma_1,\ldots,\sigma_r)$. Therefore 
+$$
+X^\top X = VD^2_rV^\top\quad\mathrm{and}\quad (X^\top X)^{-1} =  VD^{-2}_rV^\top\eqsp.
+$$
+In this case, it is enough to compute $V$ and $D$ to compute $(X^\top X)^{-1}$.
 \item Using QR decomposition, we know that there exist an orthogonal matrix $Q\in\rset^{n\times d}$, $Q^\top Q = I_d$, and an upper triangular matrix $R\in\rset^{d\times d}$ such that $X = QR$. Then,
 $$
 X^\top X \widehat\param_n = X^\top Y \Leftrightarrow R\widehat \param_n = Q^\top Y\eqsp.
