@@ -40,7 +40,9 @@ $$
 \subsection*{Cross-validation} 
 In practice, several parameterized families of predictors can be considered to minimize the empirical risk. Each parameterized family provides an empirical best predictor. Cross-validation (CV) provides appealing strategies for algorithm selection. Cross-validation proposes to split the data to estimate the risk of each algorithm: part of data  is used  to train each
 algorithm (or minimize the empirical risk over each parameterized family), and the remaining part is used to estimate
-the risk of the estimated predictor.  In \cite{arlot2010survey}, the authors provide a survey of the most common cross-validation techniques and a few  guidelines to choose the best technique depending on the statistical learning setting. The most widespread technique is probably the $k$-fold cross-validation approach, see \cite{geisser1975predictive}. In this case, the training dataset is first randomly  partitioned into $k$ subset $\mathcal{D}_i$, $1\leqslant i \leqslant k$. Each subset $\mathcal{D}_i$, $1\leqslant i \leqslant k$,  is iteratively removed from the dataset before training the algorithm. Then, the empirical risk of the trained algorithm is computed over $\mathcal{D}_i$. The estimated risk of the algorithm is given by the empirical mean of the risks obtained  over all $\mathcal{D}_i$, $1\leqslant i \leqslant k$. Additional details and illustrations can be found for instance here: \url{https://scikit-learn.org/stable/modules/cross\_validation.html}.
+the risk of the estimated predictor.  In \cite{arlot2010survey}, the authors provide a survey of the most common cross-validation techniques and a few  guidelines to choose the best technique depending on the statistical learning setting. 
+
+The most widespread technique is probably the $k$-fold cross-validation approach, see \cite{geisser1975predictive}. In this case, the training dataset is first randomly  partitioned into $k$ subset $\mathcal{D}_i$, $1\leqslant i \leqslant k$. Each subset $\mathcal{D}_i$, $1\leqslant i \leqslant k$,  is iteratively removed from the dataset before training the algorithm. Then, the empirical risk of the trained algorithm is computed over $\mathcal{D}_i$. The estimated risk of the algorithm is given by the empirical mean of the risks obtained  when each $\mathcal{D}_i$, $1\leqslant i \leqslant k$, is removed from the training dataset and used to evaluate the risk. Additional details and illustrations can be found for instance here: \url{https://scikit-learn.org/stable/modules/cross\_validation.html}.
 
 
 \section{Bayes classifier}
@@ -173,6 +175,15 @@ h_{\star}: x\mapsto  \left\{
     \end{array}
 \right.
 \]
+\begin{figure}
+\begin{center}
+\includegraphics[width = .8\linewidth]{./Illustrations/lda_plot.png}
+\end{center}
+\caption{(Top) Data are generated with the same covrariance matrix in each group. (Bottom) Data are generated with different covrariance matrices in the two groups.  (Left) Classification boundary obtained with LDA, assuming the covariance matrix is the same in each group. (Right)  Classification boundary obtained with QDA, assuming the covariance matrices are different in each group. Crosses are all false positives i.e. all data wrongly classified by the discriminant analysis. Simulations are inspired by \url{https://scikit-learn.org/stable/modules/lda_qda.html\#mathematical-formulation-of-the-lda-and-qda-classifiers} and can be found here \url{https://sylvainlc.github.io/}.}
+\end{figure}
+Additional numerical considerations can be found for instance here \url{https://scikit-learn.org/stable/modules/lda_qda.html#mathematical-formulation-of-the-lda-and-qda-classifiers}.
+
+
 When $\Sigma$ and $\mu_1$ and $\mu_{-1}$ are unknown, this classifier cannot be computed explicitely. We will approximate it using the observations. Assume that  $(X_i,Y_i)_{1\leqslant i\leqslant n}$ are independent observations with the same distribution as $(X,Y)$. The loglikelihood of these observations is given by
 \begin{align*}
 \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right) &=\sum_{i=1}^n \log \bP_{\theta} \left(X_{i},Y_{i}\right)\eqsp,\\
@@ -204,14 +215,7 @@ Therefore, a natural surrogate for the bayes classifier is
 \]
 where $\widehat{\Omega}^n = (\widehat\Sigma^n)^{-1}$. From the asymptotic properties of the Maximum Likelihood Estimator as $n$ goes to infinity, this  classifier converges almost surely to the Bayes classifier as the number of observations $n$ tends to infinity.
 
-\begin{figure}
-\begin{center}
-\includegraphics[width = .8\linewidth]{./Illustrations/lda_plot.png}
-\end{center}
-\caption{(Top) Data are generated with the same covrariance matrix in each group. (Bottom) Data are generated with different covrariance matrices in the two groups.  (Left) Classification boundary obtained with LDA, assuming the covariance matrix is the same in each group. (Right)  Classification boundary obtained with QDA, assuming the covariance matrices are different in each group. Crosses are all false positives i.e. all data wrongly classified by the discriminant analysis. Simulations are inspired by \url{https://scikit-learn.org/stable/modules/lda_qda.html\#mathematical-formulation-of-the-lda-and-qda-classifiers} and can be found here \cite{https://sylvainlc.github.io/}.}
-\end{figure}
 
-Additional numerical considerations can be found for instance here \url{https://scikit-learn.org/stable/modules/lda_qda.html#mathematical-formulation-of-the-lda-and-qda-classifiers}.
 
 
 \subsection{Logistic regression}
@@ -281,9 +285,9 @@ Even though, the model is semiparametric (and not parametric), it can be shown t
 
 \begin{figure}
 \begin{center}
-\includegraphics[width = .7\linewidth]{./Illustrations/logistic_decision.png}
+\includegraphics[width = .8\linewidth]{./Illustrations/logistic_decision.png}
 \end{center}
-\caption{Logistic decision boundary. Detailed simulations can be found here \cite{https://sylvainlc.github.io/}.}
+\caption{(Top) Data are generated with a logistic regression model. The input data are Gaussian vectors in dimension $d = 2$ and the class of each data is chosen randomly according to \eqref{eq:prob:logistic} with a fixed weight $w$. (Bottom)  Classification boundary obtained with the logistic classifier. Crosses are all false positives i.e. all data wrongly classified by the classifier (eventhough the weight $w$ is known in this case). Simulations can be found here \url{https://sylvainlc.github.io/}.}
 \end{figure}
 
 
