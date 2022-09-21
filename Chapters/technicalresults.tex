@@ -1,6 +1,43 @@
 \chapter{Technical results}
 \minitoc
 
+\section{Refresher}
+Let $(\Omega, \calF, \bP)$ be a probability space.
+\begin{shaded}
+\begin{definition}[conditional expectation]
+\label{def:cond:exp}
+Let $X$ be a nonnegative random variable and $\mathcal{G}$ be a sub-$\sigma$-field of $\calF$. There exists a nonnegative and $\mathcal{G}$-measurable random variable $Y$ such that, for  all nonnegative and $\mathcal{G}$-measurable random variables $Z$,
+\begin{equation}
+\label{eq:cond:exp}
+\bE[XZ] = \bE[YZ]\eqsp.
+\end{equation}
+\end{definition}
+\end{shaded}
+\begin{remark}
+If $\bE[X]<\infty$, then $\bE[Y]<\infty$. If $\widetilde Y$ is another nonnegative and $\mathcal{G}$-measurable random variable satisfying \eqref{eq:cond:exp}, then $\widetilde Y = Y$ $\bP$-a.s.
+\end{remark}
+A random variable $Y$ satisfying the assumptions of Definition~\ref{def:cond:exp} is called (a verion of) the conditional espectation of $X$ given $\mathcal{G}$ and written $\bE[X|\mathcal{G}]$. For all measurable sets $A$, we also write $\bE[\1_A|\mathcal{G}] = \bP(A|\mathcal{G})$. For all random variables $X$ define
+$$
+\bE[X|\mathcal{G}] = \bE[X_+|\mathcal{G}] - \bE[X_-|\mathcal{G}]\eqsp,
+$$
+where $X_+ = \mathrm{max}(0,X)$ and $X_- = \mathrm{max}(-X,0)$ are nonnegative random variables.
+
+\begin{shaded}
+\begin{proposition}
+\label{prop:cond:exp}
+Let $X$ be a random variable such that $\bE[X_-|\mathcal{G}]<\infty$ and $\mathcal{G}$ be a sub-$\sigma$-field of $\calF$. Then, $\bP$-a.s., the following properties hold.
+\begin{itemize}
+\item  If $\mathcal{H}$ is a sub-$\sigma$-field of $\mathcal{G}$, then $\bE[X|\mathcal{G}] = \bE[\bE[X|\mathcal{H}]|\mathcal{G}]$.
+\item If $\mathcal{G} = \{\emptyset,\Omega\}$, $\bE[X|\mathcal{G}]=\bE[X]$.
+\item If $X$ is independent of $\mathcal{G}$, then $\bE[X|\mathcal{G}]=X$.
+\item  If $X$ is $\mathcal{G}$-measurable and $\bE[|XY|]<\infty$ and $\bE[|Y|]<\infty$, then $\bE[XY|\mathcal{G}] = X\bE[Y|\mathcal{G}]$.
+\end{itemize}
+\end{proposition}
+\end{shaded}
+
+
+
+
 \section{Probabilistic inequalities}
 \begin{shaded}
 \begin{theorem}[Hoeffding's inequality]
@@ -80,7 +117,19 @@ The proof then follows from proof of the Hoeffding inequality, i.e. \eqref{eq:ho
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Matrix calculus}
+\begin{shaded}
+\begin{lemma}
+Let $X$ be a random vector in $\mathbb{R}^d$ with covariance matrix $\Sigma$ and $A$ be a real matrix in $\mathbb{R}^{m\times d}$. Then, $\bV[AX] = A\Sigma A^\top$.
+\end{lemma}
+\end{shaded}
+\begin{proof}
+By definition, using the linearity of the expectation,
+$$
+\bV[AX] = \bE\left[(AX - \bE[AX])(AX - \bE[AX])^\top\right] = \bE\left[A(X - \bE[X])(X - \bE[X])^\top A^\top\right] = A\bE\left[(X - \bE[X])(X - \bE[X])^\top \right]A^\top = A\Sigma A^\top\eqsp.
+$$
+\end{proof}
 
+\begin{shaded}
 \begin{lemma}
 \label{ref:expectation:quadratic:trasform}
 Let $X$ be a random vector in $\rset^d$ with mean $\mu\in\rset^d$ and covariance matrix $\Sigma\in\rset^{d\times d}$ and $A$ a symmetric matrix in $\rset^{d\times d}$. Then,
@@ -88,6 +137,7 @@ $$
 \bE[X^\top A X] = \mu^\top A \mu + \mathrm{Trace}(A\Sigma)\eqsp.
 $$
 \end{lemma}
+\end{shaded}
 \begin{proof}
 As $X^\top A X$ is a real number, $\bE[X^\top A X] = \bE[\mathrm{Trace}(X^\top A X)] =  \bE[\mathrm{Trace}(AXX^\top )]$. By linearity, $\bE[X^\top A X] = \mathrm{Trace}(A\bE[XX^\top])$ which yields,
 $$
