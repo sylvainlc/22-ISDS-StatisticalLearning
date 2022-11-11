@@ -63,7 +63,7 @@
 
 \begin{document}
 
-\noindent Apprentissage statistique \hfill ISUP - Sorbonne Universit\'e \\
+\noindent EMINES \hfill \\%ISUP - Sorbonne Universit\'e \\
  2022-2023
 
 \noindent\hrulefill
@@ -91,7 +91,38 @@ $$
 \frac{(\widehat \param_{n} -\param_{\star})^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param_{\star})}{q\widehat\sigma^2_{n}} \sim \mathcal{F}(q,n-d)\eqsp,
 $$
 where $\mathcal{F}(q,n-d)$ is the Fisher distribution with $q$ and $n-d$ degrees of freedom, i.e. the law of $(X/q)/(Y/(n-d))$ where $X\sim\chi^2(q)$ is independent of $Y\sim\chi^2(n-d)$.
+
+\vspace{.2cm}
+
+{\em
+Note that $\mathrm{rank}(L(X^\top X)^{-1}L^\top) = \mathrm{rank}(LL^\top)  = q$. The matrix $L(X^\top X)^{-1}L^\top$ is therefore positive definite. There exists a diagonal matrix $D\in\rset^{q\times q}$ with positive diagonal terms and an orthogonal matrix $Q\in\rset^{q\times q}$ such that $L(X^\top X)^{-1}L^\top = QDQ^{-1}$. The matrix $(L(X^\top X)^{-1}L^\top)^{-1/2}$ may be defined as $(L(X^\top X)^{-1}L^\top)^{-1/2} = QD^{-1/2}Q^{-1}$. 
+
+It is then enough to note that $(L(X^\top X)^{-1}L^\top)^{-1/2}L(\widehat \param_{n} -\param_{\star})/\sigma_{\star}\sim \mathcal{N}(0,I_q)$. Therefore,
+\begin{multline*}
+\sigma^{-2}_{\star}\|(L(X^\top X)^{-1}L^\top)^{-1/2}L(\widehat \param_{n} -\param_{\star})\|^2 \\
+= (\widehat \param_{n} -\param_{\star})^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param_{\star})/\sigma^2_{\star} \sim \chi^2(q)\eqsp.
+\end{multline*}
+On the other hand,we know that 
+$$
+(n-d)\sigma^{-2}_{\star}\widehat\sigma^2_{n} \sim \chi^2(n-d)\eqsp.
+$$
+The proof is concluded by noting that $\widehat \param_n$ and  $\widehat\sigma^2_{n}$ are independent.
+}
 \item Using the previous question, build a confidence region with confidence level $1-\alpha\in(0,1)$ for $\param_\star$.
+
+\vspace{.2cm}
+
+{\em
+By the previous question, for $\alpha\in(0,1)$, if $f_{1-\alpha}^{q,n-d}$ denotes the quantile of order $1-\alpha$ of the law $\mathcal{F}(q,n-p)$, then 
+\[
+\bP\left(\param_{\star}\in \left\{\param\in\rset^d\eqsp;\eqsp (\widehat \param_{n} -\param)^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param)\leqslant q\widehat\sigma^2_{n}f_{1-\alpha}^{q,n-d}\right\}\right) = 1-\alpha\eqsp.
+\]
+Therefore, 
+\[
+I^{q,n-d}_{n}(\param_{\star}) = \left\{\param\in\rset^d\eqsp;\eqsp (\widehat \param_{n} -\param)^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param)\leqslant q\widehat\sigma^2_{n}f_{1-\alpha}^{q,n-d}\right\}
+\]
+ is a confidence region for $\param_{\star}$ with confidence level $1-\alpha$. 
+}
 \end{enumerate}
 
 \section{Random design}
@@ -104,35 +135,35 @@ $$
 \widehat \param_n = (X^\top X)^{-1}X^\top Y\eqsp.
 $$
 \begin{enumerate}
-\item  Compute the excess risk $\mathsf{R}(\param)-\mathsf{R}(\param_\star)$, where $\mathsf{R}(\param) = n^{-1}\bE[(Y - X^\top \param)^2]$.
+\item  Compute the excess risk $\mathsf{R}(\param)-\mathsf{R}(\param_\star)$, where $\mathsf{R}(\param) = n^{-1}\bE[\|Y - X^\top \param\|_2^2]$.
 
-%\vspace{.2cm}
-%
-%{\em
-%By definition, using that $\bE[\varepsilon]=0$,
-%\begin{align*}
-%\mathsf{R}(\param) = n^{-1}\bE[\|Y - X \param\|_2^2] = n^{-1}\mathsf{R}(\param) &= \bE[\|X\param_\star + \varepsilon - X\param\|_2^2]\eqsp,\\
-%&= n^{-1}\bE[\|X \param_\star - X\param\|_2^2] + n^{-1}\bE[\|\varepsilon\|_2^2]\eqsp,\\
-%&=(\param_\star - \param)^\top n^{-1}\bE[X^\top X](\param_\star - \param) + \sigma_\star^2\eqsp.
-%\end{align*}
-%Therefore, $\mathsf{R}(\param)-\mathsf{R}(\param_\star) = (\param_\star - \param)^\top n^{-1}\bE[X^\top X](\param_\star - \param) $.
-%}
+\vspace{.2cm}
+
+{\em
+By definition, using that $\bE[\varepsilon]=0$,
+\begin{align*}
+\mathsf{R}(\param) = n^{-1}\bE[\|Y - X \param\|_2^2] = n^{-1}\mathsf{R}(\param) &= \bE[\|X\param_\star + \varepsilon - X\param\|_2^2]\eqsp,\\
+&= n^{-1}\bE[\|X \param_\star - X\param\|_2^2] + n^{-1}\bE[\|\varepsilon\|_2^2]\eqsp,\\
+&=(\param_\star - \param)^\top n^{-1}\bE[X^\top X](\param_\star - \param) + \sigma_\star^2\eqsp.
+\end{align*}
+Therefore, $\mathsf{R}(\param)-\mathsf{R}(\param_\star) = (\param_\star - \param)^\top n^{-1}\bE[X^\top X](\param_\star - \param) $.
+}
 \item  Compute then the excess risk $\bE[\mathsf{R}(\widehat \param_n)-\mathsf{R}(\param_\star)]$.
 
-%\vspace{.2cm}
-%
-%{\em
-%By the previous question,
-%$$
-%\bE[\mathsf{R}(\widehat \param_n)-\mathsf{R}(\param_\star)] = n^{-1}\bE[(\param_\star - \widehat \param_n)^\top \bE[X^\top X](\param_\star - \widehat \param_n) ]\eqsp.
-%$$
-%Since $\widehat \param_n$ is an unbiased estimate of $\param_\star$,
-%\begin{align*}
-%\bE[\mathsf{R}(\widehat \param_n)-\mathsf{R}(\param_\star)] &= n^{-1}\bE[(\param_\star - \bE[\widehat \param_n])^\top \bE[X^\top X](\param_\star - \bE[\widehat \param_n]) ]\eqsp,\\
-%&= n^{-1}\mathrm{Trace}\left(\bE[X^\top X]\mathbb{V}[\widehat \param_n]\right)\eqsp,\\
-%&=\frac{\sigma_\star}{n}\mathrm{Trace}\left(\bE[X^\top X]\bE\left[(X^\top X)^{-1}\right]\right)\eqsp.
-%\end{align*}
-%}
+\vspace{.2cm}
+
+{\em
+By the previous question,
+$$
+\bE[\mathsf{R}(\widehat \param_n)-\mathsf{R}(\param_\star)] = n^{-1}\bE[(\param_\star - \widehat \param_n)^\top \bE[X^\top X](\param_\star - \widehat \param_n) ]\eqsp.
+$$
+Since $\widehat \param_n$ is an unbiased estimate of $\param_\star$,
+\begin{align*}
+\bE[\mathsf{R}(\widehat \param_n)-\mathsf{R}(\param_\star)] &= n^{-1}\bE[(\param_\star - \bE[\widehat \param_n])^\top \bE[X^\top X](\param_\star - \bE[\widehat \param_n]) ]\eqsp,\\
+&= n^{-1}\mathrm{Trace}\left(\bE[X^\top X]\mathbb{V}[\widehat \param_n]\right)\eqsp,\\
+&=\frac{\sigma_\star}{n}\mathrm{Trace}\left(\bE[X^\top X]\bE\left[(X^\top X)^{-1}\right]\right)\eqsp.
+\end{align*}
+}
 
 \end{enumerate}
 
