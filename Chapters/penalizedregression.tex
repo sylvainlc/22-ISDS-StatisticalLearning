@@ -21,31 +21,31 @@ which is positive for all $u\neq 0$. This remark allows to obtain the following 
 \label{prop:least:squares:ridge}
 The unique solution to the Ridge regression problem is given by
 \[
-\widehat \param^{\mathrm{ridge}}_{n,\lambda} = \frac{1}{n}\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}X^\top Y\eqsp.
+\widehat \param^{\mathrm{ridge}}_{n,\lambda} = \frac{1}{n}\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}X^\top Y\eqsp.
 \] 
 In the well-specified setting, this estimator is biased and satisfies 
 \begin{align*}
-\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda} ] - \param_*&= - \lambda\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\param_\star\eqsp,\\
-\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda} ] &= \frac{\sigma_\star^{2}}{n}\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2}\frac{1}{n}X^\top X\eqsp.
+\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda} ] - \param_*&= - \lambda\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\param_\star\eqsp,\\
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda} ] &= \frac{\sigma_\star^{2}}{n}\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2}\frac{1}{n}X^\top X\eqsp.
 \end{align*}
 \end{proposition}
 \end{shaded}
 \begin{proof}
 The unique expression of $\widehat \param^{\mathrm{ridge}}_{n,\lambda} $ is obtained similarly as in the proof of Proposition~\ref{prop:least:squares:full:rank}. Then,
 $$
-\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] =  \frac{1}{n}\left (\frac{1}{n}X^\top X + \lambda  I_n \right)^{-1}X^\top \bE[Y] =  \frac{1}{n}\left(\frac{1}{n} X^\top X + \lambda  I_n\right )^{-1}X^\top X\param_\star \eqsp.
+\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] =  \frac{1}{n}\left (\frac{1}{n}X^\top X + \lambda  I_d \right)^{-1}X^\top \bE[Y] =  \frac{1}{n}\left(\frac{1}{n} X^\top X + \lambda  I_d\right )^{-1}X^\top X\param_\star \eqsp.
 $$
-As the matrix $n^{-1}X^\top X$ is symmetric and real,  $ n^{-1}X^\top X$ is diagonalizable and $n^{-1}X^\top X$, $n^{-1}X^\top X + \lambda I_n$ and $(n^{-1} X^\top X + \lambda I_n)^{-1}$, are diagonalizable in the same orthonormal basis. Then, there exists nonnegative eigenvalues $\lambda_1\geqslant \ldots \geqslant \lambda_d$ and orthonormal eigenvectors $u_1, \ldots u_d$ in $\rset^d$ such that $n^{-1} X^\top X = \sum_{i=1}^d \lambda_i u_i u_i^\top$ and $(n^{-1}X^\top X + \lambda I_n)^{-1} = \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top$. Therefore, 
+As the matrix $n^{-1}X^\top X$ is symmetric and real,  $ n^{-1}X^\top X$ is diagonalizable and $n^{-1}X^\top X$, $n^{-1}X^\top X + \lambda I_d$ and $(n^{-1} X^\top X + \lambda I_d)^{-1}$, are diagonalizable in the same orthonormal basis. Then, there exists nonnegative eigenvalues $\lambda_1\geqslant \ldots \geqslant \lambda_d$ and orthonormal eigenvectors $u_1, \ldots u_d$ in $\rset^d$ such that $n^{-1} X^\top X = \sum_{i=1}^d \lambda_i u_i u_i^\top$ and $(n^{-1}X^\top X + \lambda I_d)^{-1} = \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top$. Therefore, 
 $$
-\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] -\param_\star=  \sum_{i=1}^d \lambda_i(\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star -  \sum_{i=1}^d u_i u_i^\top\param_\star =  - \lambda  \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star = - \lambda\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\param_\star\eqsp.
+\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] -\param_\star=  \sum_{i=1}^d \lambda_i(\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star -  \sum_{i=1}^d u_i u_i^\top\param_\star =  - \lambda  \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star = - \lambda\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\param_\star\eqsp.
 $$
 Similarly,
 $$
-\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  =  \frac{1}{n^2}\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}X^\top \bV[Y]X  \left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1} = \frac{\sigma_\star^{2}}{n^2}\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}X^\top X  \left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\eqsp.
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  =  \frac{1}{n^2}\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}X^\top \bV[Y]X  \left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1} = \frac{\sigma_\star^{2}}{n^2}\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}X^\top X  \left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\eqsp.
 $$
 Therefore,
 $$
-\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  =   \frac{\sigma_\star^{2}}{n}\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2}\frac{1}{n}X^\top X\eqsp.
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  =   \frac{\sigma_\star^{2}}{n}\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2}\frac{1}{n}X^\top X\eqsp.
 $$
 \end{proof}
 
@@ -54,7 +54,7 @@ $$
 \label{prop:risk:ridge}
 In the well-specified setting, for all $\lambda>0$,
 $$
-\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_{n,\lambda}) - \mathsf{R}(\param_\star)\right] = \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2} \frac{1}{n}X^\top X \param_\star +\frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_n)^{-2}\right)\eqsp.
+\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_{n,\lambda}) - \mathsf{R}(\param_\star)\right] = \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2} \frac{1}{n}X^\top X \param_\star +\frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_d)^{-2}\right)\eqsp.
 $$
 \end{proposition}
 \begin{proof}
@@ -65,15 +65,15 @@ Following the full-rank risk analysis given in Section~\ref{sec:risk:fullrank}, 
 \end{multline*}
 By Proposition~\ref{prop:least:squares:ridge}, the bias term is given by
 \begin{align*}
-\left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] \right) &= \frac{\lambda^2}{n}\left(\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\param_\star\right)^\top X^\top X  \left(\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\param_\star\right)\eqsp,\\
-&= \frac{\lambda^2}{n}\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1} X^\top X \left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-1}\param_\star\eqsp,\\
-&= \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2} \frac{1}{n}X^\top X \param_\star\eqsp.
+\left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] \right) &= \frac{\lambda^2}{n}\left(\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\param_\star\right)^\top X^\top X  \left(\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\param_\star\right)\eqsp,\\
+&= \frac{\lambda^2}{n}\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1} X^\top X \left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\param_\star\eqsp,\\
+&= \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2} \frac{1}{n}X^\top X \param_\star\eqsp.
 \end{align*}
 By Lemma~\ref{ref:expectation:quadratic:trasform} and  Proposition~\ref{prop:least:squares:ridge}, the variance term is given by
 \begin{align*}
 \bE\left[ \left(\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] - \widehat \param^{\mathrm{ridge}}_{n,\lambda}\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] - \widehat \param^{\mathrm{ridge}}_{n,\lambda}\right)\right] &= \mathrm{Trace}\left(\frac{1}{n}X^\top X \bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]\right)\eqsp,\\
-&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left(\frac{1}{n}X^\top X\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2}\frac{1}{n}X^\top X\right)\eqsp,\\
-&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_n)^{-2}\right)\eqsp,
+&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left(\frac{1}{n}X^\top X\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2}\frac{1}{n}X^\top X\right)\eqsp,\\
+&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_d)^{-2}\right)\eqsp,
 \end{align*}
 which concludes the proof.
 \end{proof}
@@ -108,11 +108,11 @@ $$
 \begin{proof}
 Let $(\vartheta_1,\ldots,\vartheta_d)$ be an orthonormal basis of $\rset^d$ of eigenvectors of $n^{-1}X^\top X$ associated with the eigenvalues $(\lambda_1,\ldots,\lambda_d)\in\rset^d$. Therefore,
 $$
- \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_n\right)^{-2} \frac{1}{n}X^\top X \param_\star = \lambda\sum_{i=1}^d \param_\star^\top \frac{\lambda \lambda_i}{(\lambda_i + \lambda)^2} u_iu_i^\top \param_\star \leqslant  \frac{\lambda}{2}\|\param_\star\|_2^2\eqsp,
+ \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2} \frac{1}{n}X^\top X \param_\star = \lambda\sum_{i=1}^d \param_\star^\top \frac{\lambda \lambda_i}{(\lambda_i + \lambda)^2} u_iu_i^\top \param_\star \leqslant  \frac{\lambda}{2}\|\param_\star\|_2^2\eqsp,
 $$
 since for all $1\leqslant i \leqslant d$, $2\lambda \lambda_i \leqslant (\lambda + \lambda_i)^2$ implies $\lambda \lambda_i/(\lambda + \lambda_i)^2 \leqslant 1/2$. On the other hand,
 $$
-\frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_n)^{-2}\right) = \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left(n^{-1}X^\top X\sum_{i=1}^d\frac{\lambda_i}{(\lambda + \lambda_i)^2}u_iu_i^\top\right) \leqslant \frac{\sigma_\star^{2}}{2n\lambda }\mathrm{Trace}\left(n^{-1}X^\top X\right) \eqsp.
+\frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_d)^{-2}\right) = \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left(n^{-1}X^\top X\sum_{i=1}^d\frac{\lambda_i}{(\lambda + \lambda_i)^2}u_iu_i^\top\right) \leqslant \frac{\sigma_\star^{2}}{2n\lambda }\mathrm{Trace}\left(n^{-1}X^\top X\right) \eqsp.
 $$
 Therefore, by Proposition~\ref{prop:risk:ridge},
 $$
@@ -224,7 +224,7 @@ An algorithm to approximatively solve the Lasso regression problem proceeds as d
 \begin{proposition}
 Consider a well specified model where $\varepsilon \sim \mathcal{N}(0,\sigma_\star^2 I_n)$. Then, choosing $n\lambda_\star^2/(16\sigma_\star^2  \|\Sigma\|_\infty) = \log(dn)$ yields
 $$
-\frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  16\sigma_\star\sqrt{\frac{\log(dn)}{n}}\|\Sigma\|_\infty^{1/2}\|\param_\star\|_1  + 3\sqrt{2}\frac{\sigma_\star^2}{n\sqrt{d}} \eqsp.
+\frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  16\sigma_\star\sqrt{\frac{\log(dn)}{n}}\|\Sigma\|_\infty^{1/2}\|\param_\star\|_1  + 12\sqrt{2}\frac{\sigma_\star^2}{n\sqrt{d}} \eqsp.
 $$
 \end{proposition}
 
@@ -246,9 +246,9 @@ and
 \|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2  &\leqslant 2\varepsilon^\top X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star) + \lambda n \|\param_\star\|_1 - \lambda n \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1\eqsp,\label{eq:lasso:general:bound}\\
 &\leqslant 2 \|X^\top \varepsilon\|_\infty \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star\|_1   + \lambda n \|\param_\star\|_1 - \lambda n \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1\eqsp.\nonumber
 \end{align}
-On the other hand, writing $\Sigma = n^{-1}X^\top X$,
+Let $A = \{\|X^\top\varepsilon\|_\infty < n\lambda / 2\}$. Writing $\Sigma = n^{-1}X^\top X$,
 $$
-\bP\left(\|X^\top\varepsilon\|_\infty \geqslant \frac{n\lambda}{2}\right) \leqslant \sum_{j=1}^{d} \bP\left(|X^\top\varepsilon|_j \geqslant \frac{n\lambda}{2}\right) \leqslant 2\sum_{j=1}^{d}\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \Sigma_{jj})\right\} \leqslant 2 d\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \|\Sigma\|_\infty\right\}\eqsp,
+\bP\left(A^c\right) = \bP\left(\|X^\top\varepsilon\|_\infty \geqslant \frac{n\lambda}{2}\right) \leqslant \sum_{j=1}^{d} \bP\left(|X^\top\varepsilon|_j \geqslant \frac{n\lambda}{2}\right) \leqslant 2\sum_{j=1}^{d}\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \Sigma_{jj})\right\} \leqslant 2 d\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \|\Sigma\|_\infty\right\}\eqsp,
 $$
 as for all $1\leqslant j\leqslant d$, $X^\top\varepsilon\sim \mathcal{N}(0,\sigma_\star^2 X^\top X)$. Therefore, with probability at least $1 - 2 d\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \|\Sigma\|_\infty\right\}$,
 $$
@@ -258,25 +258,25 @@ and
 $$
 \frac{1}{n}\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2  \leqslant 2\lambda \|\param_\star\|_1 \eqsp.
 $$
-Let $A = \{\|X^\top\varepsilon\|_\infty < n\lambda / 2\}$. Then,
+Then,
 \begin{align*}
 \bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant 2 n \lambda \|\param_\star\|_1 + \bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2 \1_{A^c}\right]\eqsp.
 \end{align*}
-Note that, by \eqref{eq:lasso:general:bound}, $\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2 \leqslant 2 \|\varepsilon \|_2 \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2 + \lambda n \|\param_\star\|_1 \leqslant  \|\varepsilon \|_2^2/2 +  \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2/2 + \lambda n \|\param_\star\|_1$. Then,
+Using that for all $x,y\geq 0$, $2xy\leq x^2/2 + 2y^2$, with  $x= \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2$ and $y=\|\varepsilon \|_2$, by \eqref{eq:lasso:general:bound}, $\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2 \leqslant 2 \|\varepsilon \|_2 \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2 + \lambda n \|\param_\star\|_1 \leqslant  2\|\varepsilon \|_2^2 +  \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2/2 + \lambda n \|\param_\star\|_1$. Then,
 $$
-\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant 2 n \lambda \|\param_\star\|_1 + \bE\left[ (\|\varepsilon \|_2^2 + 2\lambda n \|\param_\star\|_1) \1_{A^c}\right]
+\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant 2 n \lambda \|\param_\star\|_1 + \bE\left[ (4\|\varepsilon \|_2^2 + 2\lambda n \|\param_\star\|_1) \1_{A^c}\right]
 $$
 and by Cauchy-Schwarz inequality,
 $$
-\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant 4 n \lambda \|\param_\star\|_1 + \bE\left[\|\varepsilon \|_2^4\right]^{1/2} \bP\left(A^c\right)^{1/2}\eqsp.
+\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant 4 n \lambda \|\param_\star\|_1 + 4\bE\left[\|\varepsilon \|_2^4\right]^{1/2} \bP\left(A^c\right)^{1/2}\eqsp.
 $$
 Using that $\bE[\|\varepsilon \|_2^4]^{1/2}\leqslant 3n\sigma_\star^2$ yields
 $$
-\frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  4\lambda \|\param_\star\|_1  + 3\sigma_\star^2 \cdot \sqrt{2 d}\mathrm{exp}\left\{-n\lambda^2/(16\sigma_\star^2  \|\Sigma\|_\infty\right\}\eqsp.
+\frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  4\lambda \|\param_\star\|_1  + 12\sigma_\star^2 \cdot \sqrt{2 d}\mathrm{exp}\left\{-n\lambda^2/(16\sigma_\star^2  \|\Sigma\|_\infty\right\}\eqsp.
 $$
 By choosing $\lambda$ so that $n\lambda^2/(16\sigma_\star^2  \|\Sigma\|_\infty) = \log(dn)$, we obtain
 $$
-\frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  16\sigma_\star\sqrt{\frac{\log(dn)}{n}}\|\Sigma\|_\infty^{1/2}\|\param_\star\|_1  + 3\sqrt{2}\frac{\sigma_\star^2}{n\sqrt{d}} \eqsp.
+\frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  16\sigma_\star\sqrt{\frac{\log(dn)}{n}}\|\Sigma\|_\infty^{1/2}\|\param_\star\|_1  + 12\sqrt{2}\frac{\sigma_\star^2}{n\sqrt{d}} \eqsp.
 $$
 \end{proof}
 

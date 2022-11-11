@@ -161,7 +161,7 @@ Since
 \]
 the Bayes classifier is such that for all $x\in \xset$,
 \begin{align*}
-h_{\star}(x) = 1& \Leftrightarrow \left. \bP\left(Y=1\middle | X\right)\right|_{X=x} > \left. \bP\left(Y=-1\middle | X\right) \right|_{X=x}\eqsp,\\
+h_{\star}(x) = 1%& \Leftrightarrow \left. \bP\left(Y=1\middle | X\right)\right|_{X=x} > \left. \bP\left(Y=-1\middle | X\right) \right|_{X=x}\eqsp,\\
 & \Leftrightarrow \pi_1 \exp\left\{-\frac{1}{2}\left(x-\mu_1\right)^\top\Sigma^{-1}\left(x-\mu_1\right)\right\} > \pi_{-1} \exp\left\{-\frac{1}{2}\left(x-\mu_{-1}\right)^\top\Sigma^{-1}\left(x-\mu_{-1}\right)\right\}\eqsp,\\
 & \Leftrightarrow \log\left(\frac{\pi_{1}}{\pi_{-1}}\right) > -\frac{1}{2}\left(x-\mu_{-1}\right)^\top\Sigma^{-1}\left(x-\mu_{-1}\right) + \frac{1}{2}\left(x-\mu_1\right)^\top\Sigma^{-1}\left(x-\mu_1\right)\eqsp,\\
 & \Leftrightarrow \log\left(\frac{\pi_{1}}{\pi_{-1}}\right) > x^\top \Sigma^{-1}\left(\mu_{-1} - \mu_{1}\right) + \frac{1}{2}\left(\mu_{1}+\mu_{-1}\right)^\top\Sigma^{-1}\left(\mu_{1}-\mu_{-1}\right)\eqsp.
@@ -317,6 +317,8 @@ Additional numerical considerations can be found for instance here \url{https://
 %\int_{\mathsf{B}(0,r)}\left(f(x) - \hat{f}_q(x)\right)^2\mu(\rmd x) \leqslant C\left(q^{-1} + \frac{qd}{n}\log n\right)\eqsp.
 %\]
 %\end{theorem}
+
+
 
 %\subsection{Support vector machines} 
 %\subsubsection*{Hard Support Vector Machines}
