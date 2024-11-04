@@ -103,7 +103,7 @@ If the matrix $X$ has full rank, i.e. its columns are linearly independent, then
 \begin{shaded}
 \begin{proposition}
 \label{prop:least:squares:full:rank}
-If the matrix $X$ has full rank, then, $\widehat \param_n = (X^\top X)^{-1}X^\top Y$. In the well-specified setting, this  is an unbiased estimator of $\param_\star$ and it satisfies $\mathbb{V}[\widehat \param_n] = \sigma_\star^2 (X^\top X)^{-1}$.
+If the matrix $X$ has full rank, then, $\widehat \param_n = (X^\top X)^{-1}X^\top Y$. If for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. centered random variables in $\rset$ with variance $\sigma_\star^2$, $\widehat \param_n$  is an unbiased estimator of $\param_\star$ and it satisfies $\mathbb{V}[\widehat \param_n] = \sigma_\star^2 (X^\top X)^{-1}$.
 \end{proposition}
 \end{shaded}
 
@@ -155,7 +155,7 @@ In the special case where $d = 1$, $X\in\rset^n$ and $\widehat Y = \{X^\top Y/(X
 \begin{shaded}
 \begin{proposition}
 \label{prop:least:squares:full:rank:variance}
-In the well-specified setting where $\varepsilon \sim \mathcal{N}(0,\sigma_\star^2I_n)$, the random variable
+If $Y = X\theta_\star + \varepsilon$, where $\varepsilon \sim \mathcal{N}(0,\sigma_\star^2I_n)$, the random variable
 \[
 \widehat \sigma^2_n =\frac{\|Y - X\widehat \param_n \|_2^2}{n-d}
 \]
@@ -211,7 +211,7 @@ In our fixed-design setting, where the matrix $X$ is deterministic, our aim is t
 $$
 \mathsf{R}(\param) = \frac{1}{n}\bE\left[\left\|Y - X\param\right\|_2^2\right]\eqsp.
 $$
-In the well-specified setting, note that
+If for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. centered random variables in $\rset$ with variance $\sigma_\star^2$, note that
 $$
 \mathsf{R}(\param_\star) = \frac{1}{n}\bE\left[\left\|Y - X\param_\star\right\|_2^2\right]= \frac{1}{n}\bE\left[\left\|\varepsilon\right\|_2^2\right] = \sigma_\star^2\eqsp.
 $$
@@ -230,7 +230,7 @@ since $\mathbb{E}[\varepsilon] = 0$. On the other hand, a standard bias-variance
 
 
 \begin{proposition}
-In the well-specified setting, 
+If for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. centered random variables in $\rset$ with variance $\sigma_\star^2$, 
 $$
 \bE\left[\mathsf{R}(\widehat \param_n) - \mathsf{R}(\param_\star)\right] = \sigma_\star^2 \frac{d}{n}\eqsp.
 $$
@@ -256,7 +256,7 @@ $$
 \begin{shaded}
 \begin{proposition}
 \label{prop:betaj}
-For all $1\leqslant j \leqslant n$,
+Assume that  for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. with distribution $\mathcal{N}(0,\sigma_\star^2)$. For all $1\leqslant j \leqslant d$,
 \[
 \frac{\widehat \param_{n,j} -\param_{\star,j}}{\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}} \sim \mathcal{S}(n-d)\eqsp,
 \]
@@ -299,7 +299,7 @@ does not depend  on $\param_{\star}$ neither on $\sigma_{\star}$ and is distribu
 \begin{shaded}
 \begin{proposition}
 \label{prop:Lbeta}
-Let $L$ be a $\rset^{q\times d}$ matrix with rank $q\leqslant d$. Then,
+Assume that for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. with distribution $\mathcal{N}(0,\sigma_\star^2)$. Let $L$ be a $\rset^{q\times d}$ matrix with rank $q\leqslant d$. Then,
 \[
 \frac{(\widehat \param_{n} -\param_{\star})^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param_{\star})}{q\widehat\sigma^2_{n}} \sim \mathcal{F}(q,n-d)\eqsp,
 \]

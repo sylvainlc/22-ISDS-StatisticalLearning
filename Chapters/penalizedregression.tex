@@ -3,15 +3,16 @@
 
 
 \section{Ridge regression}
+\subsection{Ridge estimator}
 In the case where $X^\top X$ is singular (resp. has eigenvalues close to zero), the least squares estimate cannot be computed (resp. is not robust). A common approach to control the estimator variance is to solve the surrogate Ridge regression problem:
 \[
 \widehat \param^{\mathrm{ridge}}_{n,\lambda}\in  \argmin_{\param\in\rset^d}  \left\{\frac{1}{n}\|Y - X\param\|_2^2 + \lambda\|\param\|_2^2\right\}\eqsp,
 \]
 where $\lambda>0$. 
 \begin{remark}
-The matrix $n^{-1}X^\top X + \lambda  I_n$ is definite positive for all $\lambda>0$ as for all $u\in\rset^d$,
+The matrix $n^{-1}X^\top X + \lambda  \Id_d$ is definite positive for all $\lambda>0$ as for all $u\in\rset^d$,
 \[
-u^\top (n^{-1}X^\top X + \lambda I_n)u = n^{-1}\|Xu\|_2^2 + \lambda  \|u\|_2^2\eqsp,
+u^\top (n^{-1}X^\top X + \lambda \Id_d)u = n^{-1}\|Xu\|_2^2 + \lambda  \|u\|_2^2\eqsp,
 \]
 which is positive for all $u\neq 0$. This remark allows to obtain the following result.
 \end{remark}
@@ -21,40 +22,67 @@ which is positive for all $u\neq 0$. This remark allows to obtain the following 
 \label{prop:least:squares:ridge}
 The unique solution to the Ridge regression problem is given by
 \[
-\widehat \param^{\mathrm{ridge}}_{n,\lambda} = \frac{1}{n}\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}X^\top Y\eqsp.
+\widehat \param^{\mathrm{ridge}}_{n,\lambda} = \frac{1}{n}\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}X^\top Y\eqsp.
 \] 
-In the well-specified setting, this estimator is biased and satisfies 
+If for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. centered random variables in $\rset$ with variance $\sigma_\star^2$, this estimator is biased and satisfies 
 \begin{align*}
-\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda} ] - \param_*&= - \lambda\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\param_\star\eqsp,\\
-\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda} ] &= \frac{\sigma_\star^{2}}{n}\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2}\frac{1}{n}X^\top X\eqsp.
+\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda} ] - \param_*&= - \lambda\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}\param_\star\eqsp,\\
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda} ] &= \frac{\sigma_\star^{2}}{n}\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-2}\frac{1}{n}X^\top X\eqsp.
 \end{align*}
 \end{proposition}
 \end{shaded}
 \begin{proof}
 The unique expression of $\widehat \param^{\mathrm{ridge}}_{n,\lambda} $ is obtained similarly as in the proof of Proposition~\ref{prop:least:squares:full:rank}. Then,
 $$
-\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] =  \frac{1}{n}\left (\frac{1}{n}X^\top X + \lambda  I_d \right)^{-1}X^\top \bE[Y] =  \frac{1}{n}\left(\frac{1}{n} X^\top X + \lambda  I_d\right )^{-1}X^\top X\param_\star \eqsp.
+\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] =  \frac{1}{n}\left (\frac{1}{n}X^\top X + \lambda  \Id_d \right)^{-1}X^\top \bE[Y] =  \frac{1}{n}\left(\frac{1}{n} X^\top X + \lambda  \Id_d\right )^{-1}X^\top X\param_\star \eqsp.
 $$
 As the matrix $n^{-1}X^\top X$ is symmetric and real,  $ n^{-1}X^\top X$ is diagonalizable and $n^{-1}X^\top X$, $n^{-1}X^\top X + \lambda I_d$ and $(n^{-1} X^\top X + \lambda I_d)^{-1}$, are diagonalizable in the same orthonormal basis. Then, there exists nonnegative eigenvalues $\lambda_1\geqslant \ldots \geqslant \lambda_d$ and orthonormal eigenvectors $u_1, \ldots u_d$ in $\rset^d$ such that $n^{-1} X^\top X = \sum_{i=1}^d \lambda_i u_i u_i^\top$ and $(n^{-1}X^\top X + \lambda I_d)^{-1} = \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top$. Therefore, 
 $$
-\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] -\param_\star=  \sum_{i=1}^d \lambda_i(\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star -  \sum_{i=1}^d u_i u_i^\top\param_\star =  - \lambda  \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star = - \lambda\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\param_\star\eqsp.
+\bE[\widehat \param^{\mathrm{ridge}}_{n,\lambda}] -\param_\star=  \sum_{i=1}^d \lambda_i(\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star -  \sum_{i=1}^d u_i u_i^\top\param_\star =  - \lambda  \sum_{i=1}^d (\lambda_i + \lambda)^{-1}u_i u_i^\top\param_\star = - \lambda\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}\param_\star\eqsp.
 $$
 Similarly,
 $$
-\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  =  \frac{1}{n^2}\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}X^\top \bV[Y]X  \left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1} = \frac{\sigma_\star^{2}}{n^2}\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}X^\top X  \left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\eqsp.
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  =  \frac{1}{n^2}\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}X^\top \bV[Y]X  \left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1} = \frac{\sigma_\star^{2}}{n^2}\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}X^\top X  \left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}\eqsp.
 $$
 Therefore,
 $$
-\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  =   \frac{\sigma_\star^{2}}{n}\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2}\frac{1}{n}X^\top X\eqsp.
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  =   \frac{\sigma_\star^{2}}{n}\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-2}\frac{1}{n}X^\top X\eqsp.
 $$
 \end{proof}
+\begin{remark}
+By Proposition~\ref{prop:least:squares:ridge}, 
+$$
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  = \frac{\sigma_\star^{2}}{n^2}\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}X^\top X  \left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}\eqsp.
+$$
+On the other hand, the variance of the full rank estimator is 
+$$
+\bV[\widehat \param^{}_{n}]  = \sigma_\star^{2}\left(X^\top X\right)^{-1}\eqsp.
+$$
+Therefore, writing $M_\lambda = (X^\top X + \lambda n \Id_d)^{-1}X^\top X$,
+\begin{align*}
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  - \bV[\widehat \param^{}_{n}] & =  \frac{\sigma_\star^{2}}{n^2}\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}X^\top X  \left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1} - \sigma_\star^{2}\left(X^\top X\right)^{-1}\\
+&= \sigma_\star^{2}\left(X^\top X + \lambda n \Id_d\right)^{-1}X^\top X  \left(X^\top X + \lambda n \Id_d\right)^{-1} - \sigma_\star^{2}\left(X^\top X\right)^{-1}\\
+&= \sigma_\star^{2}M_\lambda \left(X^\top X\right)^{-1}M_\lambda^\top  - \sigma_\star^{2}\left(X^\top X\right)^{-1}\\
+&= \sigma_\star^{2}M_\lambda\left((X^\top X)^{-1}  - M_\lambda^{-1}(X^\top X)^{-1}(M_\lambda^\top)^{-1}\right)M_\lambda^{\top}\\
+&= -\sigma_\star^{2}M_\lambda\left(2n\lambda(X^\top X)^{-2} + (n\lambda)^2(X^\top X)^{-3}\right)M_\lambda^{\top}\\
+&= -\sigma_\star^{2}(X^\top X + \lambda n \Id_d)^{-1}\left(2n\lambda\Id_d + (n\lambda)^2(X^\top X)^{-1}\right)(X^\top X + \lambda n \Id_d)^{-1}\eqsp.
+\end{align*}
+Therefore, the matrix $\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  - \bV[\widehat \param^{}_{n}]$ is negative semi-definite i.e. $\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]\leqslant \bV[\widehat \param^{}_{n}]$.
+\end{remark}
 
+\begin{remark}
+If $X$ is an orthonormal matrix, $X^\top X = \Id_d$ and
+\begin{equation*}
+\bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]  = \frac{\sigma_\star^{2}}{n^2}\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}X^\top X  \left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}= \frac{\sigma^2_\star}{(1+n\lambda)^2}\Id_d\eqsp.
+\end{equation*}
+\end{remark}
 
+\subsection{Risk}
 \begin{proposition}
 \label{prop:risk:ridge}
-In the well-specified setting, for all $\lambda>0$,
+Assume that for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. centered random variables in $\rset$ with variance $\sigma_\star^2$. For all $\lambda>0$,
 $$
-\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_{n,\lambda}) - \mathsf{R}(\param_\star)\right] = \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2} \frac{1}{n}X^\top X \param_\star +\frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_d)^{-2}\right)\eqsp.
+\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_{n,\lambda}) - \mathsf{R}(\param_\star)\right] = \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-2} \frac{1}{n}X^\top X \param_\star +\frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda \Id_d)^{-2}\right)\eqsp.
 $$
 \end{proposition}
 \begin{proof}
@@ -65,15 +93,15 @@ Following the full-rank risk analysis given in Section~\ref{sec:risk:fullrank}, 
 \end{multline*}
 By Proposition~\ref{prop:least:squares:ridge}, the bias term is given by
 \begin{align*}
-\left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] \right) &= \frac{\lambda^2}{n}\left(\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\param_\star\right)^\top X^\top X  \left(\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\param_\star\right)\eqsp,\\
-&= \frac{\lambda^2}{n}\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1} X^\top X \left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-1}\param_\star\eqsp,\\
-&= \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2} \frac{1}{n}X^\top X \param_\star\eqsp.
+\left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right]\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\param_\star-\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] \right) &= \frac{\lambda^2}{n}\left(\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}\param_\star\right)^\top X^\top X  \left(\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}\param_\star\right)\eqsp,\\
+&= \frac{\lambda^2}{n}\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1} X^\top X \left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-1}\param_\star\eqsp,\\
+&= \lambda^2\param_\star^\top\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-2} \frac{1}{n}X^\top X \param_\star\eqsp.
 \end{align*}
 By Lemma~\ref{ref:expectation:quadratic:trasform} and  Proposition~\ref{prop:least:squares:ridge}, the variance term is given by
 \begin{align*}
 \bE\left[ \left(\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] - \widehat \param^{\mathrm{ridge}}_{n,\lambda}\right)^\top \left(\frac{1}{n}X^\top X\right) \left(\bE\left[\widehat \param^{\mathrm{ridge}}_{n,\lambda}\right] - \widehat \param^{\mathrm{ridge}}_{n,\lambda}\right)\right] &= \mathrm{Trace}\left(\frac{1}{n}X^\top X \bV[\widehat \param^{\mathrm{ridge}}_{n,\lambda}]\right)\eqsp,\\
-&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left(\frac{1}{n}X^\top X\left(\frac{1}{n}X^\top X + \lambda I_d\right)^{-2}\frac{1}{n}X^\top X\right)\eqsp,\\
-&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda I_d)^{-2}\right)\eqsp,
+&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left(\frac{1}{n}X^\top X\left(\frac{1}{n}X^\top X + \lambda \Id_d\right)^{-2}\frac{1}{n}X^\top X\right)\eqsp,\\
+&= \frac{\sigma_\star^{2}}{n}\mathrm{Trace}\left((n^{-1}X^\top X)^2(n^{-1}X^\top X + \lambda \Id_d)^{-2}\right)\eqsp,
 \end{align*}
 which concludes the proof.
 \end{proof}
@@ -102,7 +130,7 @@ $$
 $$
 yields
 $$
-\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_{\lambda_\star}) - \mathsf{R}(\param_\star)\right]  \leqslant \frac{\sigma_\star \|\param_\star\|_2 \mathrm{Trace}\left(X^\top X\right)^{1/2}}{\sqrt{n}}  \eqsp.
+\bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_{n,\lambda_\star}) - \mathsf{R}(\param_\star)\right]  \leqslant \frac{\sigma_\star \|\param_\star\|_2 \mathrm{Trace}\left(X^\top X\right)^{1/2}}{\sqrt{n}}  \eqsp.
 $$
 \end{proposition}
 \begin{proof}
@@ -124,8 +152,51 @@ $$
 $$
 \end{proof}
 
+\subsection{Choice of $\lambda$}
+Information-based metrics such as Akaike Information Criterion (AIC, \cite{akaike1974new}) or Bayesian Information Criterion (BIC, \cite{schwarz1978estimating}) are popular approaches to select $\lambda$ in practical applications to balance between accuracy and complexity. On the other hand cross-validation techniques are widely used in machine learning and foster models with good prediction performance.
+
+A standard approach is to use a $K$-fold cross-validation to split data between train and test subsets. The dataset $\mathcal{D} = \{(X_i,Y_i)\}_{1\leq i\leq n}$ is randomly divided into a partition made of $K$ subsets approximately equally sized $\mathcal{D}_1, \ldots \mathcal{D}_K$. For all $1\leqslant k \leqslant K$, let $n_k$ be the number of couples $(X_i,Y_i)$ in $\mathcal{D}_k$. For all $1\leqslant k \leqslant K$, write $\bf X_k$ (resp. $\bf X_{-k}$) the matrix containing all input features $X_i$, $1\leqslant i\leqslant n$, such that $(X_i,Y_i)\in \mathcal{D}_k$ (resp. containing all input features $X_i$, $1\leqslant i\leqslant n$, such that $(X_i,Y_i)\notin \mathcal{D}_k$). Similarly, write $\bf Y_k$ (resp. $\bf Y_{-k}$) the vector containing all observations $Y_i$, $1\leqslant i\leqslant n$, such that $(X_i,Y_i)\in \mathcal{D}_k$ (resp. containing all observations $Y_i$, $1\leqslant i\leqslant n$, such that $(X_i,Y_i)\notin \mathcal{D}_k$). To assess the predictive performance of a model, we choose a loss function, and for each model, the model is trained $K$ times using successively $\bf X_{-k}$ and $\bf Y_{-k}$, $1\leqslant k\leqslant K$, to estimate the parameters of the model and $\bf X_{k}$ and $\bf Y_{k}$ to compute the loss function, i.e each model is associated with $K$ predictive scores computed on a dataset which was not used to train the model. Usually, the model with best average score on the test sets is chosen (but considering the empirical variance of the test scores is also interesting). An example of the procedure is displayed in Algorithm~\ref{alg:cv:ridge}.
+
+There exist many ways to build the different groups of samples. In Leave One Out (LOO) strategies,  training  sets are created using all samples except one $\{(X_i,Y_i)\}_{1\leqslant i\neq i_*\leqslant n}$, the test score being being evaluated only with $(X_{i_*},Y_{i_*})$. 
+
+Cross-validation can be performed using Scikit-learn and its ridge regression with built-in cross-validation, see for instance \url{https://scikit-learn.org/dev/modules/generated/sklearn.linear\_model.RidgeCV.html}. Figure~\ref{fig:cv:grid} illustrate a way data can be split to perform a cross-validation\footnote{\url{https://scikit-learn.org/stable/modules/cross\_validation.html}}.
+
+\begin{figure}
+\label{fig:cv:grid}
+\begin{center}
+\includegraphics[width = .7\linewidth]{./Illustrations/grid_search_cross_validation}
+\end{center}
+\caption{An illustration on how to split data to select hyperparameters using $K$-fold cross-validation, see \url{https://scikit-learn.org/stable/modules/cross\_validation.html}.}
+\end{figure}
 
 
+
+\begin{algorithm}
+\caption{K-fold cross-validation to select $\lambda$}\label{alg:cv:ridge}
+\begin{algorithmic}
+\Require $K$, $\mathcal{D}_1, \ldots \mathcal{D}_K$, candidate values $\{\lambda_1,\ldots,\lambda_p\}$, $p\geqslant 1$.
+\For{$j\in\{1,\ldots,p\}$}
+\For{$k\in\{1,\ldots,K\}$}
+    \State Compute
+$$
+\widehat \param^{\mathrm{ridge}}_{n,k,\lambda_j} = \frac{1}{n-n_k}\left(\frac{1}{n-n_k}\bf{Y}_{-k}^\top \bf{Y}_{-k} + \lambda \Id_d\right)^{-1}\bf{Y}_{-k}^\top \bf{Y}_{-k}\eqsp.
+$$
+    \State Compute
+$$
+\mathcal{L}_k(\lambda_j) = \left\|\bf{Y}_k - \bf{X}_k \widehat \param^{\mathrm{ridge}}_{n,k,\lambda_j}\right\|_2^2\eqsp.
+$$ 
+\EndFor
+\State Set
+$$
+\overline{\mathcal{L}}(\lambda_j) = \frac{1}{K}\sum_{k=1}^{K}\mathcal{L}_k(\lambda_j)\eqsp.
+$$
+\EndFor
+\State Set
+$$
+\widehat \lambda = \mathrm{Argmin}_{\lambda_1,\ldots\lambda_p}\overline{\mathcal{L}}(\lambda)\eqsp.
+$$
+\end{algorithmic}
+\end{algorithm}
 \begin{figure}
 \begin{center}
 \includegraphics[width = .7\linewidth]{./Illustrations/ridge_coef.png}
@@ -147,7 +218,7 @@ $$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Lasso regression}
-The Least Absolute Shrinkage and Selection Operator (Lasso) regression is a $\mathrm{L}_1$ based regularized regression which aims at fostering sparsity. The objective is to solve the following minimization problem,
+The Least Absolute Shrinkage and Selection Operator (Lasso) regression, introduced in \cite{tibshirani1996regression}, is a $\mathrm{L}_1$ based regularized regression which aims at fostering sparsity. The objective is to solve the following minimization problem,
 \begin{equation}
 \label{eq:lasso:obj}
 \widehat \param^{\mathrm{lasso}}_{\lambda,n}\in  \argmin_{\param\in\rset^d}  \left\{\frac{1}{n}\|Y - X\param\|_2^2 + \lambda\|\param\|_1\right\}\eqsp,
@@ -156,20 +227,110 @@ where $\lambda>0$ and
 \[
 \|\param\|_1 = \sum_{j=1}^d|\param_j|\eqsp.
 \]
-The function $\param \mapsto n^{-1}\|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex but not differentiable and the solution to this problem may  not be unique. 
+The function $\param \mapsto n^{-1}\|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex but not differentiable and the solution to this problem may  not be unique. This approach shrinks some coefficients of $\param$ and sets others to 0. The objective is to balance the impact of feature selection and regularization.  By Lemma~\ref{lem:lasso:loss}, even when the Lasso solution is not unique, the solutions to \eqref{eq:lasso:obj} share some properties. 
 
+\begin{lemma}[\cite{tibshirani2013lasso}]
+\label{lem:lasso:loss}
+For all $\lambda>0$, $n\geqslant 1$, all solutions $\widehat \param^{\mathrm{lasso}}_{\lambda,n}$ to \eqref{eq:lasso:obj} have the same fitted value $X \widehat \param^{\mathrm{lasso}}_{\lambda,n}$ and the same $\mathrm{L}_1$-norm $\|\widehat \param^{\mathrm{lasso}}_{\lambda,n}\|_1$.
+\end{lemma}
+
+\begin{proof}
+\begin{itemize}
+\item Let $\widehat \param^{\mathrm{lasso}}_{1,\lambda,n}$ and $\widehat \param^{\mathrm{lasso}}_{2,\lambda,n}$ be two solutions of \eqref{eq:lasso:obj}. Assume that $X\param^{\mathrm{lasso}}_{1,\lambda,n} \neq X\param^{\mathrm{lasso}}_{2,\lambda,n}$. Then, for all $\gamma\in(0,1)$, writing $\param^{\mathrm{lasso}}_{\gamma,\lambda,n} = \gamma \param^{\mathrm{lasso}}_{1,\lambda,n} + (1-\gamma)\param^{\mathrm{lasso}}_{2,\lambda,n}$ and since $\|\cdot\|_2^2$ is stricly convex, 
+$$
+\|Y - X\param^{\mathrm{lasso}}_{\gamma,\lambda,n}\|^2_2 = \|\gamma(Y - X\param^{\mathrm{lasso}}_{1,\lambda,n}) + (1-\gamma)(Y - X\param^{\mathrm{lasso}}_{2,\lambda,n})\|^2_2 <  \gamma\|Y - X\param^{\mathrm{lasso}}_{1,\lambda,n} \|_2 + (1-\gamma)\|Y - X\param^{\mathrm{lasso}}_{2,\lambda,n}\|^2_2\eqsp.
+$$
+Writing 
+$$
+\ell_{\mathrm{min}} = \frac{1}{n}\|Y - X\param^{\mathrm{lasso}}_{1,\lambda,n}\|_2^2 + \lambda\|\param^{\mathrm{lasso}}_{1,\lambda,n}\|_1 = \frac{1}{n}\|Y - X\param^{\mathrm{lasso}}_{2,\lambda,n}\|_2^2 + \lambda\|\param^{\mathrm{lasso}}_{2,\lambda,n}\|_1
+$$
+yields
+$$
+\frac{1}{n}\|Y - X\param^{\mathrm{lasso}}_{\gamma,\lambda,n}\|_2^2 + \lambda\|\param^{\mathrm{lasso}}_{\gamma,\lambda,n}\|_1 < \gamma\ell_{\mathrm{min}} + (1-\gamma)\ell_{\mathrm{min}} < \ell_{\mathrm{min}}\eqsp, 
+$$
+which is not possible. Therefore, $X\param^{\mathrm{lasso}}_{1,\lambda,n} = X\param^{\mathrm{lasso}}_{2,\lambda,n}$.
+\item Let $\widehat \param^{\mathrm{lasso}}_{1,\lambda,n}$ and $\widehat \param^{\mathrm{lasso}}_{2,\lambda,n}$ be two solutions of \eqref{eq:lasso:obj}. As $X\param^{\mathrm{lasso}}_{1,\lambda,n} = X\param^{\mathrm{lasso}}_{2,\lambda,n}$, $\|Y - X\param^{\mathrm{lasso}}_{1,\lambda,n}\|_2^2 = \|Y - X\param^{\mathrm{lasso}}_{2,\lambda,n}\|_2^2$. Since $\widehat \param^{\mathrm{lasso}}_{1,\lambda,n}$ and $\widehat \param^{\mathrm{lasso}}_{2,\lambda,n}$ are two solutions of \eqref{eq:lasso:obj}, $\|\param^{\mathrm{lasso}}_{1,\lambda,n}\|_1=\|\param^{\mathrm{lasso}}_{2,\lambda,n}\|_1$.
+\end{itemize}
+\end{proof}
+
+\begin{remark}
+By \cite[Lemma~4]{tibshirani2013lasso},  when the entries of $X$ have a joint distribution that is absolutely continuous with respect to Lebesgue measure on $\rset^{n\times d}$,  the Lasso solution is unique with probability 1.
+\end{remark}
 
 \subsection{Computational issues}
-A coordinate descent can be applied to solve the LASSO optimization problem. In this case, solving \eqref{eq:lasso:obj} amounts to producing iterative estimators, where at each iteration, a coordinate is selected to be updated. Then, the objective function  is optimized explicitly  with respect to the selected coordinate. For all $\param \in \rset^d$,  
+A coordinate descent can be applied to solve the Lasso optimization problem. In this case, solving \eqref{eq:lasso:obj} amounts to producing iterative estimators, where at each iteration, a coordinate is selected to be updated.  
+
+\paragraph{{\bf Othonormal design} } Assume first that $X$ is orthonormal, i.e. that $X^\top X = \Id_d$. The loss of the Lasso optimization problem writes for all $\theta\in\rset^d$,
+\begin{align*}
+\mathcal{L}_\lambda(\theta) &= \frac{1}{n}\|Y-X\theta\|_2^2 + \lambda \|\theta\|_1\eqsp,\\
+&= \frac{1}{n}(\|Y\|_2^2+ \theta^\top \theta -2 \theta^\top X^\top Y) + \lambda \|\theta\|_1\eqsp,\\
+&= \frac{1}{n}(\|Y\|_2^2+ \theta^\top \theta -2 \theta^\top X^\top Y) + \lambda \|\theta\|_1\eqsp,\\
+&= \frac{1}{n}\|Y\|_2^2 + \frac{1}{n}\sum_{j=1}^{d}(\theta_j^2 -2 (X^\top Y)_j\theta_j) + \lambda \sum_{j=1}^d|\theta_j|\eqsp.
+\end{align*}
+Therefore,
+$$
+\widehat \param^{\mathrm{lasso}}_{\lambda,n}\in  \argmin_{\param\in\rset^d}  \left\{\frac{1}{n}\sum_{j=1}^{d}(\theta_j^2 -2 (X^\top Y)_j\theta_j) + \lambda \sum_{j=1}^d|\theta_j|\right\}\eqsp,
+$$
+and $\widehat \param^{\mathrm{lasso}}_{\lambda,n}$ can be computed coordinate per coordinate. Then, the objective function  is optimized explicitly  with respect to the selected coordinate. For all $\param \in \rset^d$,  $j_0\in\{1,\ldots,d\}$,
+\[
+\partial_{\param_{j_0}} \left\{\frac{1}{n}\sum_{j=1}^{d}(\theta_j^2 -2 (X^\top Y)_j\theta_j)\right\} = - \frac{2}{n}((X^\top Y)_{j_0} - \theta_{j_0}) = - \frac{2}{n}(X_{.,j_0}^\top Y - \theta_{j_0})\eqsp.
+\]
+Define
+\[
+\upsilon_{j_0}=X_{.,j_0}^\top Y\eqsp.
+\]
+Then,
+\[
+\partial_{\param_{j_0}} \left\{\frac{1}{n}\sum_{j=1}^{d}(\theta_j^2 -2 (X^\top Y)_j\theta_j)\right\} = -2( \upsilon_{j_0} - \param_{j_0})\eqsp.
+\]
+Consequently, for all $\param_j \neq 0$, 
+\[
+(\nabla_\param ( n^{-1}\|Y - X\param\|_2^2 +  \lambda\|\param\|_1))_j= \frac{2}{n}( \param_j - \upsilon_j + \lambda n\textrm{sign}(\param_j)/2)\eqsp.
+\]
+For all $1\leqslant j\leqslant d$,  $\param_j \mapsto  n^{-1}\|Y - X\param\|_2^2 + \lambda\|\param\|_1$ is convex and grows to infinity when $|\param_j|\to \infty$ and admits thus a minimum at some $\param_j^{\star}\in\rset$. 
+\begin{enumerate}[-]
+\item If $\param_j^{\star} \neq 0$, then
+\[
+\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda n~\textrm{sign}(\param_j^{\star})}{2 \upsilon_j}\right)\eqsp,
+\]
+which yields, as  $\textrm{sign}(\param_j^{\star}) = \textrm{sign}(\upsilon_j)$,
+\[
+\param_j^{\star} = \upsilon_j\left(1 - \frac{\lambda n }{2 |\upsilon_j|}\right)
+\]
+and
+\[
+1 - \frac{\lambda n }{2 |\upsilon_j|} \geqslant 0\eqsp.
+\]
+\item If $1 - \lambda n/(2 |\upsilon_j|)<0$, there is no solution to $(\nabla_\param ( n^{-1}\|Y - X\param\|_2^2 +  \lambda\|\param\|_1))_j=0$ for $\param_j \neq 0$.  Since $\param_j \mapsto  n^{-1}\|Y - X\param\|_2^2 + \lambda\|\param\|_1$ admits a minimum, $\param_j^{\star}=0$. 
+\end{enumerate}
+Therefore,
+\[
+\param_j^{\star} = \upsilon_j\left( 1 - \frac{\lambda n}{2 |\upsilon_j|}\right)_+ = \mathrm{max}\left(0;\upsilon_j\left( 1 - \frac{\lambda n}{2 |\upsilon_j|}\right)\right)\eqsp.
+\]
+
+\paragraph{{\bf Normalized design} } Assume first that for all $j\in\{1,\ldots,d\}$,  $X_{.,j}^\top X_{.,j} = 1$. 
+%The loss of the Lasso optimization problem writes for all $\theta\in\rset^d$,
+%\begin{align*}
+%\mathcal{L}_\lambda(\theta) &= \frac{1}{n}\|Y-X\theta\|_2^2 + \lambda \|\theta\|_1\eqsp,\\
+%&= \frac{1}{n}(\|Y\|_2^2+ \theta^\top \theta -2 \theta^\top X^\top Y) + \lambda \|\theta\|_1\eqsp,\\
+%&= \frac{1}{n}(\|Y\|_2^2+ \theta^\top \theta -2 \theta^\top X^\top Y) + \lambda \|\theta\|_1\eqsp,\\
+%&= \frac{1}{n}\|Y\|_2^2 + \frac{1}{n}\sum_{j=1}^{d}(\theta_j^2 -2 (X^\top Y)_j\theta_j) + \lambda \sum_{j=1}^d|\theta_j|\eqsp.
+%\end{align*}
+%Therefore,
+%$$
+%\widehat \param^{\mathrm{lasso}}_{\lambda,n}\in  \argmin_{\param\in\rset^d}  \left\{\frac{1}{n}\sum_{j=1}^{d}(\theta_j^2 -2 (X^\top Y)_j\theta_j) + \lambda \sum_{j=1}^d|\theta_j|\right\}\eqsp,
+%$$
+%and $\widehat \param^{\mathrm{lasso}}_{\lambda,n}$ can be computed coordinate per coordinate. Then, the objective function  is optimized explicitly  with respect to the selected coordinate. 
+For all $\param \in \rset^d$, 
 \[
 \nabla_\param \|Y - X\param\|_2^2 = - 2 X^\top (Y-X\param)\eqsp.
 \]
-Then, for all $1\leqslant j \leqslant d$, $(\nabla_\param \|Y - X\param\|_2^2)_j = -2 {\bf X}^\top_j (Y-X\param)$, where ${\bf X}_j$ is the $j$-th column of the matrix $X$. 
+Then, for all $1\leqslant j \leqslant d$, $(\nabla_\param \|Y - X\param\|_2^2)_j = -2 X_{.,j}^\top (Y-X\param)$. 
 Define, for all $1\leqslant j \leqslant d$,
 \[
-\upsilon_{j}={\bf X}^\top_{j}\left(Y-\sum_{\substack{i=1\\ i\neq j}}^d\param_{i}{\bf X}_{i}\right)\eqsp.
+\upsilon_{j}=X_{.,j}^\top\left(Y-\sum_{\substack{i=1\\ i\neq j}}^d\param_{i} X_{.,i}\right)\eqsp.
 \]
-Assuming that the columns of $X$ are normalized, i.e. for all $1\leqslant k \leqslant d$, ${\bf X}^\top_{k}{\bf X}_{k}=1$, yields
+Then,
 \[
 (\nabla_\param \|Y - X\param\|_2^2)_j = -2( \upsilon_j - \param_j)\eqsp.
 \]
@@ -222,7 +383,7 @@ An algorithm to approximatively solve the Lasso regression problem proceeds as d
 
 \subsection{Risk analysis of LASSO regression problem}
 \begin{proposition}
-Consider a well specified model where $\varepsilon \sim \mathcal{N}(0,\sigma_\star^2 I_n)$. Then, choosing $n\lambda_\star^2/(16\sigma_\star^2  \|\Sigma\|_\infty) = \log(dn)$ yields
+Assume that for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. with distribution $\mathcal{N}(0,\sigma_\star^2)$. Then, choosing $n\lambda_\star^2/(16\sigma_\star^2  \|\Sigma\|_\infty) = \log(dn)$ yields
 $$
 \frac{1}{n}\bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant  16\sigma_\star\sqrt{\frac{\log(dn)}{n}}\|\Sigma\|_\infty^{1/2}\|\param_\star\|_1  + 12\sqrt{2}\frac{\sigma_\star^2}{n\sqrt{d}} \eqsp.
 $$
@@ -246,11 +407,11 @@ and
 \|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2  &\leqslant 2\varepsilon^\top X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star) + \lambda n \|\param_\star\|_1 - \lambda n \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1\eqsp,\label{eq:lasso:general:bound}\\
 &\leqslant 2 \|X^\top \varepsilon\|_\infty \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star\|_1   + \lambda n \|\param_\star\|_1 - \lambda n \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1\eqsp.\nonumber
 \end{align}
-Let $A = \{\|X^\top\varepsilon\|_\infty < n\lambda / 2\}$. Writing $\Sigma = n^{-1}X^\top X$,
+Let $A = \{\|X^\top\varepsilon\|_\infty < n\lambda / 2\}$. Writing $\Sigma = n^{-1}X^\top X$, as  $X^\top\varepsilon\sim \mathcal{N}(0,n\sigma_\star^2 \Sigma)$,
 $$
-\bP\left(A^c\right) = \bP\left(\|X^\top\varepsilon\|_\infty \geqslant \frac{n\lambda}{2}\right) \leqslant \sum_{j=1}^{d} \bP\left(|X^\top\varepsilon|_j \geqslant \frac{n\lambda}{2}\right) \leqslant 2\sum_{j=1}^{d}\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \Sigma_{jj})\right\} \leqslant 2 d\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \|\Sigma\|_\infty\right\}\eqsp,
+\bP\left(A^c\right) = \bP\left(\|X^\top\varepsilon\|_\infty \geqslant \frac{n\lambda}{2}\right) \leqslant \sum_{j=1}^{d} \bP\left(|X^\top\varepsilon|_j \geqslant \frac{n\lambda}{2}\right) \leqslant 2\sum_{j=1}^{d}\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \Sigma_{jj})\right\} \leqslant 2 d\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \|\Sigma\|_\infty\right\}\eqsp.
 $$
-as for all $1\leqslant j\leqslant d$, $X^\top\varepsilon\sim \mathcal{N}(0,\sigma_\star^2 X^\top X)$. Therefore, with probability at least $1 - 2 d\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \|\Sigma\|_\infty\right\}$,
+Therefore, with probability at least $1 - 2 d\mathrm{exp}\left\{-n\lambda^2/(8\sigma_\star^2  \|\Sigma\|_\infty\right\}$,
 $$
 \|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2  \leqslant  \lambda n  \|\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star\|_1   + \lambda n \|\param_\star\|_1 - \lambda n \|\param^{\mathrm{lasso}}_{\lambda_\star,n}\|_1
 $$
@@ -262,7 +423,11 @@ Then,
 \begin{align*}
 \bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant 2 n \lambda \|\param_\star\|_1 + \bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2 \1_{A^c}\right]\eqsp.
 \end{align*}
-Using that for all $x,y\geq 0$, $2xy\leq x^2/2 + 2y^2$, with  $x= \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2$ and $y=\|\varepsilon \|_2$, by \eqref{eq:lasso:general:bound}, $\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2 \leqslant 2 \|\varepsilon \|_2 \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2 + \lambda n \|\param_\star\|_1 \leqslant  2\|\varepsilon \|_2^2 +  \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2/2 + \lambda n \|\param_\star\|_1$. Then,
+Using that for all $x,y\geq 0$, $2xy\leq x^2/2 + 2y^2$, with  $x= \|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2$ and $y=\|\varepsilon \|_2$, by \eqref{eq:lasso:general:bound}, 
+$$
+\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2 \leqslant 2 \|\varepsilon \|_2 \|X(\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2 + \lambda n \|\param_\star\|_1 \leqslant  2\|\varepsilon \|_2^2 +  \|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2/2 + \lambda n \|\param_\star\|_1\eqsp.
+$$ 
+Then,
 $$
 \bE\left[\|X(\widehat\param^{\mathrm{lasso}}_{\lambda_\star,n}-\param_\star)\|_2^2\right] \leqslant 2 n \lambda \|\param_\star\|_1 + \bE\left[ (4\|\varepsilon \|_2^2 + 2\lambda n \|\param_\star\|_1) \1_{A^c}\right]
 $$
@@ -295,176 +460,3 @@ $$
 \end{center}
 \caption{Lasso regression is used to predict the Brazilian inflation based on many observed variables, see \url{https://github.com/gabrielrvsc/HDeconometrics/}. The model is trained using $n=140$ data with for each $1\leqslant i \leqslant n$, $X_i\in\rset^{93}$, i.e. $d  =93$. The features are econometric data available each month. Number of null coefficient in $\widehat \param^{\mathrm{lasso}}_{n,\lambda}$ as a function of $\lambda$.}
 \end{figure}
-
-
-\section{Regression with infinite-dimensional models}
-
-\subsection{Nonparametric regression}
-In a nonparametric regression framework, it is not assumed that the observations depend linearly on the covariates and a more general model is introduced. For all $1\leqslant i\leqslant n$, the observation model is given by
-\[
-Y_{i}=f^*(X_{i})+\xi_{i}\eqsp,
-\]
-where for all $1\leqslant i\leqslant n$, $X_i\in\xset$, and the $(\xi_{i})_{1\leqslant i \leqslant n}$ are i.i.d. centered Gaussian random variables with variance $\sigma^2$. The function $f^*$ is unknown and has to be estimated using the observations $(X_i,Y_i)_{1\leqslant i\leqslant n}$. A simple approach consists in defining an estimator of $f^*$ as a linear combination of $M\geqslant 1$ known functions $(\varphi_1,\ldots,\varphi_M)$ defined on $\xset$. Define $\calF_\varphi$ as
-\[
-\calF_\varphi = \left\{\sum_{j=1}^M \alpha_j \varphi_j\eqsp;\eqsp (\alpha_1,\ldots,\alpha_M)\in\rset^M\right\}\eqsp.
-\]
-Then, the least squares estimator of $f^*$ on $\calF_\varphi$ is defined as
-\[
-\widehat f^\varphi_n\in  \argmin_{f \in \calF_\varphi}  \sum_{i=1}^n(Y_i - f(X_i))^2\eqsp.
-\]
-Let $\Psi$ be the $\rset^{M\times n}$ matrix such as, for all $1\leqslant i\leqslant n$ and $1\leqslant j\leqslant M$, $\Psi_{i,j} = \varphi_j(X_i)$. Then, for all $f \in \calF_\varphi$, there exists $\alpha = (\alpha_1,\ldots,\alpha_M)\in\rset^M$ such that,
-\[
- \sum_{i=1}^n(Y_i - f(X_i))^2 = \|Y - \Psi \alpha\|^2\eqsp.
-\]
-Then, following the same steps as in Section~\ref{sec:full:rank:reg}, in the case where $\Psi^\top \Psi$ is nonsingular, the least squares estimate is
-\begin{equation}
-\label{eq:def:nonparam:reg}
-\widehat f^\varphi_n: x\mapsto \sum_{j=1}^M \widehat\alpha_{n,j} \varphi_j\eqsp,
-\end{equation}
-where
-\[
-\widehat\alpha_{n} = (\Psi^\top \Psi)^{-1}\Psi^\top Y\eqsp.
-\]
-Introducing the function $\varphi: x\mapsto (\varphi_1(x)\ldots,\varphi_M(x))^\top$ yields the linear estimator 
-\[
-\widehat f^\varphi_n: x \mapsto \sum_{i = 1}^n w_i(x)Y_i\eqsp,
-\]
-where, for all $1\leqslant i\leqslant n$,
-\[
-w_i(x) = \left(\varphi(x)^\top(\Psi^\top\Psi)^{-1}\Psi^\top\right)_i\eqsp.
-\]
-
-\begin{shaded}
-\begin{proposition}
-Let  $W = (w_i(X_j))_{1\leqslant i,j \leqslant n}$ and $\bar f^* = (f^*(X_1),\ldots,f^*(X_n))^\top$. Then,
-\[
-\frac{1}{n}\bE\left[\sum_{i=1}^n(\widehat f^\varphi_n(X_i) - f^*(X_i))^2\right] = \frac{1}{n}\sum_{i=1}^n((W\bar f^*)_i - f^*(X_i))^2 + \frac{\sigma^2}{n}\mathrm{Trace}(W^\top W)\eqsp,
-\]
-where $\widehat f^\varphi_n$  is defined by \eqref{eq:def:nonparam:reg}.
-\end{proposition}
-\end{shaded}
-\begin{proof}
-See the exercises.
-\end{proof}
-
-\subsection{Introduction to kernel regression}
-%Nonparametric classification based on the empirical risk minimization may seem appealing  
-%since its statistical properties, such as oracle inequalities, can be obtained simply. However, these properties cannot be used to
-%derive efficient practical classifiers due to the computational cost of the optimization problem defined by \eqref{eq:empirical:classif}. One of the most popular approach to design efficient algorithm for classification follows from a convexification of the original problem \eqref{eq:empirical:classif}.  The target loss function $\widehat L^n_{\mathrm{miss}}$ is replaced by a convex surrogate and its minimization is constrained to a convex set of classifiers.
-%
-%For any convex function $f:\xset\to \rset$, it is possible to build a classifier $h$ given by $h_f=\mathrm{sign}(f)$. The associated empirical classification is then
-%\[
-%\widehat L^n_{\mathrm{miss}}(h_f) = \frac{1}{n}\sum_{i=1}^n \1_{Y_i \neq h_f(X_i)} = \frac{1}{n}\sum_{i=1}^n \1_{Y_if(X_i) <0}\eqsp.
-%\]
-%Then, replacing the indicator function by any convex loss funtion $\ell$ yields a convex surrogate of $\widehat L^n_{\mathrm{miss}}$:
-%\[
-%\widehat L^{n,\mathrm{conv}}_{\mathrm{miss}}(f) = \frac{1}{n}\sum_{i=1}^n \ell(Y_if(X_i))\eqsp.
-%\]
-Let $\calF$ be a set of functions from $\xset=\rset^d$ to $\rset$. The multivariate regression problem considered so far is part of the more general framework
-%\begin{equation}
-%\label{eq:empirical:classif:conv}
-%\widehat f^n_{\calF} \in \underset{f\in\calF}{\argmin}\;\widehat L^{n,\mathrm{conv}}_{\mathrm{miss}}(f)\eqsp.
-%\end{equation}
-%In addition, when the smoothness of the function $f$ is penalized, $\widehat L^{n,\mathrm{conv}}_{\mathrm{miss}}$ may be  replaced by 
-\begin{equation}
-\label{eq:erm:rkhs}
-\widehat f^n_{\calF} \in \underset{f\in\calF}{\argmin}\; \frac{1}{n}\sum_{i=1}^n \ell(Y_i,f(X_i)) + \lambda\|f\|^2\eqsp,
-\end{equation}
-where $\lambda>0$ and $\|\cdot\|$ is a norm on the space $\calF$.  In the case of the Ridge regression $\ell:(y,y'): \mapsto \|y-y'\|_2^2$, $ \{f: \rset^d\to\rset\eqsp;\eqsp \exists \param\in\rset^d \eqsp\forall x\in \rset^d\eqsp, \eqsp f(x) =f_\param(x)= \param^\top x\}$ and $\|f_\param\|^2 = \|\param\|_2^2$.
-
-A useful case in practice consists in choosing $\calF$ as a Reproducing Kernel Hilbert Space with positive definite reproducing kernel $k$ on $\xset\times \xset$.
-
-\begin{shaded}
-\begin{definition}
-\label{def:kernel}
-A function $k:\xset\times\xset:\to \rset$ is said to be a positive semi-definite kernel if and only if it is symmetric and if for all $n\geqslant 1$, $(x_1,\ldots,x_n)\in\xset^n$ and all $(a_1,\ldots,a_n)\in\rset^n$,
-\[
-\sum_{1\leqslant i,j\leqslant n}a_ia_jk(x_i,x_j) \geqslant 0\eqsp.
-\]
-\end{definition}
-\end{shaded}
-
-\begin{remark}
-The following functions, defined on $\rset^d\times\rset^d$, are positive semi-definite kernels:
-$$
-k:(x,y)\mapsto x^Ty \quad\mathrm{and}\quad k:(x,y)\mapsto \mathrm{exp}\left(-\|x-y\|^2/(2\sigma^2\right)\eqsp,\; \sigma>0\eqsp.
-$$
-\end{remark}
-
-\begin{shaded}
-\begin{definition}
-Let $\calF$ be a Hilbert space of functions $f:\xset\to\rset$. A symmetric function $k:\xset\times\xset:\to \rset$ is said to be a reproducing kernel of $\calF$ if and only if for all $x\in\xset$, $k(x,\cdot)\in\calF$ and for all $x\in\Xset$ and all $f\in\calF$, $\langle f; k(x,\cdot)\rangle = f(x)$. The space $\calF$ is said to be a reproducing kernel Hilbert space with kernel $k$.
-\end{definition}
-\end{shaded}
-
-\begin{remark}
-For all $x\in\xset$, the function $k(x,\cdot)$ is called afeature map and often written $\varphi(x)$. In this setting, all $x,x'\in\xset$, $k(x,x') = \langle \varphi(x); \varphi(x')\rangle$. An important result given in \cite{} states that  a function $k:\xset\times\xset:\to \rset$ is a positive semi-definite kernel if and only if there exist a Hilbert space $\calF$ and a function $\varphi: \xset\to \calF$ such that $k(x,x') = \langle \varphi(x); \varphi(x')\rangle$.
-\end{remark}
-
-A reproducing kernel associated with a reproducing kernel Hilbert space is positive semi-definite since for all $n\geqslant 1$, $(x_1,\ldots,x_n)\in\xset^n$ and all $(a_1,\ldots,a_n)\in\rset^n$,
-\[
-\sum_{1\leqslant i,j\leqslant n}a_ia_jk(x_i,x_j) = \sum_{1\leqslant i,j\leqslant n}a_ia_j \langle k(x_i,\cdot);k(x_j,\cdot)\rangle = \left\|\sum_{1\leqslant i\leqslant n}a_i\langle k(x_i,\cdot)\right\|^2 \geqslant 0\eqsp.
-\]
-
-\begin{remark}
-The positive semi-definite kernel $k:(x,y)\mapsto x^Ty$ defined on $\rset^d\times\rset^d$ is a reproducing kernel of the space
-$$
-\calF = \left\{f: \rset^d\to\rset\eqsp;\eqsp \exists \omega\in\rset^d \eqsp\forall x\in \rset^d\eqsp, \eqsp f(x) = \omega^Tx\right\}\eqsp,
-$$
-equipped with the inner product defined, for all $(f,g)\in\calF\times\calF$, by 
-$$
-\langle f; g\rangle = \omega_f^T\omega_g\eqsp, 
-$$
-where $\omega_f,\omega_g\in\rset^d$ and $f: x\mapsto \omega_f^Tx$, $g: x\mapsto \omega_g^Tx$. 
-\end{remark}
-
-%\begin{shaded}
-%\begin{definition}
-%\label{def:rkhs}
-%Let $k:\xset\times\xset:\to \rset$ be a positive semi-definite kernel. The Reproducing Kernel Hilbert Space with kernel $k$ is the only Hilbert space $\calF \subset \rset^\Xset$ such that for all $x\in\xset$,  $k(x,\cdot) \in \calF$ and for all $x\in\Xset$ and all $f\in\calF$,
-%\[
-%f(x) = \langle f\eqsp;\eqsp k(x,\cdot)\rangle_\calF\eqsp.
-%\]
-%\end{definition}
-%\end{shaded}
-Proposition~\ref{prop:minimization:rkhs} proves that the minimization of the penalized empirical loss amounts to solving a convex optimization problem on $\rset^n$ for which many efficient  numerical solution exist.
-\begin{shaded}
-\begin{proposition}
-\label{prop:minimization:rkhs}
-Let $k:\xset\times\xset:\to \rset$ be a positive definite kernel and $\calF$ the RKHS with kernel $k$. Then, 
-\[
-\widehat f^n_{\calF} \in \underset{f\in\calF}{\argmin}\;\frac{1}{n}\sum_{i=1}^n \ell(Y_i,f(X_i)) + \lambda\|f\|_\calF^2\eqsp,
-\]
-where $\|f\|^2_\calF = \langle f\eqsp;\eqsp f\rangle$, is given by $\widehat f^n_{\calF} : x \mapsto \sum_{i=1}^n \widehat \alpha_i k(X_i,x)$, where
-\[
-\widehat\alpha \in \underset{\alpha \in \rset^n}{\argmin}\;\left\{\frac{1}{n}\sum_{i=1}^n \ell\left(Y_i,\sum_{j=1}^n\alpha_jk(X_j,X_i)\right) + \lambda \sum_{1\leqslant i,j \leqslant n}\alpha_i \alpha_j k(X_i,X_j)\right\}\eqsp.
-\]
-\end{proposition}
-\end{shaded}
-\begin{proof}
-Let $V$ be the linear space spanned by $(k(X_i,\cdot))_{1\leqslant i\leqslant n}$. For all $f\in\calF$, $f$ can be written $f = f_V + f_{V^\perp}$ with $f_V\in V$ and $f_{V^\perp}\in V^\perp$. Since $\calF$ is a RKHS with kernel $k$, for all $1\leqslant i \leqslant n$,
-\[
-f_{V^\perp}(X_i) = 0\quad \mathrm{and} \quad f(X_i) = \langle f\eqsp;\eqsp k(X_i,\cdot)\rangle = f_V(X_i)\eqsp.
-\]
-Therefore,
-\[
-\frac{1}{n}\sum_{i=1}^n \ell(Y_i,f(X_i)) + \lambda\|f\|^2 = \frac{1}{n}\sum_{i=1}^n \ell(Y_i,f_V(X_i)) + \lambda\|f_V\|^2 + \lambda\|f_{V^\perp}\|^2
-\]
-and any minimizer of the target function is in $V$. There exist $(\alpha_1,\ldots,\alpha_n)\in \rset^n$ such that 
-\[
-\widehat f^n_{\calF} :x\mapsto \sum_{i=1}^n \alpha_i k(X_i,x)\eqsp,
-\]
-which concludes the proof.
-\end{proof}
-Therefore, Proposition~\ref{prop:minimization:rkhs} establishes that  solving 
-\[
-\widehat f^n_{\calF} \in \underset{f\in\calF}{\argmin}\;\frac{1}{n}\sum_{i=1}^n \ell(Y_i,f(X_i)) + \lambda\|f\|_\calF^2\eqsp,
-\]
-amounts to compute  $\widehat f^n_{\calF} : x \mapsto \sum_{i=1}^n \widehat \alpha_i k(X_i,x)$ where
-\[
-\widehat\alpha \in \underset{\alpha \in \rset^n}{\argmin}\;\left\{\frac{1}{n}\sum_{i=1}^n \ell\left(Y_i,K\alpha_i\right) + \lambda \alpha^\top K \alpha\right\}\eqsp.
-\]
-In a Ridge regression setting tuis yields:
-\[
-\widehat\alpha \in \underset{\alpha \in \rset^n}{\argmin}\;\left\{\frac{1}{n} \|Y-K\alpha\|_2^2+ \lambda \alpha^\top K \alpha\right\}\eqsp.
-\]

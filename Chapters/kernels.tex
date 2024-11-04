@@ -1,0 +1,174 @@
+\chapter{Kernel-based regression}
+\minitoc
+
+\section{Regression with infinite-dimensional models}
+
+\subsection{Nonparametric regression}
+In a nonparametric regression framework, it is not assumed that the observations depend linearly on the covariates and a more general model is introduced. For all $1\leqslant i\leqslant n$, the observation model is given by
+\[
+Y_{i}=f^*(X_{i})+\xi_{i}\eqsp,
+\]
+where for all $1\leqslant i\leqslant n$, $X_i\in\xset$, and the $(\xi_{i})_{1\leqslant i \leqslant n}$ are i.i.d. centered Gaussian random variables with variance $\sigma^2$. The function $f^*$ is unknown and has to be estimated using the observations $(X_i,Y_i)_{1\leqslant i\leqslant n}$. A simple approach consists in defining an estimator of $f^*$ as a linear combination of $M\geqslant 1$ known functions $(\varphi_1,\ldots,\varphi_M)$ defined on $\xset$. Define $\calF_\varphi$ as
+\[
+\calF_\varphi = \left\{\sum_{j=1}^M \alpha_j \varphi_j\eqsp;\eqsp (\alpha_1,\ldots,\alpha_M)\in\rset^M\right\}\eqsp.
+\]
+Then, the least squares estimator of $f^*$ on $\calF_\varphi$ is defined as
+\[
+\widehat f^\varphi_n\in  \argmin_{f \in \calF_\varphi}  \sum_{i=1}^n(Y_i - f(X_i))^2\eqsp.
+\]
+Let $\Psi$ be the $\rset^{M\times n}$ matrix such as, for all $1\leqslant i\leqslant n$ and $1\leqslant j\leqslant M$, $\Psi_{i,j} = \varphi_j(X_i)$. Then, for all $f \in \calF_\varphi$, there exists $\alpha = (\alpha_1,\ldots,\alpha_M)\in\rset^M$ such that,
+\[
+ \sum_{i=1}^n(Y_i - f(X_i))^2 = \|Y - \Psi \alpha\|^2\eqsp.
+\]
+Then, following the same steps as in Section~\ref{sec:full:rank:reg}, in the case where $\Psi^\top \Psi$ is nonsingular, the least squares estimate is
+\begin{equation}
+\label{eq:def:nonparam:reg}
+\widehat f^\varphi_n: x\mapsto \sum_{j=1}^M \widehat\alpha_{n,j} \varphi_j\eqsp,
+\end{equation}
+where
+\[
+\widehat\alpha_{n} = (\Psi^\top \Psi)^{-1}\Psi^\top Y\eqsp.
+\]
+Introducing the function $\varphi: x\mapsto (\varphi_1(x)\ldots,\varphi_M(x))^\top$ yields the linear estimator 
+\[
+\widehat f^\varphi_n: x \mapsto \sum_{i = 1}^n w_i(x)Y_i\eqsp,
+\]
+where, for all $1\leqslant i\leqslant n$,
+\[
+w_i(x) = \left(\varphi(x)^\top(\Psi^\top\Psi)^{-1}\Psi^\top\right)_i\eqsp.
+\]
+
+\begin{shaded}
+\begin{proposition}
+Let  $W = (w_i(X_j))_{1\leqslant i,j \leqslant n}$ and $\bar f^* = (f^*(X_1),\ldots,f^*(X_n))^\top$. Then,
+\[
+\frac{1}{n}\bE\left[\sum_{i=1}^n(\widehat f^\varphi_n(X_i) - f^*(X_i))^2\right] = \frac{1}{n}\sum_{i=1}^n((W\bar f^*)_i - f^*(X_i))^2 + \frac{\sigma^2}{n}\mathrm{Trace}(W^\top W)\eqsp,
+\]
+where $\widehat f^\varphi_n$  is defined by \eqref{eq:def:nonparam:reg}.
+\end{proposition}
+\end{shaded}
+\begin{proof}
+See the exercises.
+\end{proof}
+
+\subsection{Introduction to kernel regression}
+%Nonparametric classification based on the empirical risk minimization may seem appealing  
+%since its statistical properties, such as oracle inequalities, can be obtained simply. However, these properties cannot be used to
+%derive efficient practical classifiers due to the computational cost of the optimization problem defined by \eqref{eq:empirical:classif}. One of the most popular approach to design efficient algorithm for classification follows from a convexification of the original problem \eqref{eq:empirical:classif}.  The target loss function $\widehat L^n_{\mathrm{miss}}$ is replaced by a convex surrogate and its minimization is constrained to a convex set of classifiers.
+%
+%For any convex function $f:\xset\to \rset$, it is possible to build a classifier $h$ given by $h_f=\mathrm{sign}(f)$. The associated empirical classification is then
+%\[
+%\widehat L^n_{\mathrm{miss}}(h_f) = \frac{1}{n}\sum_{i=1}^n \1_{Y_i \neq h_f(X_i)} = \frac{1}{n}\sum_{i=1}^n \1_{Y_if(X_i) <0}\eqsp.
+%\]
+%Then, replacing the indicator function by any convex loss funtion $\ell$ yields a convex surrogate of $\widehat L^n_{\mathrm{miss}}$:
+%\[
+%\widehat L^{n,\mathrm{conv}}_{\mathrm{miss}}(f) = \frac{1}{n}\sum_{i=1}^n \ell(Y_if(X_i))\eqsp.
+%\]
+Let $\calF$ be a set of functions from $\xset=\rset^d$ to $\rset$. The multivariate regression problem considered so far is part of the more general framework
+%\begin{equation}
+%\label{eq:empirical:classif:conv}
+%\widehat f^n_{\calF} \in \underset{f\in\calF}{\argmin}\;\widehat L^{n,\mathrm{conv}}_{\mathrm{miss}}(f)\eqsp.
+%\end{equation}
+%In addition, when the smoothness of the function $f$ is penalized, $\widehat L^{n,\mathrm{conv}}_{\mathrm{miss}}$ may be  replaced by 
+\begin{equation}
+\label{eq:erm:rkhs}
+\widehat f^n_{\calF} \in \underset{f\in\calF}{\argmin}\; \frac{1}{n}\sum_{i=1}^n \ell(Y_i,f(X_i)) + \lambda\|f\|^2\eqsp,
+\end{equation}
+where $\lambda>0$ and $\|\cdot\|$ is a norm on the space $\calF$.  In the case of the Ridge regression $\ell:(y,y'): \mapsto \|y-y'\|_2^2$, $ \{f: \rset^d\to\rset\eqsp;\eqsp \exists \param\in\rset^d \eqsp\forall x\in \rset^d\eqsp, \eqsp f(x) =f_\param(x)= \param^\top x\}$ and $\|f_\param\|^2 = \|\param\|_2^2$.
+
+A useful case in practice consists in choosing $\calF$ as a Reproducing Kernel Hilbert Space with positive definite reproducing kernel $k$ on $\xset\times \xset$.
+
+\begin{shaded}
+\begin{definition}
+\label{def:kernel}
+A function $k:\xset\times\xset:\to \rset$ is said to be a positive semi-definite kernel if and only if it is symmetric and if for all $n\geqslant 1$, $(x_1,\ldots,x_n)\in\xset^n$ and all $(a_1,\ldots,a_n)\in\rset^n$,
+\[
+\sum_{1\leqslant i,j\leqslant n}a_ia_jk(x_i,x_j) \geqslant 0\eqsp.
+\]
+\end{definition}
+\end{shaded}
+
+\begin{remark}
+The following functions, defined on $\rset^d\times\rset^d$, are positive semi-definite kernels:
+$$
+k:(x,y)\mapsto x^Ty \quad\mathrm{and}\quad k:(x,y)\mapsto \mathrm{exp}\left(-\|x-y\|^2/(2\sigma^2\right)\eqsp,\; \sigma>0\eqsp.
+$$
+\end{remark}
+
+\begin{shaded}
+\begin{definition}
+Let $\calF$ be a Hilbert space of functions $f:\xset\to\rset$. A symmetric function $k:\xset\times\xset:\to \rset$ is said to be a reproducing kernel of $\calF$ if and only if for all $x\in\xset$, $k(x,\cdot)\in\calF$ and for all $x\in\Xset$ and all $f\in\calF$, $\langle f; k(x,\cdot)\rangle = f(x)$. The space $\calF$ is said to be a reproducing kernel Hilbert space with kernel $k$.
+\end{definition}
+\end{shaded}
+
+\begin{remark}
+For all $x\in\xset$, the function $k(x,\cdot)$ is called afeature map and often written $\varphi(x)$. In this setting, all $x,x'\in\xset$, $k(x,x') = \langle \varphi(x); \varphi(x')\rangle$. An important result given in \cite{} states that  a function $k:\xset\times\xset:\to \rset$ is a positive semi-definite kernel if and only if there exist a Hilbert space $\calF$ and a function $\varphi: \xset\to \calF$ such that $k(x,x') = \langle \varphi(x); \varphi(x')\rangle$.
+\end{remark}
+
+A reproducing kernel associated with a reproducing kernel Hilbert space is positive semi-definite since for all $n\geqslant 1$, $(x_1,\ldots,x_n)\in\xset^n$ and all $(a_1,\ldots,a_n)\in\rset^n$,
+\[
+\sum_{1\leqslant i,j\leqslant n}a_ia_jk(x_i,x_j) = \sum_{1\leqslant i,j\leqslant n}a_ia_j \langle k(x_i,\cdot);k(x_j,\cdot)\rangle = \left\|\sum_{1\leqslant i\leqslant n}a_i\langle k(x_i,\cdot)\right\|^2 \geqslant 0\eqsp.
+\]
+
+\begin{remark}
+The positive semi-definite kernel $k:(x,y)\mapsto x^Ty$ defined on $\rset^d\times\rset^d$ is a reproducing kernel of the space
+$$
+\calF = \left\{f: \rset^d\to\rset\eqsp;\eqsp \exists \omega\in\rset^d \eqsp\forall x\in \rset^d\eqsp, \eqsp f(x) = \omega^Tx\right\}\eqsp,
+$$
+equipped with the inner product defined, for all $(f,g)\in\calF\times\calF$, by 
+$$
+\langle f; g\rangle = \omega_f^T\omega_g\eqsp, 
+$$
+where $\omega_f,\omega_g\in\rset^d$ and $f: x\mapsto \omega_f^Tx$, $g: x\mapsto \omega_g^Tx$. 
+\end{remark}
+
+%\begin{shaded}
+%\begin{definition}
+%\label{def:rkhs}
+%Let $k:\xset\times\xset:\to \rset$ be a positive semi-definite kernel. The Reproducing Kernel Hilbert Space with kernel $k$ is the only Hilbert space $\calF \subset \rset^\Xset$ such that for all $x\in\xset$,  $k(x,\cdot) \in \calF$ and for all $x\in\Xset$ and all $f\in\calF$,
+%\[
+%f(x) = \langle f\eqsp;\eqsp k(x,\cdot)\rangle_\calF\eqsp.
+%\]
+%\end{definition}
+%\end{shaded}
+Proposition~\ref{prop:minimization:rkhs} proves that the minimization of the penalized empirical loss amounts to solving a convex optimization problem on $\rset^n$ for which many efficient  numerical solution exist.
+\begin{shaded}
+\begin{proposition}
+\label{prop:minimization:rkhs}
+Let $k:\xset\times\xset:\to \rset$ be a positive definite kernel and $\calF$ the RKHS with kernel $k$. Then, 
+\[
+\widehat f^n_{\calF} \in \underset{f\in\calF}{\argmin}\;\frac{1}{n}\sum_{i=1}^n \ell(Y_i,f(X_i)) + \lambda\|f\|_\calF^2\eqsp,
+\]
+where $\|f\|^2_\calF = \langle f\eqsp;\eqsp f\rangle$, is given by $\widehat f^n_{\calF} : x \mapsto \sum_{i=1}^n \widehat \alpha_i k(X_i,x)$, where
+\[
+\widehat\alpha \in \underset{\alpha \in \rset^n}{\argmin}\;\left\{\frac{1}{n}\sum_{i=1}^n \ell\left(Y_i,\sum_{j=1}^n\alpha_jk(X_j,X_i)\right) + \lambda \sum_{1\leqslant i,j \leqslant n}\alpha_i \alpha_j k(X_i,X_j)\right\}\eqsp.
+\]
+\end{proposition}
+\end{shaded}
+\begin{proof}
+Let $V$ be the linear space spanned by $(k(X_i,\cdot))_{1\leqslant i\leqslant n}$. For all $f\in\calF$, $f$ can be written $f = f_V + f_{V^\perp}$ with $f_V\in V$ and $f_{V^\perp}\in V^\perp$. Since $\calF$ is a RKHS with kernel $k$, for all $1\leqslant i \leqslant n$,
+\[
+f_{V^\perp}(X_i) = 0\quad \mathrm{and} \quad f(X_i) = \langle f\eqsp;\eqsp k(X_i,\cdot)\rangle = f_V(X_i)\eqsp.
+\]
+Therefore,
+\[
+\frac{1}{n}\sum_{i=1}^n \ell(Y_i,f(X_i)) + \lambda\|f\|^2 = \frac{1}{n}\sum_{i=1}^n \ell(Y_i,f_V(X_i)) + \lambda\|f_V\|^2 + \lambda\|f_{V^\perp}\|^2
+\]
+and any minimizer of the target function is in $V$. There exist $(\alpha_1,\ldots,\alpha_n)\in \rset^n$ such that 
+\[
+\widehat f^n_{\calF} :x\mapsto \sum_{i=1}^n \alpha_i k(X_i,x)\eqsp,
+\]
+which concludes the proof.
+\end{proof}
+Therefore, Proposition~\ref{prop:minimization:rkhs} establishes that  solving 
+\[
+\widehat f^n_{\calF} \in \underset{f\in\calF}{\argmin}\;\frac{1}{n}\sum_{i=1}^n \ell(Y_i,f(X_i)) + \lambda\|f\|_\calF^2\eqsp,
+\]
+amounts to compute  $\widehat f^n_{\calF} : x \mapsto \sum_{i=1}^n \widehat \alpha_i k(X_i,x)$ where
+\[
+\widehat\alpha \in \underset{\alpha \in \rset^n}{\argmin}\;\left\{\frac{1}{n}\sum_{i=1}^n \ell\left(Y_i,K\alpha_i\right) + \lambda \alpha^\top K \alpha\right\}\eqsp.
+\]
+In a Ridge regression setting thus yields:
+\[
+\widehat\alpha \in \underset{\alpha \in \rset^n}{\argmin}\;\left\{\frac{1}{n} \|Y-K\alpha\|_2^2+ \lambda \alpha^\top K \alpha\right\}\eqsp.
+\]

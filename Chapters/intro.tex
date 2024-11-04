@@ -74,9 +74,9 @@ For all $u,v \in \{-1,1\}$, $\indin{u \neq v}=\indin{u v=-1}=(1-uv)/2$. Since $Y
 \begin{equation} \label{eq:miss}
 \Lmiss(h)=\PP(Y\neq h(X)) = \left(1-\PE[Y h(X)]\right)/2\eqsp.
 \end{equation}
-Now, using sucessively the tower property, the equality $|u|= u\times \sgn(u)$, and the tower property again,
+Using sucessively the tower property, the equality $|u|= u\times \sgn(u)$, and the tower property again yields
 $$
-\PE[Y h(X)] =\PE[\CPE{Y}{X} h(X)] \leq \PEs{|\CPE{Y}{X}| \underbrace{|h(X)|}_{=1}}=  \PEs{\CPE{Y}{X} \underbrace{\sgn(\CPE{Y}{X})}_{h_\star(X)}}=\PE[Y h_\star(X)]
+\PE[Y h(X)] =\PE[\CPE{Y}{X} h(X)] \leq \PEs{|\CPE{Y}{X}| \underbrace{|h(X)|}_{=1}}=  \PEs{\CPE{Y}{X} \underbrace{\sgn(\CPE{Y}{X})}_{h_\star(X)}}=\PE[Y h_\star(X)]\eqsp.
 $$
 Plugging this into \eqref{eq:miss} yields $\Lmiss(h) \geq \Lmiss(h_\star)$, which concludes the proof.
 \end{proof}
@@ -248,14 +248,12 @@ h_{\star}: x\mapsto  \left\{
     \end{array}
 \right.
 \]
-
-\begin{figure}
-\begin{center}
-\includegraphics[width = .7\linewidth]{./Illustrations/logistic_function.png}
-\end{center}
-\caption{Logistic function $\sigma: x \mapsto \rme^x/(1+\rme^x)$.}
-\end{figure}
-
+%\begin{figure}
+%\begin{center}
+%\includegraphics[width = .7\linewidth]{./Illustrations/logistic_function.png}
+%\end{center}
+%\caption{Logistic function $\sigma: x \mapsto \rme^x/(1+\rme^x)$.}
+%\end{figure}
 When $\alpha$ and $\beta$ are unknown, this classifier cannot be computed explicitely and is approximated using the observations. Assume that  $(X_i,Y_i)_{1\leqslant i\leqslant n}$ are independent observations with the same distribution as $(X,Y)$. The conditional  likelihood of the observations $Y_{1:n}$  given $X_{1:n}$ is:
 \begin{align*}
 \bP_{\theta}\left(Y_{1:n}\middle |X_{1:n}\right) &=\prod_{i=1}^n \bP_{\theta}\left(Y_{i} \middle |X_{i}\right)\eqsp,\\

@@ -1,0 +1,45 @@
+\input{Defs/headings}
+\input{Defs/defs}
+
+
+
+\begin{document}
+
+
+In this first example, we consider a {\em parametric model}, that is, we assume that the joint distribution of $(X,Y)$ belongs to a family of distributions parametrized by a vector $\theta$ with real components. For $k\in\{-1,1\}$, write $\pi_k = \bP(Y = k)$. Assume that, conditionally on the event $\{Y = k\}$, $X$ has a Gaussian distribution with mean $\mu_k \in\rset^d$ and covariance matrix $\Sigma\in \rset^{d\times d}$, whose density is denoted $g_k$. In this case, the parameter $\theta=(\pi_1, \mu_1,\mu_{-1}, \Sigma)$ belongs to the set $\Theta= [0,1] \times \rset^d \times \rset^d \times \rset^{d \times d}$. The parameter $\pi_{-1}$ is not part of the components of $\theta$ since $\pi_{-1}=1-\pi_{1}$. In this case, the parameter $\theta=(\pi_1, \mu_1,\mu_{-1}, \Sigma)$ belongs to the set $\Theta= [0,1] \times \mathbb{R}^d \times \mathbb{R}^d \times \mathbb{R}^{d \times d}$. The explicit computation of $\mathbb{P}(Y=1 | X)$ writes
+$$
+\mathbb{P}\left(Y=1\middle | X\right) = \frac{\pi_1g_1(X)}{\pi_1g_1(X) + \pi_{-1}g_{-1}(X)} = \frac{1}{1 + \frac{\pi_{-1}g_{-1}(X)}{\pi_1g_1(X)}} = \sigma\left(\log(\pi_1/\pi_{-1}) + \log(g_1(X)/g_{-1}(X)\right)\,,
+$$
+where $\sigma: x\mapsto (1 + \mathrm{e}^{-x})^{-1}$ is the sigmoid function. Then,
+\begin{equation}
+\label{eq:prob:lda}
+\mathbb{P}\left(Y=1\middle | X\right) = \sigma\left( X^\top\omega+ b\right)\eqsp,
+\end{equation}
+where
+$$
+\omega =  \Sigma^{-1}\left(\mu_{1} - \mu_{-1}\right)\,,
+b = \log(\pi_1/\pi_{-1}) +  \frac{1}{2}\left(\mu_{1}+\mu_{-1}\right)^\top\Sigma^{-1}\left(\mu_{-1}-\mu_{1}\right)\eqsp.
+$$
+
+When $\Sigma$ and $\mu_1$ and $\mu_{-1}$ are unknown, this classifier cannot be computed explicitely. We will approximate it using the observations. Assume that  $(X_i,Y_i)_{1\leqslant i\leqslant n}$ are independent observations with the same distribution as $(X,Y)$. The loglikelihood of these observations is given by
+\begin{align*}
+\log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right) &=\sum_{i=1}^n \log \bP_{\theta} \left(X_{i},Y_{i}\right)\eqsp,\\
+&= - \frac{nd}{2} \log(2\pi)+\sum_{i=1}^n\sum_{k\in\{-1,1\}}\1_{Y_i=k}\left(\log \pi_{k} -\frac{\log \det \Sigma}{2} - \frac{1}{2}\left(X_i - \mu_{k}\right)^\top\Sigma^{-1}\left(X_i - \mu_{k}\right)\right) \eqsp,\\
+&= - \frac{nd}{2} \log(2\pi)-\frac{n}2 \log\det\Sigma + \left(\sum_{i=1}^n\1_{Y_i=1}\right)\log \pi_1 + \left(\sum_{i=1}^n\1_{Y_i=-1}\right)\log (1-\pi_{1})\\
+& \hspace{1cm}-  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=1}\left(X_i - \mu_{1}\right)^\top\Sigma^{-1}\left(X_i - \mu_{1}\right) -  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=-1}\left(X_i - \mu_{-1}\right)^\top\Sigma^{-1}\left(X_i - \mu_{-1}\right)\eqsp.
+\end{align*}
+The gradient of $\log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)$ with respect to $\theta$ is therefore given by
+\begin{align*}
+\frac{\partial \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)}{\partial \pi_1} &= \left(\sum_{i=1}^n\1_{Y_i=1}\right)\frac{1}{\pi_1} - \left(\sum_{i=1}^n\1_{Y_i=-1}\right)\frac{1}{1-\pi_{1}}\eqsp,\\
+\frac{\partial \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)}{\partial \mu_1} &= \sum_{i=1}^n\1_{Y_i=1}\left(2\Sigma^{-1}X_i - 2\Sigma^{-1}\mu_{1}\right)\eqsp,\\
+\frac{\partial \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)}{\partial \mu_{-1}} &= \sum_{i=1}^n\1_{Y_i=-1}\left(2\Sigma^{-1}X_i - 2\Sigma^{-1}\mu_{-1}\right)\eqsp,\\
+\frac{\partial \log \bP_{\theta}\left(X_{1:n},Y_{1:n}\right)}{\partial \Sigma^{-1}} &= \frac{n}{2}\Sigma -  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=1}\left(X_i - \mu_{1}\right)\left(X_i - \mu_{1}\right)^\top -  \frac{1}{2}\sum_{i=1}^n\1_{Y_i=-1}\left(X_i - \mu_{-1}\right)\left(X_i - \mu_{-1}\right)^\top\eqsp.
+\end{align*}
+The maximum likelihood estimator is defined as the only parameter $\widehat \theta^n$ such that all these equations are set to 0. For $k\in\{-1,1\}$,  it is given by
+\begin{align*}
+\widehat \pi_k^n &= \frac{1}{n}\sum_{i=1}^n\1_{Y_i=k}\eqsp,\\
+\widehat \mu_k^n &= \frac{1}{\sum_{i=1}^n\1_{Y_i=k}}\sum_{i=1}^n\1_{Y_i=k}\,X_i\eqsp,\\
+\widehat\Sigma^n &= \frac{1}{n}\sum_{i=1}^n \left(X_i - \widehat \mu_{Y_i}^n\right)\left(X_i - \widehat \mu_{Y_i}^n\right)^\top\eqsp.
+\end{align*}
+
+\end{document}
