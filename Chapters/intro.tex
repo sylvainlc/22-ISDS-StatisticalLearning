@@ -37,7 +37,7 @@ $$
 \widehat\param_n \in\argmin_{\param\in\paramset} \left\{\mathsf{R}_n(f_\param) = \frac{1}{n}\sum_{i=1}^n\ell(Y_i,f_\param(X_i)) \right\}\eqsp.
 $$
 
-\subsection*{Cross-validation} 
+\subsection*{Cross-validation (see also Section~\ref{sec:ridge:choicepen})} 
 In practice, several parameterized families of predictors can be considered to minimize the empirical risk. Each parameterized family provides an empirical best predictor. Cross-validation (CV) provides appealing strategies for algorithm selection. Cross-validation proposes to split the data to estimate the risk of each algorithm: part of data  is used  to train each
 algorithm (or minimize the empirical risk over each parameterized family), and the remaining part is used to estimate
 the risk of the estimated predictor.  In \cite{arlot2010survey}, the authors provide a survey of the most common cross-validation techniques and a few  guidelines to choose the best technique depending on the statistical learning setting. 

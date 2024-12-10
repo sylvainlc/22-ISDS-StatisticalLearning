@@ -16,7 +16,7 @@ Then, the least squares estimator of $f^*$ on $\calF_\varphi$ is defined as
 \[
 \widehat f^\varphi_n\in  \argmin_{f \in \calF_\varphi}  \sum_{i=1}^n(Y_i - f(X_i))^2\eqsp.
 \]
-Let $\Psi$ be the $\rset^{M\times n}$ matrix such as, for all $1\leqslant i\leqslant n$ and $1\leqslant j\leqslant M$, $\Psi_{i,j} = \varphi_j(X_i)$. Then, for all $f \in \calF_\varphi$, there exists $\alpha = (\alpha_1,\ldots,\alpha_M)\in\rset^M$ such that,
+Let $\Psi$ be the $\rset^{n\times M}$ matrix such as, for all $1\leqslant i\leqslant n$ and $1\leqslant j\leqslant M$, $\Psi_{i,j} = \varphi_j(X_i)$. Then, for all $f \in \calF_\varphi$, there exists $\alpha = (\alpha_1,\ldots,\alpha_M)\in\rset^M$ such that,
 \[
  \sum_{i=1}^n(Y_i - f(X_i))^2 = \|Y - \Psi \alpha\|^2\eqsp.
 \]
@@ -81,7 +81,7 @@ A useful case in practice consists in choosing $\calF$ as a Reproducing Kernel H
 \begin{shaded}
 \begin{definition}
 \label{def:kernel}
-A function $k:\xset\times\xset:\to \rset$ is said to be a positive semi-definite kernel if and only if it is symmetric and if for all $n\geqslant 1$, $(x_1,\ldots,x_n)\in\xset^n$ and all $(a_1,\ldots,a_n)\in\rset^n$,
+A function $k:\xset\times\xset:\to \rset$ is said to be a positive semi-definite (PSD) kernel if and only if it is symmetric and if for all $n\geqslant 1$, $(x_1,\ldots,x_n)\in\xset^n$ and all $(a_1,\ldots,a_n)\in\rset^n$,
 \[
 \sum_{1\leqslant i,j\leqslant n}a_ia_jk(x_i,x_j) \geqslant 0\eqsp.
 \]
@@ -91,13 +91,13 @@ A function $k:\xset\times\xset:\to \rset$ is said to be a positive semi-definite
 \begin{remark}
 The following functions, defined on $\rset^d\times\rset^d$, are positive semi-definite kernels:
 $$
-k:(x,y)\mapsto x^Ty \quad\mathrm{and}\quad k:(x,y)\mapsto \mathrm{exp}\left(-\|x-y\|^2/(2\sigma^2\right)\eqsp,\; \sigma>0\eqsp.
+k:(x,y)\mapsto x^\top y \quad\mathrm{and}\quad k:(x,y)\mapsto \mathrm{exp}\left(-\|x-y\|^2/(2\sigma^2\right)\eqsp,\; \sigma>0\eqsp.
 $$
 \end{remark}
 
 \begin{shaded}
 \begin{definition}
-Let $\calF$ be a Hilbert space of functions $f:\xset\to\rset$. A symmetric function $k:\xset\times\xset:\to \rset$ is said to be a reproducing kernel of $\calF$ if and only if for all $x\in\xset$, $k(x,\cdot)\in\calF$ and for all $x\in\Xset$ and all $f\in\calF$, $\langle f; k(x,\cdot)\rangle = f(x)$. The space $\calF$ is said to be a reproducing kernel Hilbert space with kernel $k$.
+Let $\calF$ be a Hilbert space of functions $f:\xset\to\rset$. A symmetric function $k:\xset\times\xset:\to \rset$ is said to be a reproducing kernel of $\calF$ if and only if for all $x\in\xset$, $k(x,\cdot)\in\calF$ and for all $x\in\Xset$ and all $f\in\calF$, $\langle f; k(x,\cdot)\rangle = f(x)$. The space $\calF$ is said to be a reproducing kernel Hilbert space (RKHS) with kernel $k$.
 \end{definition}
 \end{shaded}
 
@@ -111,15 +111,15 @@ A reproducing kernel associated with a reproducing kernel Hilbert space is posit
 \]
 
 \begin{remark}
-The positive semi-definite kernel $k:(x,y)\mapsto x^Ty$ defined on $\rset^d\times\rset^d$ is a reproducing kernel of the space
+The positive semi-definite kernel $k:(x,y)\mapsto x^\top y$ defined on $\rset^d\times\rset^d$ is a reproducing kernel of the space
 $$
-\calF = \left\{f: \rset^d\to\rset\eqsp;\eqsp \exists \omega\in\rset^d \eqsp\forall x\in \rset^d\eqsp, \eqsp f(x) = \omega^Tx\right\}\eqsp,
+\calF = \left\{f: \rset^d\to\rset\eqsp;\eqsp \exists \omega\in\rset^d \eqsp\forall x\in \rset^d\eqsp, \eqsp f(x) = \omega^\top x\right\}\eqsp,
 $$
 equipped with the inner product defined, for all $(f,g)\in\calF\times\calF$, by 
 $$
-\langle f; g\rangle = \omega_f^T\omega_g\eqsp, 
+\langle f; g\rangle = \omega_f^\top \omega_g\eqsp, 
 $$
-where $\omega_f,\omega_g\in\rset^d$ and $f: x\mapsto \omega_f^Tx$, $g: x\mapsto \omega_g^Tx$. 
+where $\omega_f,\omega_g\in\rset^d$ and $f: x\mapsto \omega_f^\top x$, $g: x\mapsto \omega_g^\top x$. 
 \end{remark}
 
 %\begin{shaded}

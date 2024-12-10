@@ -1,0 +1,157 @@
+\documentclass[a4paper,10pt,fleqn]{article}
+
+\usepackage{a4wide,amsmath,amsthm,amssymb,bbm,fancyhdr}
+\usepackage{ifthen,color,enumerate,comment,dsfont,pdfsync,framed,todonotes,enumitem}
+
+\newcommand{\titre}[1]{\textbf{\textsc{#1}}}
+
+\RequirePackage[T1]{fontenc}
+
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{dsfont}
+\usepackage{enumitem}
+\newcommand{\eqsp}{\,}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\rmd}{\mathrm{d}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\rset}{\ensuremath{\mathbb{R}}}
+\renewcommand{\P}{\ensuremath{\operatorname{P}}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\rme}{\ensuremath{\mathrm{e}}}
+\newcommand{\calH}{\ensuremath{\mathcal{H}}}
+\newcommand{\xset}{\ensuremath{\mathsf{X}}}
+\newcommand{\V}{\ensuremath{\mathbb{V}}}
+\newcommand{\Sb}{\ensuremath{\mathbb{S}}}
+\newcommand{\gaus}{\ensuremath{\mathcal{N}}}
+\newcommand{\HH}{\ensuremath{\mathcal{H}}}
+\newcommand{\F}{\ensuremath{\mathcal{F}}}
+\newcommand{\W}{\ensuremath{\mathcal{W}}}
+\newcommand{\X}{\ensuremath{\mathcal{X}}}
+\newcommand{\1}{\ensuremath{\mathbbm{1}}}
+\newcommand{\dlim}{\ensuremath{\stackrel{\mathcal{L}}{\longrightarrow}}}
+\newcommand{\plim}{\ensuremath{\stackrel{\mathrm{P}}{\longrightarrow}}}
+\newcommand{\PP}{\ensuremath{\mathbb{P}}}
+\newcommand{\p}{\ensuremath{\mathbb{P}}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\bE}{\mathbb{E}}
+
+\newcommand{\pa}[1]{\left(#1\right)}
+\newcommand{\hatk}{\widehat K}
+\newcommand{\f}{\varphi}
+\newcommand{\Id}{\textsf{Id}}
+\newcommand{\bfU}{\mathbf{U}}
+\newcommand{\bfX}{\mathbf{X}}
+\newcommand{\bfs}{\mathbf{\Sigma}}
+\newcommand{\bfA}{\mathbf{A}}
+\newcommand{\bfV}{\mathbf{V}}
+\newcommand{\bfB}{\mathbf{B}}
+\newcommand{\bfI}{\mathbf{I}}
+\newcommand{\bfD}{\mathbf{D}}
+\newcommand{\bfK}{\mathbf{K}}
+\newcommand{\argmin}{\mathop{\textrm{argmin}}}
+\newcommand{\argmax}{\mathop{\textrm{argmax}}}
+\newcommand{\crit}{\mathop{\textrm{crit}}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\pc}{\pi_{\mathcal{C}}}
+
+
+% Style
+
+
+\begin{document}
+
+%\noindent EMINES \hfill \\%ISUP - Sorbonne Universit\'e \\
+% 2023-2023
+
+\noindent\hrulefill
+
+\begin{center}
+\textsc{Principal Component Analysis}
+\end{center}
+\hrulefill
+
+\medskip
+
+
+\section*{Probabilistic PCA}
+Let $X$ be a standard Gaussian random variable in $\rset^d$ and assume that conditionally on $X$, $Z$ has a Gaussian distribution with mean $WX + \mu$ and variance $\sigma^2 I_d$.
+\begin{enumerate}
+\item Prove that $Z$ has a Gaussian distribution with mean $\mu$ and variance $C = WW^\top + \sigma^2 I_d$.
+
+\vspace{.2cm}
+
+{\em
+It is enough to write
+$$
+Z = WX + \mu + \sigma \varepsilon\,,
+$$
+where $X$ and $\varepsilon$ are independent Gaussian random variables. Therefore, $Z \sim \mathcal{N}(\mu,C)$.
+}
+
+\item Prove that conditionally on $Z$, $X$ has a Gaussian distribution with mean $m= C^{-1}W^\top (Z-\mu)$ and variance $\Sigma = \sigma^2 C^{-1}$.
+
+\vspace{.2cm}
+
+{\em
+The joint distribution of $Z$ and $X$ can be written, for all $(x,z)\in\rset^d\times\rset^d$,
+\begin{align*}
+p(z,x) \propto \exp(-\frac{1}{2}x^\top x)\exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,.
+\end{align*}
+Therefore,
+\begin{align*}
+p(x|z) &\propto  p(z,x)\\
+&\propto \exp(-\frac{1}{2}x^\top x)\exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,,\\
+&\propto \exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,,\\
+&\propto \exp(-\frac{1}{2\sigma^2}(x - m)^\top \Sigma^{-1} (x-m))\,,
+\end{align*}
+where $\Sigma = \sigma^2 C^{-1}$ and $m = C^{-1}W^\top (Z-\mu)$ which concludes the proof.
+}
+\item Assume that $\{Z_i\}_{1\leq i\leq n}$ are $n$ i.i.d. observations with the same distribution has $Z$. Write the loglikelihood of $(Z_1,\ldots,Z_n)$.
+
+\vspace{.2cm}
+
+{\em
+By definition,
+\begin{align*}
+\log p_C(Z_1,\ldots,Z_n) &= \sum_{i=1}^n \log p_C(Z_i)  \,,\\
+&=\sum_{i=1}^n \left(-\frac{1}{2}\log \mathrm{det}(2\pi C) - \frac{1}{2}(Z_i-m)^\top \Sigma^{-1}(Z_i-m)\right)\,,\\
+&= -\frac{n}{2}\log \mathrm{det}(2\pi C) -\frac{1}{2}\sum_{i=1}^n (Z_i-m)^\top \Sigma^{-1}(Z_i-m)\,,\\
+&= -\frac{n}{2}\log \mathrm{det}(2\pi C) -\frac{n}{2}\mathrm{Trace}(C^{-1}S_n)\,,
+\end{align*} 
+where
+$$
+S_n = \frac{1}{n}\sum_{i=1}^n(Z_i-\mu)^\top(Z_i-\mu)\,.
+$$
+}
+\item Assuming that $C = WW^\top + \sigma^2 I_d$, show that $\widehat C= \widehat{W}\widehat{W}^\top + \sigma^2 I_d$ with $\widehat{W} = U_q(\Lambda_q-\sigma^2I_q)^{1/2}R$ is a stationary point of the loglikelihood (and therefore maximizes the loglikelihood).
+
+\vspace{.2cm}
+
+{\em
+
+}
+\item 
+
+\vspace{.2cm}
+
+{\em
+
+}
+\item
+
+\vspace{.2cm}
+
+{\em
+
+}
+\end{enumerate}
+\end{document}
+
+
+
+
+
+	
