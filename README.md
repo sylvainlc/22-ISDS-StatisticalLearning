@@ -4,7 +4,12 @@
 The course covers the basics of statistical learning.
 
 ### [Lecture notes](https://github.com/sylvainlc/22-ISDS-StatisticalLearning/blob/master/sl.pdf)
-
+- Principal Component Analysis
+- Supervised Learning (loss, risk, Bayes classification)
+- Multivariate regression (risk analysis)
+- Penalized and sparse regression (Ridge, Lasso, risk analysis)
+- Kernel-based regression (RKHS)
+- Feed forward neural networks (définitions and backpropagation)
 
 ### Labs
 - [1 - PCA](https://github.com/sylvainlc/22-ISDS-StatisticalLearning/blob/master/Labs/01_intro_pca/01_PCA.ipynb)
