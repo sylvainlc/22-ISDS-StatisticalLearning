@@ -1,0 +1,130 @@
+\documentclass[a4paper,10pt,fleqn]{article}
+
+\usepackage{a4wide,amsmath,amsthm,amssymb,bbm,fancyhdr}
+\usepackage{ifthen,color,enumerate,comment,dsfont,pdfsync,framed,todonotes,enumitem}
+
+\newcommand{\titre}[1]{\textbf{\textsc{#1}}}
+
+\RequirePackage[T1]{fontenc}
+
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{dsfont}
+\usepackage{enumitem}
+\newcommand{\eqsp}{\,}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\rmd}{\mathrm{d}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\rset}{\ensuremath{\mathbb{R}}}
+\renewcommand{\P}{\ensuremath{\operatorname{P}}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\rme}{\ensuremath{\mathrm{e}}}
+\newcommand{\calH}{\ensuremath{\mathcal{H}}}
+\newcommand{\xset}{\ensuremath{\mathsf{X}}}
+\newcommand{\V}{\ensuremath{\mathbb{V}}}
+\newcommand{\Sb}{\ensuremath{\mathbb{S}}}
+\newcommand{\gaus}{\ensuremath{\mathcal{N}}}
+\newcommand{\HH}{\ensuremath{\mathcal{H}}}
+\newcommand{\F}{\ensuremath{\mathcal{F}}}
+\newcommand{\W}{\ensuremath{\mathcal{W}}}
+\newcommand{\X}{\ensuremath{\mathcal{X}}}
+\newcommand{\1}{\ensuremath{\mathbbm{1}}}
+\newcommand{\dlim}{\ensuremath{\stackrel{\mathcal{L}}{\longrightarrow}}}
+\newcommand{\plim}{\ensuremath{\stackrel{\mathrm{P}}{\longrightarrow}}}
+\newcommand{\PP}{\ensuremath{\mathbb{P}}}
+\newcommand{\p}{\ensuremath{\mathbb{P}}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\bE}{\mathbb{E}}
+\newcommand{\pa}[1]{\left(#1\right)}
+\newcommand{\hatk}{\widehat K}
+\newcommand{\f}{\varphi}
+\newcommand{\Id}{\textsf{Id}}
+\newcommand{\bfU}{\mathbf{U}}
+\newcommand{\bfX}{\mathbf{X}}
+\newcommand{\bfs}{\mathbf{\Sigma}}
+\newcommand{\bfA}{\mathbf{A}}
+\newcommand{\bfV}{\mathbf{V}}
+\newcommand{\bfB}{\mathbf{B}}
+\newcommand{\bfI}{\mathbf{I}}
+\newcommand{\bfD}{\mathbf{D}}
+\newcommand{\bfK}{\mathbf{K}}
+\newcommand{\argmin}{\mathop{\textrm{argmin}}}
+\newcommand{\argmax}{\mathop{\textrm{argmax}}}
+\newcommand{\crit}{\mathop{\textrm{crit}}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\pc}{\pi_{\mathcal{C}}}
+
+
+% Style
+%\pagestyle{fancyplain}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand{\subsectionmark}[1]{}
+%\lhead[\fancyplain{}{\thepage}]{\fancyplain{}{\footnotesize {\sf
+%MAP569 Machine Learning II, \thisyear %/ \rightmark
+%}}}
+%\rhead[\fancyplain{}{\footnotesize {\sf MAT4506 Introduction to machine learning, \thisyear %/ \rightmark
+%}}]{\fancyplain{}{\thepage}}
+
+
+\begin{document}
+
+%\noindent Machine learning \hfill ISUP - Sorbonne Universit\'e \\
+ %2022-2023
+
+\noindent\hrulefill
+
+\begin{center}
+\textsc{Discriminant analysis}
+\end{center}
+\hrulefill
+
+\section{Classification error}
+
+Linear discriminant analysis assumes that the random variables $(X,Y)\in \rset^d\times\{0,1\}$ have the following distribution. For all $A\in \mathcal{B}(\mathbb{R}^d)$ and all $y\in\{0,1\}$,
+$$
+\bP\left(X\in A;Y=y\right) = \pi_y \int_A g_y(x) \rmd x\eqsp,
+$$
+where $\pi_{0}$ and $\pi_1$ are positive real numbers such that $\pi_0+\pi_{1}=1$ and $g_0$ (resp. $g_1$) is the probability density of a Gaussian random variable with mean $\mu_0\in\rset^d$ (resp. $\mu_1)$ and positive definite covariance matrix $\Sigma_0\in \rset^{d\times d}$ (resp. $\Sigma_1$).  Define the classifier $h_{*}:\mathbb{R}^d\to\{0,1\}$ by
+$$
+h_{*}:x \mapsto \1_{\{\pi_{1}g_{1}(x)>\pi_{0}g_{0}(x)\}}\eqsp.
+$$
+\begin{enumerate}
+\item Give the distribution of the random variable $X$ and prove that 
+$$
+\bP(h_{*}(X)\neq Y)=\min_{h:\rset^d\to \{0,1\}}\left\{\bP(h(X)\neq Y)\right\}\eqsp.
+$$
+\item Assume that  $\mu_0\ne\mu_1$. Prove that when $\Sigma_0=\Sigma_1=\Sigma$, for all $x\in\rset^d$,
+$$
+h_{*}(x) = 1 \Leftrightarrow (\mu_{1}-\mu_{0})^\top\Sigma^{-1}\left(x-{\mu_{1}+\mu_{0}\over2}\right)>\log(\pi_{0}/\pi_{1})\eqsp.
+$$
+Provide a geometrical interpretation.
+\item Prove that when $\pi_{1}=\pi_{0}$, 
+$$
+\bP(h_{*}(X)=1|Y=0)=\Phi(-d(\mu_{1},\mu_{0})/2)\eqsp,
+$$
+where $\Phi$ is the cumulative distribution function of a standard Gaussian random variable  and 
+$$
+d(\mu_{1},\mu_{0})^2=(\mu_{1}-\mu_{0})^\top\Sigma^{-1}(\mu_{1}-\mu_{0})\eqsp.
+$$
+\item Assume now that $\Sigma_{1}\neq \Sigma_{0}$. What is the nature of the frontier between $\{x\eqsp;\eqsp h_{*}(x)=1\}$ and $\{x\eqsp;\eqsp h_{*}(x)=0\}$?
+\end{enumerate}
+
+\section{Maximum likelihood estimation}
+We assume that the joint distribution of $(X,Y)$ belongs to a family of distributions parametrized by a vector $\theta$ with real components. For $k\in\{-1,1\}$, write $\pi_k = \bP(Y = k)$. Assume that conditionally on the event $\{Y = k\}$, $X$ has a Gaussian distribution with mean $\mu_k \in\rset^d$ and covariance matrix $\Sigma\in \rset^{d\times d}$, whose density is denoted $g_k$. In this case, the parameter $\theta=(\pi_1, \mu_1,\mu_{-1}, \Sigma)$ belongs to the set $\Theta= [0,1] \times \rset^d \times \rset^d \times \rset^{d \times d}$. The parameter $\pi_{-1}$ is not part of the components of $\theta$ since $\pi_{-1}=1-\pi_{1}$. In this case, the parameter $\theta=(\pi_1, \mu_1,\mu_{-1}, \Sigma)$ belongs to the set $\Theta= [0,1] \times \mathbb{R}^d \times \mathbb{R}^d \times \mathbb{R}^{d \times d}$. The parameter $\pi_{-1}$ is not part of the components of $\theta$ since $\pi_{-1}=1-\pi_{1}$. 
+
+When $\Sigma$ and $\mu_1$ and $\mu_{-1}$ are unknown, the  discriminant analysis classifier cannot be computed explicitely. Assume that  $(X_i,Y_i)_{1\leqslant i\leqslant n}$ are independent observations with the same distribution as $(X,Y)$.
+\begin{enumerate}
+\item Write the joint loglikelihood of the observations.
+\item Let $M_d$ be the space of real-valued $d \times d$ symmetric positive matrices. Show that the function $\Sigma \mapsto \log \det \Sigma$ is concave on $M_d$.
+\item Show that the derivative of the real valued function $\Sigma \mapsto \log\mathrm{det}(\Sigma)$ defined on $\rset^{d\times d}$ is given by:
+$$
+\partial_{\Sigma}\{\log\mathrm{det}(\Sigma)\}= \Sigma^{-1}\eqsp,
+$$
+where, for all real valued function $f$ defined on $\rset^{d\times d}$, $\partial_{\Sigma}f(\Sigma)$ denotes the $\rset^{d\times d}$ matrix such that for all $1\leqslant i,j\leqslant d$, $\{\partial_{\Sigma}f(\Sigma)\}_{i,j}$ is the partial derivative of $f$ with respect to $\Sigma_{i,j}$.
+\item Provide the maximum likehood estimator of $\theta$.
+\item How do you suggest to use this estimator to build a classifier ?
+\end{enumerate}
+
+\end{document}
