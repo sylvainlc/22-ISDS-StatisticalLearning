@@ -89,82 +89,11 @@ $$
 where $\beta_0 \in \mathbb{R}^{d}$, $W\in\rset^{n\times n}$ is a diagonal matrix with elements in $[0,1]$, $\Delta\in\rset^{d\times d}$ is a definite-positive matrix.
 \begin{enumerate}
 \item Provide the expression of $\widehat \beta$ when $\beta_0 = 0$, $W = I_n$ and $\Delta = \lambda I_d$ where $\lambda>0$.
-
-\vspace{.2cm}
-
-{\em
-Proof in lecture notes.
-} 
 \item Solve the optimization problem in the general case.
-\vspace{.2cm}
-
-{\em
-For all $\beta\in\rset^d$, write
-$$
-\mathcal{L}(\beta) = (Y -X\beta)^\top W (Y-X\beta) + (\beta-\beta_0)^\top \Delta (\beta-\beta_0)\eqsp.
-$$
-Therefore, for all $\beta\in\rset^d$,
-$$
-\nabla \mathcal{L}(\beta)  = 2\left( \left(X^\top W X + \Delta\right)\beta - \Delta\beta_0 - X^\top W Y\right)\eqsp.
-$$
-Note that $X^\top W X + \Delta$ is definite-positive so that $\nabla \mathcal{L}(\beta)=0$ has a unique solution given by
-$$
-\widehat{\beta} = \left(X^\top W X + \Delta\right)^{-1}(\Delta\beta_0 + X^\top W Y)\eqsp.
-$$
-}
 \item Compute $\mathbb{E}[\widehat \beta]$ and show that the estimator is unbiased when $\beta_0 = \beta_*$.
-\vspace{.2cm}
-
-{\em
-Assuming that the design is not random, 
-$$
-\mathbb{E}[\widehat \beta] =  \left(X^\top W X + \Delta\right)^{-1}(\Delta\beta_0 + X^\top W \mathbb{E}[Y])\eqsp.
-$$
-This yields
-$$
-\mathbb{E}[\widehat \beta] =  \left(X^\top W X + \Delta\right)^{-1}(\Delta\beta_0 + X^\top W X\beta_*)\eqsp.
-$$
-In the case where $\beta_0 = \beta_*$,
-$$
-\mathbb{E}[\widehat \beta] =  \left(X^\top W X + \Delta\right)^{-1}\left(X^\top W X + \Delta\right)\beta_* = \beta_*
-$$
-and the estimator is unbiased.
-}
 \item Compute $\mathbb{V}[\widehat \beta]$ and the mean squared error $\mathbb{E}[\|\widehat \beta-\beta_*\|_2^2]$ when $\beta_0 = \beta_*$.
-\vspace{.2cm}
-
-{\em
-By definition of $\widehat \beta$,
-\begin{align*}
-\mathbb{V}[\widehat \beta] &= \left(X^\top W X + \Delta\right)^{-1}X^\top W \mathbb{V}[Y] W^\top X\left(X^\top W X + \Delta\right)^{-1}\\
-&= \sigma^2\left(X^\top W X + \Delta\right)^{-1}X^\top W W^\top X\left(X^\top W X + \Delta\right)^{-1}\\
-&= \sigma^2\left(X^\top W X + \Delta\right)^{-1}X^\top W^2 X\left(X^\top W X + \Delta\right)^{-1}\eqsp.
-\end{align*}
-If  $\beta_0 = \beta_*$, as the estimator is unbiased,
-\begin{align*}
-\mathbb{E}[\|\widehat \beta-\beta_*\|_2^2] &= \mathrm{Trace}\left(\mathbb{V}[\widehat \beta] \right)\\
-&=\sigma^2\mathrm{Trace}\left(\left(X^\top W X + \Delta\right)^{-1}X^\top W^2 X\left(X^\top W X + \Delta\right)^{-1}\right)\\
-&=\sigma^2\mathrm{Trace}\left(X^\top W^2 X\left(X^\top W X + \Delta\right)^{-2}\right)\eqsp.
-\end{align*}
-}
 \item Assume that $W=I_n$, $\beta_0=0$ and $\Delta = V\Lambda 
  V^\top$ where $X = U D V^\top$ is a singular value decomposition of $X$ and $\Lambda$ is a diagonal matrix with positive diagonal components. Provide an expression of $\widehat \beta$ as a function of $U$, $D$, $V$, $\Lambda$ and $Y$.
-\vspace{.2cm}
-
-{\em
-In the proposed setting,
-$$
-\widehat{\beta} = \left(X^\top X + \Delta\right)^{-1}X^\top Y\eqsp.
-$$
-Let $X = U D V^\top$ be a singular value decomposition of $X$ and choose $\Delta = V\Lambda 
- V^\top$. Then,
-\begin{align*}
-\widehat{\beta} &= \left((U D V^\top)^\top U D V^\top + V\Lambda V^\top\right)^{-1}(U D V^\top)^\top Y\\
-&=  \left(V D^\top U^\top U D V^\top + V\Lambda V^\top\right)^{-1}V D^\top U^\top Y\\
-&=  V\left(D^\top D + \Lambda \right)^{-1}D^\top U^\top Y\eqsp.
-\end{align*}
-Contrary to the classical Ridge estimator, this estimator shrinks values of $\beta$ with a different penalty for each component thanks to the matrix $\Lambda$.
-}
 \end{enumerate}
 
 
