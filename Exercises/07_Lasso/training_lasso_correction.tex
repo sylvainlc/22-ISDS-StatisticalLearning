@@ -90,7 +90,20 @@ For all $\lambda>0$, the excess risk is given by
 $$
 \bE\left[\mathsf{R}(\widehat \param^{\mathrm{ridge}}_n) - \mathsf{R}(\param_\star)\right]  \leqslant \frac{\lambda}{2}\|\param_\star\|_2^2 + \frac{\sigma_\star^{2}}{2n\lambda}\mathrm{Trace}\left(n^{-1}X^\top X\right)\eqsp.
 $$
+
+\vspace{.2cm}
+
+{\em
+Proof in  lecture notes.
+}
+
 \item Propose an "optimal" value for $\lambda$ and  compute the associated excess risk.
+
+\vspace{.2cm}
+
+{\em
+Proof in  lecture notes.
+}
 \end{enumerate}
 
 \section{Elastic-Net}
@@ -105,9 +118,57 @@ $$
 In the following, we assume that for all $1\leq j\leq d$, the $j$-th column of $X$ satisfies $\|\mathbf{X}_j\|_2 = 1$.
 \begin{enumerate}
 \item For all $1\leq j \leq d$ provide the partial derivative of $\mathcal{L}$ with respect to $\theta_j$ for $\theta_j\neq 0$. 
+
+\vspace{.2cm}
+
+{\em
+Note that for all $\theta\in\rset^d$,
+$$
+\nabla_\theta(\|Y-X\theta\|_2^2 + \lambda \|\theta\|_2^2) = 2X^\top X\theta - 2 X^\top Y+ 2\lambda \theta = 2X^\top \left(\sum_{k=1}^d \theta_k\mathbf{X}_k - Y\right)  + 2\lambda \theta\eqsp.
+$$
+Therefore, for $1\leq j \leq d$ such that $\theta_j\neq 0$,
+$$
+\partial_j  \mathcal{L}(\theta) = 2\mathbf{X}^\top_j \left(\sum_{k=1}^d \theta_k\mathbf{X}_k -Y\right)+ 2\lambda \theta_j + \mu \mathrm{sign}(\theta_j) \eqsp.
+$$
+}
 \item Provide an expression of the answer of the first question with $R_j(\theta) = \mathbf{X}_j^\top(Y - \sum_{k\neq j}\theta_k\mathbf{X}_k)$.
+
+\vspace{.2cm}
+
+{\em
+Since $\|\mathbf{X}_j\|_2 = 1$, for $1\leq j \leq d$ such that $\theta_j\neq 0$,
+\begin{align*}
+\partial_j  \mathcal{L}(\theta) &= 2\theta_j -2R_j(\theta)+ 2\lambda \theta_j + \mu \mathrm{sign}(\theta_j)\\
+&= 2\left((1+\lambda)\theta_j -R_j(\theta) + \frac{\mu}{2} \mathrm{sign}(\theta_j)\right)\eqsp.
+\end{align*}
+}
 \item Assume that $\theta_k$, $1\leq k\neq j \leq d$ are fixed and assume that the minimum of $\theta_j \mapsto \mathcal{L}(\theta)$ is reached at a $\theta_j\neq 0$. Prove that the sign of $\theta_j$ is the same as the signe of $R_j$ and conclude.
+
+\vspace{.2cm}
+
+{\em
+If the minimum of $\theta_j \mapsto \mathcal{L}(\theta)$ is reached at some $\theta^*_j\neq 0$ it means that $\partial_j  \mathcal{L}((\theta_1,\ldots,\theta_{j-1},\theta^*_j,\theta_{j+1},\ldots,\theta_d)) = 0$. Since
+$$
+\partial_j  \mathcal{L}((\theta_1,\ldots,\theta_{j-1},\theta^*_j,\theta_{j+1},\ldots,\theta_d)) = 2\left((1+\lambda)\theta^*_j -R_j(\theta) + \frac{\mu}{2} \mathrm{sign}(\theta^*_j)\right)\eqsp,
+$$
+$\theta^*_j$ and $R_j(\theta)$ have the same sign. Indeed, if $\theta^*_j\geq 0 $ and  $R_j(\theta)<0$ then $\partial_j  \mathcal{L}((\theta_1,\ldots,\theta_{j-1},\theta^*_j,\theta_{j+1},\ldots,\theta_d))>0$ and  $\theta^*_j<0 $ and  $R_j(\theta)\geq 0$ then $\partial_j  \mathcal{L}((\theta_1,\ldots,\theta_{j-1},\theta^*_j,\theta_{j+1},\ldots,\theta_d))<0$. Therefore,
+\begin{align*}
+\theta^*_j &= \frac{R_j(\theta)}{1+\lambda}\left(1 - \frac{\mu\mathrm{sign}(\theta^*_j)}{2R_j(\theta)}\right)\eqsp,\\
+&= \frac{R_j(\theta)}{1+\lambda}\left(1 - \frac{\mu}{2|R_j(\theta)|}\right)\eqsp.
+\end{align*}
+}
 \item Provide an algorithm to obtain an approximation of $\widehat{\theta}_{\lambda,\mu}$.
+
+\vspace{.2cm}
+
+{\em
+The estimator $\widehat{\theta}_{\lambda,\mu}$ can be approximated recursively coordinate by coordinate. Starting from a random vector, at each iteration, a coordinate $1\leq j \leq d$ is chosen at random and we update $\theta_j$, keeping all other coordinates fixed. 
+\begin{itemize}
+\item Compute $R_j(\theta)$.
+\item If $1 - \mu/(2|R_j(\theta)|) >0 $ set $\theta_j = \frac{R_j(\theta)}{1+\lambda}\left(1 - \frac{\mu}{2|R_j(\theta)|}\right)$.
+\item If $1 - \mu/(2|R_j(\theta)|) \geq 0 $ set $\theta_j = 0$.
+\end{itemize} 
+}
 \end{enumerate}
 
 

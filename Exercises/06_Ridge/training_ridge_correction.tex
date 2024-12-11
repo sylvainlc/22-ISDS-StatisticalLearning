@@ -1,0 +1,240 @@
+\documentclass[a4paper,10pt,fleqn]{article}
+
+\usepackage{a4wide,amsmath,amsthm,amssymb,bbm,fancyhdr}
+\usepackage{ifthen,color,enumerate,comment,dsfont,pdfsync,framed,todonotes,enumitem}
+
+\newcommand{\titre}[1]{\textbf{\textsc{#1}}}
+
+\RequirePackage[T1]{fontenc}
+
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{dsfont}
+\usepackage{enumitem,url,hyperref}
+\newcommand{\eqsp}{\,}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\rmd}{\mathrm{d}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\rset}{\ensuremath{\mathbb{R}}}
+\renewcommand{\P}{\ensuremath{\operatorname{P}}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\rme}{\ensuremath{\mathrm{e}}}
+\newcommand{\calH}{\ensuremath{\mathcal{H}}}
+\newcommand{\xset}{\ensuremath{\mathsf{X}}}
+\newcommand{\V}{\ensuremath{\mathbb{V}}}
+\newcommand{\Sb}{\ensuremath{\mathbb{S}}}
+\newcommand{\gaus}{\ensuremath{\mathcal{N}}}
+\newcommand{\HH}{\ensuremath{\mathcal{H}}}
+\newcommand{\F}{\ensuremath{\mathcal{F}}}
+\newcommand{\W}{\ensuremath{\mathcal{W}}}
+\newcommand{\X}{\ensuremath{\mathcal{X}}}
+\newcommand{\1}{\ensuremath{\mathbbm{1}}}
+\newcommand{\dlim}{\ensuremath{\stackrel{\mathcal{L}}{\longrightarrow}}}
+\newcommand{\plim}{\ensuremath{\stackrel{\mathrm{P}}{\longrightarrow}}}
+\newcommand{\PP}{\ensuremath{\mathbb{P}}}
+\newcommand{\p}{\ensuremath{\mathbb{P}}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\bE}{\mathbb{E}}
+
+\newcommand{\pa}[1]{\left(#1\right)}
+\newcommand{\hatk}{\widehat K}
+\newcommand{\f}{\varphi}
+\newcommand{\Id}{\textsf{Id}}
+\newcommand{\bfU}{\mathbf{U}}
+\newcommand{\bfX}{\mathbf{X}}
+\newcommand{\bfs}{\mathbf{\Sigma}}
+\newcommand{\bfA}{\mathbf{A}}
+\newcommand{\bfV}{\mathbf{V}}
+\newcommand{\bfB}{\mathbf{B}}
+\newcommand{\bfI}{\mathbf{I}}
+\newcommand{\bfD}{\mathbf{D}}
+\newcommand{\bfK}{\mathbf{K}}
+\newcommand{\argmin}{\mathop{\textrm{argmin}}}
+\newcommand{\argmax}{\mathop{\textrm{argmax}}}
+\newcommand{\crit}{\mathop{\textrm{crit}}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\pc}{\pi_{\mathcal{C}}}
+\newcommand{\param}{\theta}
+
+% Style
+
+
+\begin{document}
+
+%\noindent EMINES \hfill \\%ISUP - Sorbonne Universit\'e \\
+ %2022-2023
+
+\noindent\hrulefill
+
+\begin{center}
+\textsc{Full rank linear regression}
+\end{center}
+\hrulefill
+
+\medskip
+
+\section{Warm-up}
+Let $X$ be a random vector in $\rset^d$ with mean $\mu\in\rset^d$ and covariance matrix $\Sigma\in\rset^{d\times d}$ and $A$ a symmetric matrix in $\rset^{d\times d}$. Then,
+$$
+\bE[X^\top A X] = \mu^\top A \mu + \mathrm{Trace}(A\Sigma)\eqsp.
+$$
+
+\vspace{.2cm}
+
+{\em
+\noindent As $X^\top A X$ is a real number, $\bE[X^\top A X] = \bE[\mathrm{Trace}(X^\top A X)] =  \bE[\mathrm{Trace}(AXX^\top )]$. By linearity, $\bE[X^\top A X] = \mathrm{Trace}(A\bE[XX^\top])$ which yields,
+$$
+\bE[X^\top A X] =   \mathrm{Trace}(A\{\mathbb{V}[X] + \bE[X]\bE[X]^\top\}) =  \mu^\top A \mu + \mathrm{Trace}(A\Sigma)\eqsp.
+$$
+}
+
+
+\section{Student's t-statistics}
+We assume that  for all $1\leqslant i \leqslant n$, $Y_i = X^\top_i \param_{\star} + \varepsilon_i$ for some unknown $\param_\star\in\rset^d$ where the $(\varepsilon_i)_{1\leqslant i\leqslant n}$ are i.i.d. random variables with distribution $\mathcal{N}(0,\sigma_*^2)$. Let  $\varepsilon\in\rset^n$  be the random vector such that  for all $1\leqslant i \leqslant n$, the $i$-th component of $\varepsilon$  is $\varepsilon_i$. The model is then written $Y = X \param_{\star} + \varepsilon$. Assume that $X$ has full rank and that $\widehat \theta_n = (X^\top X)^{-1}X^\top Y$ and $\widehat \sigma^2_n = \|Y-X\widehat \theta_n\|^2/(n-d)$.
+\begin{enumerate}
+\item For all $1\leqslant j \leqslant d$, show that
+$$
+\frac{\widehat \param_{n,j} -\param_{\star,j}}{\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}} \sim \mathcal{S}(n-d)\eqsp,
+$$
+where $\mathcal{S}(n-d)$ is the Student's t-distribution with $n-d$ degrees of freedom, i.e. the law of $X/\sqrt{Y/(n-d)}$ where $X\sim\mathcal{N}(0,1)$ is independent of $Y\sim\chi^2(n-d)$.
+
+\vspace{.2cm}
+
+{\em
+By definition, for all $1\leqslant j \leqslant d$,  
+\[
+\frac{\widehat \param_{n,j} -\param_{\star,j}}{\widehat\sigma_{n}\sqrt{(X^\top X)_{j,j}^{-1}}} = \frac{\sigma_\star^{-1}(\widehat \param_{n,j} -\param_{\star,j})}{\sigma_\star^{-1}\widehat\sigma_{n}\sqrt{(X^\top X)_{j,j}^{-1}}} = \frac{e^\top_j(\sigma_\star^{-1}(\widehat \param_{n} -\param_{\star}))}{\sigma_\star^{-1}\widehat\sigma_{n}\sqrt{(X^\top X)_{j,j}^{-1}}}\eqsp.
+\]
+Note that $\sigma_\star^{-1}(\widehat \param_{n} -\param_{\star}) \sim \mathcal{N}(0,(X^\top X)^{-1})$ so that $e^\top_j(\sigma_\star^{-1}(\widehat \param_{n} -\param_{\star}))\sim \mathcal{N}(0,e^\top_j(X^\top X)^{-1}e_j)$ and 
+\[
+\frac{e^\top_j(\sigma_\star^{-1}(\widehat \param_{n} -\param_{\star}))}{\sqrt{(X^\top X)_{j,j}^{-1}}}\sim\mathcal{N}(0,1)\eqsp.
+\]
+In addition,
+\[
+\sigma_\star^{-1}\widehat\sigma_{n} = \sqrt{\sigma_\star^{-2}\widehat\sigma^2_{n}} = \sqrt{\|\sigma_\star^{-1}(I_n - X(X^\top X)^{-1}X^\top)\varepsilon\|_2^2/(n-d)}\eqsp,
+\]
+where $\sigma_\star^{-2}\widehat\sigma^2_{n} = \|\sigma_\star^{-1}(I_n - X(X^\top X)^{-1}X^\top)\varepsilon\|_2^2 \sim \chi^2(n-d)$. The proof is concluded by noting that $\widehat \param_n$ and  $\widehat\sigma^2_{n}$ are independent.
+}
+\item Provide a confidence interval with confidence level $1-\alpha$ for $\param_{\star,j}$.
+
+\vspace{.2cm}
+
+{\em
+For $\alpha\in(0,1)$, if $s_{1-\alpha/2}^{n-d}$ denotes the quantile of order $1-\alpha/2$ of the law $\mathcal{S}(n-d)$, then 
+\[
+\bP\left(\left|\frac{\widehat \param_{n,j} -\param_{\star,j}}{\widehat\sigma_{n}\sqrt{(X^TX)_{j,j}^{-1}}}\right| \leqslant s_{1-\alpha/2}^{n-d}\right) = 1-\alpha\eqsp.
+\]
+Therefore, 
+\[
+I^{n-p}_{n,j}(\param_{\star}) = \left[\widehat \param_{n,j} -\widehat\sigma_{n}s_{1-\alpha/2}^{n-d}\sqrt{(X^\top X)_{j,j}^{-1}}\eqsp;\eqsp \widehat \param_{n,j} + \widehat\sigma_{n}s_{1-\alpha/2}^{n-d}\sqrt{(X^\top X)_{j,j}^{-1}}\right]
+\]
+ is a confidence interval for $\param_{\star,j}$ with confidence level $1-\alpha$. 
+}
+\end{enumerate}
+\section{Random design}
+Consider the regression model given by
+$$
+Y = X\param_{\star}+ \varepsilon\eqsp,
+$$
+where $X\in\rset^{n\times d}$ the $(\varepsilon_{i})_{1\leqslant i \leqslant n}$ are i.i.d. centered Gaussian random variables with variance $\sigma_{\star}^2$ and independent of $(X_{i})_{1\leqslant i \leqslant n}$ which are assumed to be random. Assume that $X^\top X$ has full rank and that $\param_\star$ is estimated by 
+$$
+\widehat \param_n = (X^\top X)^{-1}X^\top Y\eqsp.
+$$
+\begin{enumerate}
+\item  Compute the excess risk $\mathsf{R}(\param)-\mathsf{R}(\param_\star)$, where $\mathsf{R}(\param) = n^{-1}\bE[\|Y - X^\top \param\|_2^2]$.
+
+\vspace{.2cm}
+
+{\em
+By definition, using that $\bE[\varepsilon]=0$,
+\begin{align*}
+\mathsf{R}(\param) = n^{-1}\bE[\|Y - X \param\|_2^2] = n^{-1}\mathsf{R}(\param) &= \bE[\|X\param_\star + \varepsilon - X\param\|_2^2]\eqsp,\\
+&= n^{-1}\bE[\|X \param_\star - X\param\|_2^2] + n^{-1}\bE[\|\varepsilon\|_2^2]\eqsp,\\
+&=(\param_\star - \param)^\top n^{-1}\bE[X^\top X](\param_\star - \param) + \sigma_\star^2\eqsp.
+\end{align*}
+Therefore, $\mathsf{R}(\param)-\mathsf{R}(\param_\star) = (\param_\star - \param)^\top n^{-1}\bE[X^\top X](\param_\star - \param) $.
+}
+\item  Compute then the excess risk $\bE[\mathsf{R}(\widehat \param_n)-\mathsf{R}(\param_\star)]$.
+
+\vspace{.2cm}
+
+{\em
+By the previous question,
+$$
+\bE[\mathsf{R}(\widehat \param_n)-\mathsf{R}(\param_\star)] = n^{-1}\bE[(\param_\star - \widehat \param_n)^\top \bE[X^\top X](\param_\star - \widehat \param_n) ]\eqsp.
+$$
+Since $\widehat \param_n$ is an unbiased estimate of $\param_\star$,
+\begin{align*}
+\bE[\mathsf{R}(\widehat \param_n)-\mathsf{R}(\param_\star)] &= n^{-1}\bE[(\param_\star - \bE[\widehat \param_n])^\top \bE[X^\top X](\param_\star - \bE[\widehat \param_n]) ]\eqsp,\\
+&= n^{-1}\mathrm{Trace}\left(\bE[X^\top X]\mathbb{V}[\widehat \param_n]\right)\eqsp,\\
+&=\frac{\sigma_\star}{n}\mathrm{Trace}\left(\bE[X^\top X]\bE\left[(X^\top X)^{-1}\right]\right)\eqsp.
+\end{align*}
+}
+
+\end{enumerate}
+
+\section{Fisher statistics (bonus)}
+Consider the regression model given by
+$$
+Y = X\param_{\star}+ \varepsilon\eqsp,
+$$
+where $X\in\rset^{n\times d}$ and the $(\varepsilon_{i})_{1\leqslant i \leqslant n}$ are i.i.d. centered Gaussian random variables with variance $\sigma_{\star}^2$. Assume that $X^\top X$ has full rank and that $\param_\star$ and $\sigma_{\star}^2$ are estimated by 
+$$
+\widehat \param_n = (X^\top X)^{-1}X^\top Y\quad\mathrm{and}\quad \widehat \sigma^2_n =\frac{\|Y - X\widehat \param_n \|^2}{n-d}\eqsp.
+$$
+\begin{enumerate}
+\item  Let $L$ be a $\rset^{q\times d}$ matrix with rank $q\leqslant d$. Show that
+$$
+\frac{(\widehat \param_{n} -\param_{\star})^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param_{\star})}{q\widehat\sigma^2_{n}} \sim \mathcal{F}(q,n-d)\eqsp,
+$$
+where $\mathcal{F}(q,n-d)$ is the Fisher distribution with $q$ and $n-d$ degrees of freedom, i.e. the law of $(X/q)/(Y/(n-d))$ where $X\sim\chi^2(q)$ is independent of $Y\sim\chi^2(n-d)$.
+
+\vspace{.2cm}
+
+{\em
+Note that $\mathrm{rank}(L(X^\top X)^{-1}L^\top) = \mathrm{rank}(LL^\top)  = q$. The matrix $L(X^\top X)^{-1}L^\top$ is therefore positive definite. There exists a diagonal matrix $D\in\rset^{q\times q}$ with positive diagonal terms and an orthogonal matrix $Q\in\rset^{q\times q}$ such that $L(X^\top X)^{-1}L^\top = QDQ^{-1}$. The matrix $(L(X^\top X)^{-1}L^\top)^{-1/2}$ may be defined as $(L(X^\top X)^{-1}L^\top)^{-1/2} = QD^{-1/2}Q^{-1}$. 
+
+It is then enough to note that $(L(X^\top X)^{-1}L^\top)^{-1/2}L(\widehat \param_{n} -\param_{\star})/\sigma_{\star}\sim \mathcal{N}(0,I_q)$. Therefore,
+\begin{multline*}
+\sigma^{-2}_{\star}\|(L(X^\top X)^{-1}L^\top)^{-1/2}L(\widehat \param_{n} -\param_{\star})\|^2 \\
+= (\widehat \param_{n} -\param_{\star})^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param_{\star})/\sigma^2_{\star} \sim \chi^2(q)\eqsp.
+\end{multline*}
+On the other hand,we know that 
+$$
+(n-d)\sigma^{-2}_{\star}\widehat\sigma^2_{n} \sim \chi^2(n-d)\eqsp.
+$$
+The proof is concluded by noting that $\widehat \param_n$ and  $\widehat\sigma^2_{n}$ are independent.
+}
+\item Using the previous question, build a confidence region with confidence level $1-\alpha\in(0,1)$ for $\param_\star$.
+
+\vspace{.2cm}
+
+{\em
+By the previous question, for $\alpha\in(0,1)$, if $f_{1-\alpha}^{q,n-d}$ denotes the quantile of order $1-\alpha$ of the law $\mathcal{F}(q,n-p)$, then 
+\[
+\bP\left(\param_{\star}\in \left\{\param\in\rset^d\eqsp;\eqsp (\widehat \param_{n} -\param)^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param)\leqslant q\widehat\sigma^2_{n}f_{1-\alpha}^{q,n-d}\right\}\right) = 1-\alpha\eqsp.
+\]
+Therefore, 
+\[
+I^{q,n-d}_{n}(\param_{\star}) = \left\{\param\in\rset^d\eqsp;\eqsp (\widehat \param_{n} -\param)^\top L^\top(L(X^\top X)^{-1}L^\top)^{-1}L(\widehat \param_{n} -\param)\leqslant q\widehat\sigma^2_{n}f_{1-\alpha}^{q,n-d}\right\}
+\]
+ is a confidence region for $\param_{\star}$ with confidence level $1-\alpha$. 
+}
+\end{enumerate}
+
+
+
+%\section{Multivariate linear regression in practice}
+%
+%See Python Notebook on Moodle or \url{https://sylvainlc.github.io/}.
+
+
+\end{document}
+
+
+
+
+
+	
