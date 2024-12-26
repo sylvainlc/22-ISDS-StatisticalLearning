@@ -1,0 +1,113 @@
+\documentclass[a4paper,10pt,fleqn]{article}
+
+\usepackage{a4wide,amsmath,amsthm,amssymb,bbm,fancyhdr}
+\usepackage{ifthen,color,enumerate,comment,dsfont,pdfsync,framed,todonotes,enumitem}
+\newboolean{corrige}
+\setboolean{corrige}{true}
+
+\newcommand{\titre}[1]{\textbf{\textsc{#1}}}
+
+\RequirePackage[T1]{fontenc}
+
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{dsfont}
+\newcommand{\thisyear}{}
+\usepackage{enumitem}
+\newcommand{\eqsp}{\,}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\rset}{\ensuremath{\mathbb{R}}}
+\renewcommand{\P}{\ensuremath{\operatorname{P}}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\rme}{\ensuremath{\mathrm{e}}}
+\newcommand{\calH}{\ensuremath{\mathcal{H}}}
+\newcommand{\xset}{\ensuremath{\mathsf{X}}}
+\newcommand{\V}{\ensuremath{\mathbb{V}}}
+\newcommand{\Sb}{\ensuremath{\mathbb{S}}}
+\newcommand{\gaus}{\ensuremath{\mathcal{N}}}
+\newcommand{\HH}{\ensuremath{\mathcal{H}}}
+\newcommand{\F}{\ensuremath{\mathcal{F}}}
+\newcommand{\W}{\ensuremath{\mathcal{W}}}
+\newcommand{\X}{\ensuremath{\mathcal{X}}}
+\newcommand{\1}{\ensuremath{\mathbbm{1}}}
+\newcommand{\dlim}{\ensuremath{\stackrel{\mathcal{L}}{\longrightarrow}}}
+\newcommand{\plim}{\ensuremath{\stackrel{\mathrm{P}}{\longrightarrow}}}
+\newcommand{\PP}{\ensuremath{\mathbb{P}}}
+\newcommand{\p}{\ensuremath{\mathbb{P}}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\bE}{\mathbb{E}}
+\newcommand{\pa}[1]{\left(#1\right)}
+\newcommand{\hatk}{\widehat K}
+\newcommand{\f}{\varphi}
+\newcommand{\Id}{\textsf{Id}}
+\newcommand{\bfU}{\mathbf{U}}
+\newcommand{\bfX}{\mathbf{X}}
+\newcommand{\bfs}{\mathbf{\Sigma}}
+\newcommand{\bfA}{\mathbf{A}}
+\newcommand{\bfV}{\mathbf{V}}
+\newcommand{\bfB}{\mathbf{B}}
+\newcommand{\bfI}{\mathbf{I}}
+\newcommand{\bfD}{\mathbf{D}}
+\newcommand{\bfK}{\mathbf{K}}
+\newcommand{\argmin}{\mathop{\textrm{argmin}}}
+\newcommand{\argmax}{\mathop{\textrm{argmax}}}
+\newcommand{\crit}{\mathcal{L}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\pc}{\pi_{\mathcal{C}}}
+
+
+% Style
+%\pagestyle{fancyplain}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand{\subsectionmark}[1]{}
+%\lhead[\fancyplain{}{\thepage}]{\fancyplain{}{\footnotesize {\sf
+%MAT4506 Introduction to Machine Learning  %/ \rightmark
+%}}}
+%\rhead[\fancyplain{}{\footnotesize {\sf MAT4506 Introduction to machine learning, \thisyear %/ \rightmark
+%}}]{\fancyplain{}{\thepage}}
+
+
+\newtheorem{theorem}{Theorem}
+
+
+\begin{document}
+
+\noindent\hrulefill
+
+\begin{center}
+\textsc{Unsupervised learning}
+\end{center}
+\hrulefill
+
+\medskip
+
+
+\subsection*{K means algorithm}
+Let $n\geqslant 1$ and  $X_{1},\ldots,X_{n}$ in $\R^p$.
+The $K$-means algorithm aims at minimizing over all partitions $G=(G_{1},\ldots,G_{K})$ of $\{1,\ldots,p\}$ the criterion
+$$
+\crit(G)=\sum_{k=1}^K\sum_{a\in G_{k}}\|X_{a}-\bar{X}_{G_{k}}\|^2\quad \textrm{with}\quad \bar{X}_{G_{k}}={1\over |G_{k}|}\sum_{b\in G_{k}} X_{b}\;.
+$$
+\begin{enumerate}
+\item Prove that
+$$
+\crit(G)=\sum_{k=1}^K{1\over |G_{k}|}\sum_{a,b\in G_{k}} \langle X_{a},X_{a}-X_{b}\rangle ={1\over 2}\sum_{k=1}^K{1\over |G_{k}|}\sum_{a,b\in G_{k}} \|X_{a}-X_{b}\|^2\;.
+$$
+\item Assume now that the observations are independent. Write $\E[X_a] = \mu_{a}\in\R^p$ so that $X_{a}=\mu_{a}+\eps_{a}$ with $\eps_{1},\ldots,\eps_{n}$ centered and independent. Define $v_{a}=\textrm{trace}(\V[X_{a}])$. Prove that
+$$
+\E[\crit(G)]={1\over 2}\sum_{k=1}^K{1\over |G_{k}|}\sum_{a,b\in G_{k}} \left(\|\mu_{a}-\mu_{b}\|^2+v_{a}+v_{b}\right){\bf 1}_{a\neq b}\;.
+$$
+What is the value of $\E[\crit(G)]$ when all the within-group variables have the same mean?
+\item We assume now that there exists a partition $G^*=(G^*_{1},\ldots,G^*_{K})$ such that within-group variables have the same mean and the same volume. More precisely, we assume that there exists $m_{1},\ldots,m_{K}\in\R^p$ and $\gamma_{1},\ldots,\gamma_{K}>0$ such that
+$\mu_{a}=m_{k}$ and $v_{a}=\gamma_{k}$ for all $a\in G^*_{k}$ and $k=1,\ldots,K$. Compute $\E[\crit(G^*)]$.
+\item In the special case where $\gamma_{1}=\ldots=\gamma_{K}=\gamma$, which partition $G=(G_{1},\ldots,G_{K})$ minimizes $\E[\crit(G)]$?
+\end{enumerate}
+	
+	
+
+
+
+\end{document} 

@@ -1,0 +1,208 @@
+\documentclass[a4paper,10pt,fleqn]{article}
+
+\usepackage{a4wide,amsmath,amsthm,amssymb,bbm,fancyhdr}
+\usepackage{ifthen,color,enumerate,comment,dsfont,pdfsync,framed,todonotes,enumitem}
+\newboolean{corrige}
+\setboolean{corrige}{true}
+
+\newcommand{\titre}[1]{\textbf{\textsc{#1}}}
+
+\RequirePackage[T1]{fontenc}
+
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{dsfont}
+\newcommand{\thisyear}{}
+\usepackage{enumitem}
+\newcommand{\eqsp}{\,}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\rset}{\ensuremath{\mathbb{R}}}
+\renewcommand{\P}{\ensuremath{\operatorname{P}}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\rme}{\ensuremath{\mathrm{e}}}
+\newcommand{\calH}{\ensuremath{\mathcal{H}}}
+\newcommand{\xset}{\ensuremath{\mathsf{X}}}
+\newcommand{\V}{\ensuremath{\mathbb{V}}}
+\newcommand{\Sb}{\ensuremath{\mathbb{S}}}
+\newcommand{\gaus}{\ensuremath{\mathcal{N}}}
+\newcommand{\HH}{\ensuremath{\mathcal{H}}}
+\newcommand{\F}{\ensuremath{\mathcal{F}}}
+\newcommand{\W}{\ensuremath{\mathcal{W}}}
+\newcommand{\X}{\ensuremath{\mathcal{X}}}
+\newcommand{\1}{\ensuremath{\mathbbm{1}}}
+\newcommand{\dlim}{\ensuremath{\stackrel{\mathcal{L}}{\longrightarrow}}}
+\newcommand{\plim}{\ensuremath{\stackrel{\mathrm{P}}{\longrightarrow}}}
+\newcommand{\PP}{\ensuremath{\mathbb{P}}}
+\newcommand{\p}{\ensuremath{\mathbb{P}}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\bE}{\mathbb{E}}
+\newcommand{\pa}[1]{\left(#1\right)}
+\newcommand{\hatk}{\widehat K}
+\newcommand{\f}{\varphi}
+\newcommand{\Id}{\textsf{Id}}
+\newcommand{\bfU}{\mathbf{U}}
+\newcommand{\bfX}{\mathbf{X}}
+\newcommand{\bfs}{\mathbf{\Sigma}}
+\newcommand{\bfA}{\mathbf{A}}
+\newcommand{\bfV}{\mathbf{V}}
+\newcommand{\bfB}{\mathbf{B}}
+\newcommand{\bfI}{\mathbf{I}}
+\newcommand{\bfD}{\mathbf{D}}
+\newcommand{\bfK}{\mathbf{K}}
+\newcommand{\argmin}{\mathop{\textrm{argmin}}}
+\newcommand{\argmax}{\mathop{\textrm{argmax}}}
+\newcommand{\crit}{\mathcal{L}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\pc}{\pi_{\mathcal{C}}}
+
+
+% Style
+%\pagestyle{fancyplain}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand{\subsectionmark}[1]{}
+%\lhead[\fancyplain{}{\thepage}]{\fancyplain{}{\footnotesize {\sf
+%MAT4506 Introduction to Machine Learning  %/ \rightmark
+%}}}
+%\rhead[\fancyplain{}{\footnotesize {\sf MAT4506 Introduction to machine learning, \thisyear %/ \rightmark
+%}}]{\fancyplain{}{\thepage}}
+
+
+\newtheorem{theorem}{Theorem}
+
+
+\begin{document}
+
+\noindent\hrulefill
+
+\begin{center}
+\textsc{Unsupervised learning}
+\end{center}
+\hrulefill
+
+\medskip
+
+
+\subsection*{K means algorithm}
+Let $n\geqslant 1$ and  $X_{1},\ldots,X_{n}$ in $\R^p$.
+The $K$-means algorithm aims at minimizing over all partitions $G=(G_{1},\ldots,G_{K})$ of $\{1,\ldots,p\}$ the criterion
+$$
+\crit(G)=\sum_{k=1}^K\sum_{a\in G_{k}}\|X_{a}-\bar{X}_{G_{k}}\|^2\quad \textrm{with}\quad \bar{X}_{G_{k}}={1\over |G_{k}|}\sum_{b\in G_{k}} X_{b}\;.
+$$
+\begin{enumerate}
+\item Prove that
+$$
+\crit(G)=\sum_{k=1}^K{1\over |G_{k}|}\sum_{a,b\in G_{k}} \langle X_{a},X_{a}-X_{b}\rangle ={1\over 2}\sum_{k=1}^K{1\over |G_{k}|}\sum_{a,b\in G_{k}} \|X_{a}-X_{b}\|^2\;.
+$$
+
+\vspace{.2cm}
+
+{\em
+By definition,
+\begin{align*}
+\crit(G) & = \sum_{k=1}^K\sum_{a\in G_{k}}\|X_{a}-\bar{X}_{G_{k}}\|^2 \\
+& = \sum_{k=1}^K \sum_{a\in G_{k}} \langle X_a - \frac{1}{|G_k|} \sum_{b \in G_k} X_b,X_a - \frac{1}{|G_k|} \sum_{c \in G_k} X_c \rangle \\
+& = \sum_{k=1}^K \frac{1}{|G_k|^2}\sum_{a, b, c\in G_{k}} \langle X_a - X_b,X_a - X_c \rangle \\
+& = \sum_{k=1}^K \frac{1}{|G_k|^2}\sum_{a, b, c\in G_{k}} \langle X_a - X_b,X_a \rangle 
+- \sum_{k=1}^K \frac{1}{|G_k|^2}\sum_{a, b, c\in G_{k}} \langle X_a - X_b,X_c \rangle,
+\end{align*}
+where
+$$
+\sum_{a, b, c\in G_{k}} \langle X_a - X_b,X_c \rangle  = |G_k| \sum_{a, c\in G_{k}} \langle X_a ,X_c \rangle - |G_k| \sum_{b, c\in G_{k}} \langle X_b ,X_c \rangle = 0\eqsp.
+$$
+Thus, 
+\begin{align*}
+\crit(G) & = \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \langle X_a,X_a -X_b \rangle.
+\end{align*}
+For the second equality, note that 
+\begin{align*}
+\crit(G) & = \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \langle X_a-X_b,X_a -X_b \rangle + \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \langle X_b,X_a -X_b \rangle\\
+& = \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \| X_a-X_b \|^2 - \crit(G),
+\end{align*}
+which concludes the proof. 
+}
+\item Assume now that the observations are independent. Write $\E[X_a] = \mu_{a}\in\R^p$ so that $X_{a}=\mu_{a}+\eps_{a}$ with $\eps_{1},\ldots,\eps_{n}$ centered and independent. Define $v_{a}=\textrm{trace}(\V[X_{a}])$. Prove that
+$$
+\E[\crit(G)]={1\over 2}\sum_{k=1}^K{1\over |G_{k}|}\sum_{a,b\in G_{k}} \left(\|\mu_{a}-\mu_{b}\|^2+v_{a}+v_{b}\right){\bf 1}_{a\neq b}\;.
+$$
+What is the value of $\E[\crit(G)]$ when all the within-group variables have the same mean?
+
+\vspace{.2cm}
+
+{\em
+
+The expectation of $\crit(G)$ is given by
+\begin{align*}
+\E \left[ \crit(G) \right] & = \frac{1}{2}  \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \E \left[ \| X_a-X_b \|^2 \right].
+\end{align*}
+Let $a, b \in G_k, a \neq b$,
+\begin{align*}
+\E \left[ \| X_a-X_b \|^2 \right] & = \E \left[ \| \mu_a - \mu_b + \varepsilon_a - \varepsilon_b \|^2\right]\\
+& = \E \left[ \| \mu_a - \mu_b\|^2 \right]   + \E \left[ \| \varepsilon_a - \varepsilon_b \|^2 \right] 
++ 2  \E \left[  \langle \mu_a - \mu_b, \varepsilon_a - \varepsilon_b \rangle \right]\\
+& = \| \mu_a - \mu_b\|^2 + \E \left[ \| \varepsilon_a \|^2 \right] + \E \left[ \| \varepsilon_b \|^2 \right] + 2 \E \left[ \langle \varepsilon_a, \varepsilon_b \rangle \right],
+\end{align*}
+since $\varepsilon_a$ and $\varepsilon_b$ are independent and centred. Finally, since for all $a \in G_k, \E \left[ \| \varepsilon_a \|^2 \right] = v_a$, 
+\begin{align*}
+\E \left[ \crit(G) \right] & = \frac{1}{2}  \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \left( \| \mu_a - \mu_b\|^2 + v_a + v_b \right) \mathds{1}_{a \neq b}.
+\end{align*}
+If all the within-group variables have the same mean, for all $k$, there exists $\mu_k$ such that, for all $a \in G_k$, $\mu_a = \mu_k$. Therefore, 
+\begin{align*}
+\E \left[ \crit(G) \right] & = \frac{1}{2}  \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \left( v_a + v_b \right) \mathds{1}_{a \neq b}\\
+& = \frac{1}{2}  \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \left( v_a + v_b \right) \mathds{1}_{a \neq b},
+\end{align*}
+where 
+\begin{align*}
+\frac{1}{|G_k|}\sum_{a, b\in G_{k}} \left( v_a + v_b \right) \mathds{1}_{a \neq b} &= \frac{1}{|G_k|} \left( \sum_{a, b\in G_{k}} \left( v_a + v_b \right)  - \sum_{a, b\in G_{k}} \left( v_a + v_b \right) \mathds{1}_{a = b} \right) \\
+& = \frac{1}{|G_k|} \left( 2 |G_k| \sum_{a \in G_{k}} v_a - 2 \sum_{a \in G_{k}} v_a \right)\\
+& = \frac{2 (|G_k|-1)}{|G_k|} \sum_{a \in G_{k}} v_a.
+\end{align*}
+Consequently, if, for all $a \in G_k$, $\mu_a = \mu_k$, we have
+$$
+\E \left[ \crit(G) \right]  =\sum_{k=1}^K \frac{|G_k|-1}{|G_k|} \sum_{a \in G_{k}} v_a.
+$$
+}
+\item We assume now that there exists a partition $G^*=(G^*_{1},\ldots,G^*_{K})$ such that within-group variables have the same mean and the same volume. More precisely, we assume that there exists $m_{1},\ldots,m_{K}\in\R^p$ and $\gamma_{1},\ldots,\gamma_{K}>0$ such that
+$\mu_{a}=m_{k}$ and $v_{a}=\gamma_{k}$ for all $a\in G^*_{k}$ and $k=1,\ldots,K$. Compute $\E[\crit(G^*)]$.
+
+\vspace{.2cm}
+
+{\em
+By definition of  $G^*$,  
+	\begin{align*}
+	\E \left[ \crit(G^*) \right] & =\sum_{k=1}^K \frac{|G^*_k|-1}{|G^*_k|} \sum_{a \in G^*_{k}} v_a\\
+	& = \sum_{k=1}^K \frac{|G^*_k|-1}{|G^*_k|} |G^*_k| \gamma_k\\
+	& = \sum_{k=1}^K (|G^*_k|-1) \gamma_k.
+	\end{align*}
+}
+\item In the special case where $\gamma_{1}=\ldots=\gamma_{K}=\gamma$, which partition $G=(G_{1},\ldots,G_{K})$ minimizes $\E[\crit(G)]$?
+
+\vspace{.2cm}
+
+{\em
+Assume that $\gamma_1 = \hdots = \gamma_K = \gamma$. Then, for any partition $G$, 
+	\begin{align*}
+	\E \left[ \crit(G) \right] & = \frac{1}{2}  \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \left( \| \mu_a - \mu_b\|^2 \right)
+	+ \frac{1}{2}  \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \left( v_a + v_b \right) \mathds{1}_{a \neq b}\\
+	& = \frac{1}{2}  \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \left( \| \mu_a - \mu_b\|^2 \right) + \sum_k \frac{|G_k|-1}{|G_k|} \sum_{a \in G_k} \gamma\\
+	& = \frac{1}{2}  \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \left( \| \mu_a - \mu_b\|^2 \right) + \gamma(n-K).
+	\end{align*}
+	In particular, for $G^*$ we have
+	\begin{align*}
+	\E \left[ \crit(G^*) \right] & = \gamma(n-K),
+	\end{align*}
+	which leads to 
+	\begin{align*}
+	\E \left[ \crit(G) \right] - \E \left[ \crit(G^*) \right] = \frac{1}{2}  \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \left( \| \mu_a - \mu_b\|^2 \right) \geq 0\;.
+	\end{align*}
+	The minimum of $\E \left[ \crit(G) \right]$ is reached at$G = G^*$. To prove that this minimum is unique, choose $G$ such that $\E \left[ \crit(G) \right] = \E \left[ \crit(G^*) \right]$. Then, for all $k$, and for all $a,b \in G_k$,  $\mu_a = \mu_b$ which implies that $G = G^*$ (if all $\mu_k$ are different).
+}
+\end{enumerate}
+	
+	
+
+
+
+\end{document} 
