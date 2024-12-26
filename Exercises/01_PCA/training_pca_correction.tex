@@ -76,78 +76,398 @@
 \medskip
 
 
-\section*{Probabilistic PCA}
-Let $X$ be a standard Gaussian random variable in $\rset^d$ and assume that conditionally on $X$, $Z$ has a Gaussian distribution with mean $WX + \mu$ and variance $\sigma^2 I_d$.
+\section*{Warm-up}
+
 \begin{enumerate}
-\item Prove that $Z$ has a Gaussian distribution with mean $\mu$ and variance $C = WW^\top + \sigma^2 I_d$.
+\item Let $\bfA$ be a $n\times d$ matrix with real entries. Show that $\mathrm{Im}(\bfA)=\mathrm{Im}(\bfA \bfA^\top)$.
 
 \vspace{.2cm}
 
 {\em
-It is enough to write
+    First note that $\bfA\bfA^\top x=0$ implies $<\bfA^\top x,\bfA^\top x>=0$ so that $\bfA^\top x=0$. The converse is obvious. Therefore, $\mathrm{Ker}(\bfA \bfA^\top)= \mathrm{Ker}(\bfA^\top)$. And using that $\mathrm{Ker}(B^\top)=(\mathrm{Im}(B))^\perp$, we deduce that $\mathrm{Im}(\bfA \bfA^\top)^\perp=\mathrm{Im}(\bfA)^\perp$, which concludes the proof.
+}
+    
+\item Let $\{U_k\}_{1\leq k \leq r}$ be a family of $r$ orthonormal vectors of $\rset^d$.
+Show that $\sum_{k=1}^{r} U_k U_k^\top$ is the matrix associated with the orthogonal projection onto $\mathbf{H}=\{\sum_{k=1}^r \alpha_k U_k\,; \ \alpha_1,\ldots,\alpha_r \in \rset\}$. Deduce that if $\bfA$ is a $n\times d$ matrix with real entries such that each column of $\bfA$ is in $\mathrm{H}$, then,
 $$
-Z = WX + \mu + \sigma \varepsilon\,,
+\left(\sum_{k=1}^r U_k U_k^\top\right) \bfA=\bfA\eqsp.
 $$
-where $X$ and $\varepsilon$ are independent Gaussian random variables. Therefore, $Z \sim \mathcal{N}(\mu,C)$.
-}
-
-\item Prove that conditionally on $Z$, $X$ has a Gaussian distribution with mean $m= C^{-1}W^\top (Z-\mu)$ and variance $\Sigma = \sigma^2 C^{-1}$.
 
 \vspace{.2cm}
 
 {\em
-The joint distribution of $Z$ and $X$ can be written, for all $(x,z)\in\rset^d\times\rset^d$,
-\begin{align*}
-p(z,x) \propto \exp(-\frac{1}{2}x^\top x)\exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,.
-\end{align*}
-Therefore,
-\begin{align*}
-p(x|z) &\propto  p(z,x)\\
-&\propto \exp(-\frac{1}{2}x^\top x)\exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,,\\
-&\propto \exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,,\\
-&\propto \exp(-\frac{1}{2\sigma^2}(x - m)^\top \Sigma^{-1} (x-m))\,,
-\end{align*}
-where $\Sigma = \sigma^2 C^{-1}$ and $m = C^{-1}W^\top (Z-\mu)$ which concludes the proof.
-}
-\item Assume that $\{Z_i\}_{1\leq i\leq n}$ are $n$ i.i.d. observations with the same distribution has $Z$. Write the loglikelihood of $(Z_1,\ldots,Z_n)$.
-
-\vspace{.2cm}
-
-{\em
-By definition,
-\begin{align*}
-\log p_C(Z_1,\ldots,Z_n) &= \sum_{i=1}^n \log p_C(Z_i)  \,,\\
-&=\sum_{i=1}^n \left(-\frac{1}{2}\log \mathrm{det}(2\pi C) - \frac{1}{2}(Z_i-m)^\top \Sigma^{-1}(Z_i-m)\right)\,,\\
-&= -\frac{n}{2}\log \mathrm{det}(2\pi C) -\frac{1}{2}\sum_{i=1}^n (Z_i-m)^\top \Sigma^{-1}(Z_i-m)\,,\\
-&= -\frac{n}{2}\log \mathrm{det}(2\pi C) -\frac{n}{2}\mathrm{Trace}(C^{-1}S_n)\,,
-\end{align*} 
-where
+Let $\pi_\mathbf{H}(X)$ be the orthogonal projection of $X$ onto $\mathbf{H}$. Since $\{U_k\}_{1\leq k \leq r}$  is an orthonormal basis of $\mathbf{H}$,
 $$
-S_n = \frac{1}{n}\sum_{i=1}^n(Z_i-\mu)^\top(Z_i-\mu)\,.
+\pi_\mathbf{H}(X)=\sum_{k=1}^{r} <X,U_k>U_k=\left(\sum_{k=1}^{r} U_k U_k^\top\right)X\eqsp.
 $$
-}
-\item Assuming that $C = WW^\top + \sigma^2 I_d$, show that $\widehat C= \widehat{W}\widehat{W}^\top + \sigma^2 I_d$ with $\widehat{W} = U_q(\Lambda_q-\sigma^2I_q)^{1/2}R$ is a stationary point of the loglikelihood (and therefore maximizes the loglikelihood).
-
-\vspace{.2cm}
-
-{\em
-
-}
-\item 
-
-\vspace{.2cm}
-
-{\em
-
-}
-\item
-
-\vspace{.2cm}
-
-{\em
-
+This implies that for each $X \in \mathbf{H}$, $X=\left(\sum_{k=1}^{r} U_k U_k^\top\right)X$. Since all the column vectors of $A$ are in $\mathbf{H}$, this yields $\left(\sum_{k=1}^r U_k U_k^\top\right) \bfA=\bfA$.
 }
 \end{enumerate}
+
+\section*{Kernel Principal Component Analysis}
+\subsection*{Principal Component Analysis}
+Principal component analysis is a multivariate technique which aims at analyzing the statistical structure of high dimensional dependent observations by representing data using orthogonal variables called {\em principal components}. Reducing the dimensionality of the data is motivated by several practical reasons such as improving computational complexity. Let $(X_i)_{1\leqslant i\leqslant n}$ be i.i.d. random variables in $\rset^d$ and consider the matrix $\bfX\in\rset^{n\times d}$ such that the $i$-th row of $\bfX$ is the observation $X^\top_i$. In this exercise, it is assumed that data are preprocessed so that the columns of $\bfX$ are centered.  This means that for all $1\leqslant k \leqslant d$, $\sum_{i=1}^{n}X_{i,k} = 0$. Let $\bfs_n$ be the empirical covariance matrix:
+$$
+\bfs_n = n^{-1}\sum_{i=1}^n X_i X^T_i\eqsp.
+$$
+Principal Component Analysis  aims at reducing the dimensionality of the observations $(X_i)_{1\leqslant i \leqslant n}$ using a {\em compression} matrix $\bfU\in \rset^{d\times p}$ with orthonormal columns with $p\leqslant d$ so that for each $1\leqslant i \leqslant n$, $\bfU^TX_i$ ia a low dimensional representation of $X_i$. The original observation may then be partially recovered using  $\bfU\in \rset^{d\times p}$. Principal Component Analysis computes $\bfU$ using the least squares approach:
+$$
+\bfU_{\star} \in \underset{U\in  \rset^{d\times p}}{\mathrm{argmin}} \;\sum_{i=1}^n\|X_i - \bfU\bfU^TX_i\|^2\eqsp,
+$$
+\begin{enumerate}
+\item Prove that for all $\rset^{n \times d}$ matrix $\bfA$ with rank $r$, there exist $\sigma_1\geqslant \ldots \geqslant \sigma_r>0$ such that
+$$
+\bfA = \sum_{k=1}^r \sigma_k u_k v^T_k\eqsp,
+$$
+where $\{u_1,\ldots,u_r\}\subset \rset^n$ and $\{v_1,\ldots,v_r \} \subset \rset^d$ are two families of orthonormal  vectors. The vectors $\{u_1,\ldots,u_r\}$  (resp. $\{v_1,\ldots,v_r\}$) are the left-singular (resp. right-singular) vectors associated with $\{\sigma_1,\ldots,\sigma_r\}$, the singular values of $\bfA$.
+
+\vspace{.2cm}
+
+{\em
+Since the matrix $\bfA\bfA^T$ is positive semidefinite, its spectral decomposition is given by
+$$
+\bfA\bfA^T = \sum_{k=1}^r \lambda_k u_k u^T_k\eqsp,
+$$
+where $\lambda_1\geqslant \ldots\geqslant \lambda_r>0$ are the nonzero eigenvalues of $\bfA\bfA^T$ and $\{u_1,\ldots,u_r\}$ is an orthonormal family of $\rset^n$. For all $1\leqslant k\leqslant r$, define $v_k = \lambda_k^{-1/2}\bfA^Tu_k$ so that
+\begin{align*}
+\|v_k\|^2&=\lambda_k^{-1}\langle \bfA^Tu_k;\bfA^Tu_k\rangle = \lambda_k^{-1} u^T_k\bfA\bfA^Tu_k = 1\eqsp, \\
+\bfA^T\bfA v_k & = \lambda_k^{-1/2}\bfA^T\bfA \bfA^Tu_k  = \lambda_k v_k\eqsp.
+\end{align*}
+On the other hand, for all $1\leqslant k\neq j\leqslant r$, $\langle v_k;v_j\rangle = \lambda_k^{-1/2}\lambda_j^{-1/2}u^T_k\bfA\bfA^Tu_j =\lambda_k^{-1/2}\lambda_j^{1/2}u_k'u_j = 0$. Therefore, $\{v_1,\ldots,v_r\}$ is an orthonormal family of eigenvectors of $\bfA^T\bfA$ associated with the eigenvalues $\lambda_1\geqslant \ldots\geqslant \lambda_r>0$.
+Define, for all $1\leqslant k\leqslant r$, $\sigma_k = \lambda_k^{1/2}$ which yields
+$$
+\sum_{k=1}^r \sigma_k u_k v^T_k = \sum_{k=1}^r  u_k u^T_k\bfA = \left(\sum_{k=1}^r  u_k u^T_k\right)\bfA\eqsp.
+$$
+As $\{u_1,\ldots,u_r\}$ is an orthonormal family, $\bfU\bfU^T = \sum_{k=1}^r u_ku^T_k$ is the orthogonal projection onto the $\mathrm{range}(\bfA\bfA^T) = \mathrm{range}(\bfA)$ which implies
+$$
+\sum_{k=1}^r \sigma_k u_k v^T_k = \left(\sum_{k=1}^r  u_k u^T_k\right)\bfA = \bfA\eqsp.
+$$
+}
+%{\em 
+%If $\bfU$ denotes the $\rset^{n\times r}$ matrix with columns given by $\{u_1,\ldots,u_r\}$ and $\bfV$ denotes the $\rset^{d \times r}$ matrix with columns given by $\{v_1,\ldots,v_r\}$, then the singular value decomposition of $\bfA$ may also be written as
+%$$
+%\bfA = \bfU\bfD_r\bfV^T\eqsp,
+%$$
+%where $\bfD_r = \mathrm{diag}(\sigma_1,\ldots,\sigma_r)$. Then, $\bfA^T\bfA$ and $\bfA\bfA^T$ are positive semidefinite such that
+%$$
+%\bfA^T\bfA = \bfV\bfD_r^2\bfV^T\quad\mathrm{and}\quad \bfA\bfA^T = \bfU\bfD_r^2\bfU^T\eqsp.
+%$$
+%In the framwework of this exercise, $n\bfs_n = \bfX^T\bfX$ so that diagonalizing $n\bfs_n$ is equivalent to computing the singular value decomposition of $\bfX$.
+%}
+\item Prove that solving the PCA least squares optimization problem boils down to computing
+$$
+\bfU_{\star} \in \hspace{-0.5cm}\underset{\bfU\in \rset^{d\times p}\eqsp,\eqsp \bfU^T\bfU = \bfI_p}{\mathrm{argmax}} \hspace{-.4cm}\{ \mathrm{trace}(\bfU^T\bfs_n\bfU)\}\eqsp.
+$$
+
+\vspace{.2cm}
+
+{\em
+Let $\bfU\in\rset^{d\times p}$ be such that $\bfU^T\bfU = \bfI_p$. Then,
+\begin{align*}
+\sum_{i=1}^n\|X_i - \bfU\bfU^TX_i\|^2 &= \sum_{i=1}^n\|X_i\|^2 + \sum_{i=1}^n\|\bfU\bfU^TX_i\|^2 - 2\sum_{i=1}^n\langle X_i;\bfU\bfU^TX_i\rangle\eqsp,\\
+&=  \sum_{i=1}^n\|X_i\|^2 + \sum_{i=1}^nX^T_i\bfU\bfU^TX_i - 2\sum_{i=1}^nX^T_i\bfU\bfU^TX_i\eqsp,\\
+&=  \sum_{i=1}^n\|X_i\|^2 - \sum_{i=1}^nX^T_i\bfU\bfU^TX_i\eqsp,\\
+&=  \sum_{i=1}^n\|X_i\|^2 - \mathrm{trace}(\bfU^T\bfX\bfX^T\bfU)\eqsp.
+\end{align*}
+}
+\item Let $\{\vartheta_1,\ldots,\vartheta_d\}$ be orthonormal eigenvectors associated with the eigenvalues $\lambda_1\geqslant \ldots \geqslant \lambda_d$ of $\bfs_n$. Prove that a solution to this problem is given by the matrix $\bfU_{\star}$ with columns $\{\vartheta_1,\ldots,\vartheta_p\}$.
+
+\vspace{.2cm}
+
+{\em
+ Let $\bfs_n = \bfV\bfD_n\bfV^T$ be the spectral decomposition of $\bfs_n$ where $\bfD_n = \mathrm{Diag}(\lambda_1,\ldots,\lambda_d)$ and $\bfV\in\rset^{d\times d}$  is a matrix with orthonormal columns $\{\vartheta_1,\ldots,\vartheta_d\}$. For all  $\bfU\in\rset^{d\times p}$ matrix with orthonormal columns define $\bfB = \bfV^T\bfU$ so that, as $\bfV\in\rset^{d\times d}$ is an orthogonal matrix,
+$$
+\bfV\bfB = \bfV\bfV^T\bfU = \bfU\quad\mathrm{and}\quad \bfU^T\bfs_n \bfU = \bfB^T\bfV^T\bfV\bfD_n\bfV^T\bfV\bfB = \bfB^T\bfD_n\bfB\eqsp.
+$$
+Therefore,
+\begin{equation}
+\label{eq:trusigmau}
+\mathrm{Trace}(\bfU^T\bfs_n \bfU) = \mathrm{Trace}(\bfB^T\bfD_n\bfB) = \sum_{i = 1}^d \lambda_i \sum_{j=1}^p b^2_{i,j}\eqsp.
+\end{equation}
+On the other hand,
+$$
+\bfB^T\bfB = \bfU^T\bfV\bfV^T\bfU = \bfU^T\bfU = I_p\eqsp,
+$$
+so that the columns of $\bfB$ are orthonormal and
+$$
+\sum_{i = 1}^d \sum_{j=1}^p b^2_{i,j} = p\eqsp.
+$$
+Hence, introducing for all $1\leqslant i \leqslant d$, $\alpha_i =  \sum_{j=1}^p b^2_{i,j}$, by \eqref{eq:trusigmau},
+$$
+\mathrm{Trace}(\bfU^T\bfs_n \bfU) = \sum_{i=1}^{d}\alpha_i\lambda_i\eqsp,
+$$
+with, for all $1\leqslant i\leqslant d$, $\alpha_i \in[0,1]$ and $\sum_{i=1}^d\alpha_i  = p$. As $\lambda_1 \geqslant \lambda_2\geqslant \ldots, \lambda_d$\eqsp,
+$$
+\mathrm{Trace}(\bfU^T\bfs_n \bfU) \leqslant \sum_{i=1}^{p}\lambda_i\eqsp.
+$$
+Indeed, the function $f_d:(\alpha_1,\ldots,\alpha_d)\mapsto\sum_{i=1}^{d}\alpha_i\lambda_i$ is maximized under the constraints   $\alpha_i \in[0,1]$ and $\sum_{i=1}^d\alpha_i  = p$ by $(\alpha^*_i)_{1\leqslant i \leqslant d}$ such that $\alpha^*_1=\ldots=\alpha^*_p=1$. Assume that $(\alpha_1,\ldots,\alpha_d)$ is such that there exists $1\leqslant j_0\leqslant p$ such that $\alpha_{j_0}<1$. Then, $\sum_{j=p+1}^d\alpha_j \geqslant 1 - \alpha_{j_0}$ and we may write, as $\lambda_{j_0}\geqslant \lambda_{p+1}\geqslant \ldots\geqslant \lambda_d$,
+$$
+f_d:(\alpha_1,\ldots,\alpha_d) \leqslant \sum_{i=1, i\neq j_0}^{p}\alpha_i\lambda_i + \lambda_{j_0} + \sum_{i=p+1}^{d}\tilde \alpha_i\lambda_i \eqsp,
+$$
+where $(\tilde \alpha_i)_{p+1\leqslant i\leqslant d}$ are in $[0,1]$ and such that $ \sum_{i=1, i\neq j_0}^{p}\alpha_i + 1 +  \sum_{i=p+1}^{d}\tilde\alpha_i = p$.
+%there exists $p+1\leqslant j_0\leqslant d$ such that $\alpha_{k_0}>0$. Then,
+%\begin{enumerate}
+%\item either $\alpha_{j_0} + \alpha_{k_0}<1$ and then, as $\lambda_{j_0}\geqslant \lambda_{k_0}$,
+%$$
+%f_d:(\alpha_1,\ldots,\alpha_d) \leqslant \sum_{i=1, i\neq j_0, i\neq k_0}^{d}\alpha_i\lambda_i + (\alpha_{j_0} + \alpha_{k_0})\lambda_{j_0}\eqsp,
+%$$
+%\item either $\alpha_{j_0} + \alpha_{k_0}>1$ and then, as $\lambda_{j_0}\geqslant \lambda_{k_0}$,
+%$$
+%f_d:(\alpha_1,\ldots,\alpha_d) \leqslant \sum_{i=1, i\neq j_0, i\neq k_0}^{d}\alpha_i\lambda_i + \lambda_{j_0} + (\alpha_{j_0} + \alpha_{k_0}-1)\lambda_{k_0}\eqsp,
+%$$
+%\end{enumerate}
+
+
+As the columns of $\bfU_{\star}$ are $\{\vartheta_1,\ldots,\vartheta_p\}$, for all $1\leqslant i\leqslant d$ and $1\leqslant j \leqslant p$, $b_{i,j} = \langle \vartheta_i;\vartheta_j\rangle = \delta_{i,j}$. Therefore,  for all $1\leqslant i\leqslant d$, $\sum_{j=1}^p b^2_{i,j} = 1$ and
+$$
+\mathrm{Trace}(\bfU^T_{\star}\bfs_n \bfU_{\star}) =\sum_{i = 1}^p \lambda_i\eqsp,
+$$
+which completes the proof.
+}
+\item  For any dimension $1\leqslant p \leqslant  d$, let $\calF_d^p$ be the set of all vector subpaces of $\rset^d$ with dimension $p$. Consider the linear span $V_d$ defined as
+$$
+V_p \in \underset{V\in \calF_d^p}{\mathrm{argmin}} \;\sum_{i=1}^n\|X_i - \pi_V(X_i)\|^2\eqsp,
+$$
+where $\pi_V$ is the orthogonal projection onto the linear span $V$. Prove that $V_1 = \mathrm{span}\{v_1\}$ where
+$$
+v_1 \in \underset{v \in \rset^d\,;\, \|v\|=1}{\mathrm{argmax}} \sum_{i=1}^n   \langle X_i, v \rangle^2\eqsp.
+$$
+
+\vspace{.2cm}
+
+{\em
+Write $V_1 = \mathrm{span}\{v_1\}$ for $v_1\in \rset^d$ such that $\|v_1\| = 1$. Then,
+\begin{align*}
+\sum_{i=1}^n\|X_i - \pi_{V_1}(X_i)\|^2 & = \sum_{i=1}^n\|X_i -  \langle X_i; v_1 \rangle v_1 \|^2\eqsp,\\
+& = \sum_{i=1}^n \left( \|X_i\|^2 - 2 \langle X_i; \langle X_i; v_1 \rangle v_1 \rangle + \| \langle X_i; v_1 \rangle v_1 \|^2 \right)\eqsp,\\
+& = \sum_{i=1}^n \left( \|X_i\|^2 -   \langle X_i; v_1 \rangle^2 \right).
+\end{align*}
+Consequently, $V_1$ is a solution  if and only if $v_1$ is solution to:
+$$
+v_1 \in \underset{v \in \rset^d\,;\, \|v\|=1}{\mathrm{argmax}} \sum_{i=1}^n   \langle X_i, v \rangle^2\eqsp.
+$$
+}
+\item For all $2\leqslant p \leqslant d$, following the same steps, prove that a solution to the optimization problem is given by $V_p = \mathrm{span}\{v_1, \ldots, v_p\}$ where
+\begin{equation}
+\label{eq:vecpca}
+v_1 \in \underset{v\in \rset^d\,;\,\|v\|=1}{\mathrm{argmax}} \sum_{i=1}^n\langle X_i,v\rangle^2 \quad\mbox{and for all}\;\; 2\leqslant k \leqslant p\;,\;\; v_k \in \underset{\substack{v\in \rset^d\,;\,\|v\|=1\,;\\ v\perp v_1,\ldots,v\perp v_{k-1}}}{\mathrm{argmax}}\sum_{i=1}^n\langle X_i,v\rangle^2\eqsp.
+\end{equation}
+
+\vspace{.2cm}
+
+{\em
+Write $V_p = \mathrm{span}\{v_1,\ldots,v_p\}$ where $\{v_1,\ldots,v_p\}$ is an orthonormal family. Then,
+$$
+\sum_{i=1}^n\|X_i - \pi_{V_p}(X_i)\|^2  = \sum_{i=1}^n\|X_i -  \sum_{k=1}^p\langle X_i; v_k \rangle v_k \|^2= \sum_{i=1}^n \left( \|X_i\|^2 -  \sum_{k=1}^p \langle X_i; v_k \rangle^2 \right)\eqsp.
+$$
+ $(v_1,\ldots,v_p)$ is therefore solution to 
+$$
+v = (v_1,\ldots,v_p) \in \mathrm{argmax} \sum_{k=1}^p  \sum_{i=1}^n \langle X_i; v_k \rangle^2\eqsp.
+$$
+The additive form of the function to be maximized allows to build the orthonormal basis of $V_p$ sequentially as claimed.
+}
+\item Prove that the vectors $\{v_1, \ldots , v_k\}$ defined by \eqref{eq:vecpca} can be chosen as the orthonormal eigenvectors associated with the $k$ largest eigenvalues of the empirical covariance matrix $\bfs_n$.
+
+\vspace{.2cm}
+
+{\em
+Note that for all $v\in \rset^d$ such that $\|v\|=1$,
+$$
+\frac{1}{n}\sum_{i=1}^n\langle X_i,v\rangle^2 = \frac{1}{n}\sum_{i=1}^n (v^TX_i)(X^T_iv) = v^T\bfs_n v\eqsp.
+$$
+As $(\vartheta_i)_{1\leqslant i \leqslant d}$ are the orthonormal eigenvectors associated with the eigenvalues $\lambda_1\geqslant \ldots \geqslant\lambda_d\geqslant 0$ of $\Sigma_n$. Then,
+$$
+\frac{1}{n}\sum_{i=1}^n\langle X_i,v\rangle^2 = v^T\left(\sum_{i=1}^d \lambda_i \vartheta_i\vartheta^T_i\right)v = \sum_{i=1}^d \lambda_i \langle v,\vartheta_i\rangle^2\leqslant \lambda_1  \sum_{i=1}^d \langle v,\vartheta_i\rangle^2
+$$
+and, as $(\vartheta_i)_{1\leqslant i \leqslant d}$ is an orthonormal basis of $\rset^d$,  $\sum_{i=1}^d \langle v,\vartheta_i\rangle^2 = \|v\|^2 = 1$. Therefore,
+$$
+\frac{1}{n}\sum_{i=1}^n\langle X_i,v\rangle^2 \leqslant \lambda_1\eqsp.
+$$
+On the other hand, for all $2\leqslant i \leqslant d$, $\langle \vartheta_1,\vartheta_i\rangle =0$ and $\langle \vartheta_1,\vartheta_1\rangle=1$ so that $\sum_{i=1}^d \lambda_i \langle \vartheta_1,\vartheta_i\rangle^2 = \lambda_1$ which proves that $\vartheta_1$ is solution to \eqref{eq:vecpca}.
+
+Assume now that  $v\in \rset^d$ is such that $\|v\|=1$ and for all $1\leqslant j \leqslant k-1$,  $\langle v ; \vartheta_j\rangle = 0$ and write
+$$
+\frac{1}{n}\sum_{i=1}^n\langle X_i,v\rangle^2 = \sum_{i=1}^d \lambda_i \langle v,\vartheta_i\rangle^2\le \lambda_k  \sum_{i=k}^d \langle v,\vartheta_i\rangle^2 \le \lambda_k\eqsp,
+$$
+since, as $(\vartheta_i)_{1\leqslant i \leqslant d}$ is an orthonormal basis of $\rset^d$,  $\sum_{i=1}^d \langle v,\vartheta_i\rangle^2 = \sum_{i=k}^d \langle v,\vartheta_i\rangle^2 = \|v\|^2 = 1$. On the other hand, for all $1\leqslant i \leqslant d$, $i\neq k$, $\langle \vartheta_k,\vartheta_i\rangle =0$ and $\langle \vartheta_k,\vartheta_k\rangle=1$ so that $\sum_{i=1}^d \lambda_i \langle \vartheta_k,\vartheta_i\rangle^2 = \lambda_k$ which proves that $\vartheta_k$ is solution to \eqref{eq:vecpca}.
+
+Therefore, $V_p = \mathrm{span}\{\vartheta_1,\ldots\vartheta_p\}$ is a solution to \eqref{eq:vecpca} and, as $(\vartheta_i)_{1\leqslant i \leqslant p}$ is an orthonormal family, the projection matrix onto $V_p$ is given by $\bfU_{\star}\bfU^T_{\star}$ where $\bfU_{\star}$ is a $\rset^{d\times p}$ matrix with columns $\{\vartheta_1,\ldots\vartheta_p\}$.
+}
+\item The orthonormal eigenvectors associated with the eigenvalues of $\Sigma_n$ allow to define the principal components as follows. Then, as $V_d = \mathrm{span}\{\vartheta_1, \ldots, \vartheta_d\}$, for all $1\leqslant i\leqslant n$,
+$$
+\pi_{V_d}(X_i) = \sum_{k=1}^d \langle X_i,\vartheta_k\rangle \vartheta_k  = \sum_{k=1}^d (X^T_i \vartheta_k)\vartheta_k = \sum_{k=1}^d c_k(i)\vartheta_k\eqsp,
+$$
+where for all $1\leqslant k \leqslant d$, the $k$-th principal component is defined as $c_k = \mathbf{X}\vartheta_k$. Prove that $(c_1,\ldots,c_d)$ are orthogonal vectors.
+
+\vspace{.2cm}
+
+{\em
+The $k$-th principal component is the vector whose components are the coordinates of each $X_i$, $1\leqslant i\leqslant n$, relative to the basis $\{\vartheta_1, \ldots, \vartheta_d\}$ of $V_d$. For all $1\leqslant i\neq j \leqslant d$,
+$$
+\langle c_i,c_j\rangle = \vartheta^T_i \bfX^T \bfX \vartheta_j = \vartheta^T_i(n\Sigma_n)\vartheta_j = n \lambda_j \vartheta^T_i\vartheta_j = 0\eqsp,
+$$
+as $\{\vartheta_1, \ldots, \vartheta_d\}$ is an orthonormal family.
+}
+%\item Let $W_d$ be the vector subspace of $\rset^n$ generated by $\{c_1,\ldots,c_d\}$. Prove that
+%$$
+%\pi_{W_d}(X_i) = \sum_{j=1}^d \vartheta_{j}(i)c_{j}\eqsp.
+%$$
+%\begin{comment}
+%Since $(c_j)_{1 \leqslant j\leqslant d}$ form an orthogonal basis of $W_d$, for all $1\leqslant i\leqslant n$,
+%$$
+%\pi_{W_d}(X_i) = \sum_{j=1}^d \frac{\langle c_{j}, X_i\rangle }{\|c_{j}\|^2 }c_{j}\eqsp.
+%$$
+%For all $1\leqslant j\leqslant d$, $\|c_{j}\|^2 = n \lambda_{j}$ and
+%$$
+%\langle c_{j}, X_i \rangle  = \langle \bfX \vartheta_{j} , X_i \rangle  = \bfX^T_i\bfX\vartheta_{j} = (\bfX^T\bfX\vartheta_{j})_i = (n \bfs_n \vartheta_{j})_i = n \lambda_{j} \vartheta_{j}(i)\eqsp.
+%$$
+%This yields, for all $1\leqslant i\leqslant n$,
+%$$
+%\pi_{W_d}(X_i) = \sum_{j=1}^d \vartheta_{j}(i)c_{j}\eqsp.
+%$$
+%\end{comment}
+\end{enumerate}
+
+
+\subsection*{Application to RKHS}
+Let $(X_i)_{1\le i \le n}$ be $n$ observations in a general space $\X$ and $k: \X\times \X \to \rset$ a positive function. We assume that $k$ is symmetric and that for all $n\geqslant 1$, $(a_i)_{1\leqslant i \leqslant n}\in\rset^n$ and $(x_i)_{1\leqslant i \leqslant n}\in\X^n$, $\sum_{1\leqslant i,j \leqslant n}a_ia_j k(x_i,x_j)\geqslant 0$.  For all $x\in\X$, $\phi(x)$ denotes the function $\phi(x): y\to k(x,y)$.
+
+Let $\W$ be a Hilbert space of real-valued functions defined on $\X$ such that for all $x\in\X$, $\phi(x)\in\W$ and for all $f\in \W$ and all $x\in\X$, $f(x) = \langle f,\phi(x) \rangle_{\W}$. The aim is now to perform a PCA on $(\phi(X_1),\ldots,\phi(X_n))$. It is assumed that
+$$
+\sum_{i=1}^n \phi(X_i) = 0\eqsp.
+$$
+Define
+$$
+\bfK = \left(k(X_i,X_j)\right)_{1\leqslant i,j \leqslant n}\;.
+$$
+\begin{enumerate}
+\item Prove that
+$$
+f_1 =  \underset{f\in \W\,;\,\|f\|_\W=1}{\mathrm{argmax}} \sum_{i=1}^n\langle \phi(X_i),f\rangle_\W^2
+$$
+may be written
+$$
+f_1 = \sum_{i=1}^n \alpha_1(i) \phi(X_i)\;,\quad\mbox{where}\quad \alpha_1 =  \underset{\alpha\in \rset^n\,;\, \alpha^T \bfK\alpha=1}{\mathrm{argmax}}\alpha^\top\bfK^2\alpha\;.
+$$
+
+\vspace{.2cm}
+
+{\em
+Any solution to the optimization problem lies in the vectorial subspace $V = \mathrm{span}\{\phi(X_i), \ldots,\phi(X_n)\}$.
+Let $f = \sum_{i=1}^n \alpha(i)\phi(X_i)$ be such that $\|f\|_{\W}=1$. Then,
+$$
+\|f\|_{\W}^2 = \sum_{i,j=1}^n \alpha_i\alpha_j \langle \phi(X_i),\phi(X_j)\rangle_\W = \alpha^\top \bfK \alpha\;.
+$$
+On the other hand, $\langle \phi(X_i),f\rangle_\W = f(X_i) = [\bfK\alpha](i)$ so that,
+$$
+\sum_{i=1}^n\langle \phi(X_i),f\rangle_\W^2 = \sum_{i=1}^nf^2(X_i) = \sum_{i=1}^n  \left([\bfK\alpha](i)\right)^2 = (\bfK\alpha_1)^\top\bfK\alpha_1 = \alpha^\top \bfK^2 \alpha\;.
+$$
+}
+\item Prove that $\alpha_1 = \lambda_1^{-1/2}b_1$ where $b_1$ is the unit eigenvector associated with the largest eigenvalue $\lambda_1$ of $\bfK$.
+
+\vspace{.2cm}
+
+{\em
+Let $\lambda_1\geqslant\ldots\geqslant \lambda_n\ge 0$ be the eigenvalues of $\bfK$ associated with the orthonormal basis of eigenvectors $(b_1,\ldots,b_n)$. For any $\alpha\in\rset^n$ such that $\alpha^\top \bfK\alpha=1$,
+$$
+\alpha^\top \bfK^2 \alpha = \alpha^\top\left(\sum_{i=1}^n\lambda_i b_ib^\top_i\right)^2 \alpha = \sum_{i=1}^n \lambda_i^2 \langle \alpha,b_i\rangle^2 \leqslant \lambda_1\underbrace{\sum_{i=1}^n \lambda_i\langle \alpha,b_i\rangle^2}_{=1}= \lambda_1\;,
+$$
+as $\alpha^\top \bfK\alpha = \sum_{i=1}^n \lambda_i\langle \alpha,b_i\rangle^2 = 1$. On the other hand,
+$$
+\left(\lambda_1^{-1/2}b_1\right)^T \bfK^2 \left(\lambda_1^{-1/2}b_1\right) = \lambda_1^{-1}\sum_{i=1}^n \lambda_i^2 \langle b_1,b_i\rangle^2 = \lambda_1\;.
+$$
+Following the same steps, $f_j$ may be written $f_j = \sum_{i=1}^n \alpha_j(i)\phi(x_i)$ with $\alpha_j = \lambda^{-1/2}_jb_j$.
+}
+\item Write $H_d = \mathrm{span}\{f_1,\ldots,f_d\}$. Prove that, for all $1\leqslant i\leqslant n$,
+$$
+\pi_{H_d}(\phi(X_i)) = \sum_{j=1}^d \lambda_{j}\alpha_j(i)f_j\;.
+$$
+
+\vspace{.2cm}
+
+{\em
+Note first that the $(f_1,\ldots,f_d)$ is an orthonormal family. Therefore,
+$$
+\pi_{H_d}(\phi(X_i)) = \sum_{j=1}^d \langle \phi(X_i),f_j\rangle_{\W} f_j = \sum_{j=1}^d \langle \phi(X_i), \sum_{\ell=1}^n \alpha_j(\ell)\phi(X_{\ell})\rangle_{\W} f_j= \sum_{j=1}^d [\bfK\alpha_j](i)f_j\eqsp.
+$$
+Therefore,
+$$
+\pi_{H_d}(\phi(x_i)) = \sum_{j=1}^d \lambda^{-1/2}_j[\bfK b_j](i)f_j = \sum_{j=1}^d \lambda^{1/2}_jb_j(i)f_j =  \sum_{j=1}^d \lambda_{j}\alpha_j(i)f_j\eqsp.
+$$
+}
+\end{enumerate}
+
+%Let $X$ be a standard Gaussian random variable in $\rset^d$ and assume that conditionally on $X$, $Z$ has a Gaussian distribution with mean $WX + \mu$ and variance $\sigma^2 I_d$.
+%\begin{enumerate}
+%\item Prove that $Z$ has a Gaussian distribution with mean $\mu$ and variance $C = WW^\top + \sigma^2 I_d$.
+%
+%\vspace{.2cm}
+%
+%{\em
+%It is enough to write
+%$$
+%Z = WX + \mu + \sigma \varepsilon\,,
+%$$
+%where $X$ and $\varepsilon$ are independent Gaussian random variables. Therefore, $Z \sim \mathcal{N}(\mu,C)$.
+%}
+%
+%\item Prove that conditionally on $Z$, $X$ has a Gaussian distribution with mean $m= C^{-1}W^\top (Z-\mu)$ and variance $\Sigma = \sigma^2 C^{-1}$.
+%
+%\vspace{.2cm}
+%
+%{\em
+%The joint distribution of $Z$ and $X$ can be written, for all $(x,z)\in\rset^d\times\rset^d$,
+%\begin{align*}
+%p(z,x) \propto \exp(-\frac{1}{2}x^\top x)\exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,.
+%\end{align*}
+%Therefore,
+%\begin{align*}
+%p(x|z) &\propto  p(z,x)\\
+%&\propto \exp(-\frac{1}{2}x^\top x)\exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,,\\
+%&\propto \exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,,\\
+%&\propto \exp(-\frac{1}{2\sigma^2}(x - m)^\top \Sigma^{-1} (x-m))\,,
+%\end{align*}
+%where $\Sigma = \sigma^2 C^{-1}$ and $m = C^{-1}W^\top (Z-\mu)$ which concludes the proof.
+%}
+%\item Assume that $\{Z_i\}_{1\leq i\leq n}$ are $n$ i.i.d. observations with the same distribution has $Z$. Write the loglikelihood of $(Z_1,\ldots,Z_n)$.
+%
+%\vspace{.2cm}
+%
+%{\em
+%By definition,
+%\begin{align*}
+%\log p_C(Z_1,\ldots,Z_n) &= \sum_{i=1}^n \log p_C(Z_i)  \,,\\
+%&=\sum_{i=1}^n \left(-\frac{1}{2}\log \mathrm{det}(2\pi C) - \frac{1}{2}(Z_i-m)^\top \Sigma^{-1}(Z_i-m)\right)\,,\\
+%&= -\frac{n}{2}\log \mathrm{det}(2\pi C) -\frac{1}{2}\sum_{i=1}^n (Z_i-m)^\top \Sigma^{-1}(Z_i-m)\,,\\
+%&= -\frac{n}{2}\log \mathrm{det}(2\pi C) -\frac{n}{2}\mathrm{Trace}(C^{-1}S_n)\,,
+%\end{align*} 
+%where
+%$$
+%S_n = \frac{1}{n}\sum_{i=1}^n(Z_i-\mu)^\top(Z_i-\mu)\,.
+%$$
+%}
+%\item Assuming that $C = WW^\top + \sigma^2 I_d$, show that $\widehat C= \widehat{W}\widehat{W}^\top + \sigma^2 I_d$ with $\widehat{W} = U_q(\Lambda_q-\sigma^2I_q)^{1/2}R$ is a stationary point of the loglikelihood (and therefore maximizes the loglikelihood).
+%
+%\vspace{.2cm}
+%
+%{\em
+%
+%}
+%\item 
+%
+%\vspace{.2cm}
+%
+%{\em
+%
+%}
+%\item
+%
+%\vspace{.2cm}
+%
+%{\em
+%
+%}
+%\end{enumerate}
 \end{document}
 
 

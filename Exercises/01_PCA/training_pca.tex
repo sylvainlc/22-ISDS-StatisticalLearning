@@ -1,0 +1,255 @@
+\documentclass[a4paper,10pt,fleqn]{article}
+
+\usepackage{a4wide,amsmath,amsthm,amssymb,bbm,fancyhdr}
+\usepackage{ifthen,color,enumerate,comment,dsfont,pdfsync,framed,todonotes,enumitem}
+
+\newcommand{\titre}[1]{\textbf{\textsc{#1}}}
+
+\RequirePackage[T1]{fontenc}
+
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{dsfont}
+\usepackage{enumitem}
+\newcommand{\eqsp}{\,}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\rmd}{\mathrm{d}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\rset}{\ensuremath{\mathbb{R}}}
+\renewcommand{\P}{\ensuremath{\operatorname{P}}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\rme}{\ensuremath{\mathrm{e}}}
+\newcommand{\calH}{\ensuremath{\mathcal{H}}}
+\newcommand{\xset}{\ensuremath{\mathsf{X}}}
+\newcommand{\V}{\ensuremath{\mathbb{V}}}
+\newcommand{\Sb}{\ensuremath{\mathbb{S}}}
+\newcommand{\gaus}{\ensuremath{\mathcal{N}}}
+\newcommand{\HH}{\ensuremath{\mathcal{H}}}
+\newcommand{\F}{\ensuremath{\mathcal{F}}}
+\newcommand{\W}{\ensuremath{\mathcal{W}}}
+\newcommand{\X}{\ensuremath{\mathcal{X}}}
+\newcommand{\1}{\ensuremath{\mathbbm{1}}}
+\newcommand{\dlim}{\ensuremath{\stackrel{\mathcal{L}}{\longrightarrow}}}
+\newcommand{\plim}{\ensuremath{\stackrel{\mathrm{P}}{\longrightarrow}}}
+\newcommand{\PP}{\ensuremath{\mathbb{P}}}
+\newcommand{\p}{\ensuremath{\mathbb{P}}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\bE}{\mathbb{E}}
+
+\newcommand{\pa}[1]{\left(#1\right)}
+\newcommand{\hatk}{\widehat K}
+\newcommand{\f}{\varphi}
+\newcommand{\Id}{\textsf{Id}}
+\newcommand{\bfU}{\mathbf{U}}
+\newcommand{\bfX}{\mathbf{X}}
+\newcommand{\bfs}{\mathbf{\Sigma}}
+\newcommand{\bfA}{\mathbf{A}}
+\newcommand{\bfV}{\mathbf{V}}
+\newcommand{\bfB}{\mathbf{B}}
+\newcommand{\bfI}{\mathbf{I}}
+\newcommand{\bfD}{\mathbf{D}}
+\newcommand{\bfK}{\mathbf{K}}
+\newcommand{\argmin}{\mathop{\textrm{argmin}}}
+\newcommand{\argmax}{\mathop{\textrm{argmax}}}
+\newcommand{\crit}{\mathop{\textrm{crit}}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\pc}{\pi_{\mathcal{C}}}
+
+
+% Style
+
+
+\begin{document}
+
+%\noindent EMINES \hfill \\%ISUP - Sorbonne Universit\'e \\
+% 2023-2023
+
+\noindent\hrulefill
+
+\begin{center}
+\textsc{Principal Component Analysis}
+\end{center}
+\hrulefill
+
+\medskip
+
+
+\section*{Warm-up}
+
+\begin{enumerate}
+\item Let $\bfA$ be a $n\times d$ matrix with real entries. Show that $\mathrm{Im}(\bfA)=\mathrm{Im}(\bfA \bfA^\top)$.
+ \item Let $\{U_k\}_{1\leq k \leq r}$ be a family of $r$ orthonormal vectors of $\rset^d$.
+Show that $\sum_{k=1}^{r} U_k U_k^\top$ is the matrix associated with the orthogonal projection onto $\mathbf{H}=\{\sum_{k=1}^r \alpha_k U_k\,; \ \alpha_1,\ldots,\alpha_r \in \rset\}$. Deduce that if $\bfA$ is a $n\times d$ matrix with real entries such that each column of $\bfA$ is in $\mathrm{H}$, then,
+$$
+\left(\sum_{k=1}^r U_k U_k^\top\right) \bfA=\bfA\eqsp.
+$$
+\end{enumerate}
+
+\section*{Kernel Principal Component Analysis}
+\subsection*{Principal Component Analysis}
+Principal component analysis is a multivariate technique which aims at analyzing the statistical structure of high dimensional dependent observations by representing data using orthogonal variables called {\em principal components}. Reducing the dimensionality of the data is motivated by several practical reasons such as improving computational complexity. Let $(X_i)_{1\leqslant i\leqslant n}$ be i.i.d. random variables in $\rset^d$ and consider the matrix $\bfX\in\rset^{n\times d}$ such that the $i$-th row of $\bfX$ is the observation $X^\top_i$. In this exercise, it is assumed that data are preprocessed so that the columns of $\bfX$ are centered.  This means that for all $1\leqslant k \leqslant d$, $\sum_{i=1}^{n}X_{i,k} = 0$. Let $\bfs_n$ be the empirical covariance matrix:
+$$
+\bfs_n = n^{-1}\sum_{i=1}^n X_i X^T_i\eqsp.
+$$
+Principal Component Analysis  aims at reducing the dimensionality of the observations $(X_i)_{1\leqslant i \leqslant n}$ using a {\em compression} matrix $\bfU\in \rset^{d\times p}$ with orthonormal columns with $p\leqslant d$ so that for each $1\leqslant i \leqslant n$, $\bfU^TX_i$ ia a low dimensional representation of $X_i$. The original observation may then be partially recovered using  $\bfU\in \rset^{d\times p}$. Principal Component Analysis computes $\bfU$ using the least squares approach:
+$$
+\bfU_{\star} \in \underset{U\in  \rset^{d\times p}}{\mathrm{argmin}} \;\sum_{i=1}^n\|X_i - \bfU\bfU^TX_i\|^2\eqsp,
+$$
+\begin{enumerate}
+\item Prove that for all $\rset^{n \times d}$ matrix $\bfA$ with rank $r$, there exist $\sigma_1\geqslant \ldots \geqslant \sigma_r>0$ such that
+$$
+\bfA = \sum_{k=1}^r \sigma_k u_k v^T_k\eqsp,
+$$
+where $\{u_1,\ldots,u_r\}\subset \rset^n$ and $\{v_1,\ldots,v_r \} \subset \rset^d$ are two families of orthonormal  vectors. The vectors $\{u_1,\ldots,u_r\}$  (resp. $\{v_1,\ldots,v_r\}$) are the left-singular (resp. right-singular) vectors associated with $\{\sigma_1,\ldots,\sigma_r\}$, the singular values of $\bfA$.
+\item Prove that solving the PCA least squares optimization problem boils down to computing
+$$
+\bfU_{\star} \in \hspace{-0.5cm}\underset{\bfU\in \rset^{d\times p}\eqsp,\eqsp \bfU^T\bfU = \bfI_p}{\mathrm{argmax}} \hspace{-.4cm}\{ \mathrm{trace}(\bfU^T\bfs_n\bfU)\}\eqsp.
+$$
+\item Let $\{\vartheta_1,\ldots,\vartheta_d\}$ be orthonormal eigenvectors associated with the eigenvalues $\lambda_1\geqslant \ldots \geqslant \lambda_d$ of $\bfs_n$. Prove that a solution to this problem is given by the matrix $\bfU_{\star}$ with columns $\{\vartheta_1,\ldots,\vartheta_p\}$.
+\item  For any dimension $1\leqslant p \leqslant  d$, let $\calF_d^p$ be the set of all vector subpaces of $\rset^d$ with dimension $p$. Consider the linear span $V_d$ defined as
+$$
+V_p \in \underset{V\in \calF_d^p}{\mathrm{argmin}} \;\sum_{i=1}^n\|X_i - \pi_V(X_i)\|^2\eqsp,
+$$
+where $\pi_V$ is the orthogonal projection onto the linear span $V$. Prove that $V_1 = \mathrm{span}\{v_1\}$ where
+$$
+v_1 \in \underset{v \in \rset^d\,;\, \|v\|=1}{\mathrm{argmax}} \sum_{i=1}^n   \langle X_i, v \rangle^2\eqsp.
+$$
+\item For all $2\leqslant p \leqslant d$, following the same steps, prove that a solution to the optimization problem is given by $V_p = \mathrm{span}\{v_1, \ldots, v_p\}$ where
+\begin{equation}
+\label{eq:vecpca}
+v_1 \in \underset{v\in \rset^d\,;\,\|v\|=1}{\mathrm{argmax}} \sum_{i=1}^n\langle X_i,v\rangle^2 \quad\mbox{and for all}\;\; 2\leqslant k \leqslant p\;,\;\; v_k \in \underset{\substack{v\in \rset^d\,;\,\|v\|=1\,;\\ v\perp v_1,\ldots,v\perp v_{k-1}}}{\mathrm{argmax}}\sum_{i=1}^n\langle X_i,v\rangle^2\eqsp.
+\end{equation}
+\item Prove that the vectors $\{v_1, \ldots , v_k\}$ defined by \eqref{eq:vecpca} can be chosen as the orthonormal eigenvectors associated with the $k$ largest eigenvalues of the empirical covariance matrix $\bfs_n$.  
+\item The orthonormal eigenvectors associated with the eigenvalues of $\Sigma_n$ allow to define the principal components as follows. Then, as $V_d = \mathrm{span}\{\vartheta_1, \ldots, \vartheta_d\}$, for all $1\leqslant i\leqslant n$,
+$$
+\pi_{V_d}(X_i) = \sum_{k=1}^d \langle X_i,\vartheta_k\rangle \vartheta_k  = \sum_{k=1}^d (X^T_i \vartheta_k)\vartheta_k = \sum_{k=1}^d c_k(i)\vartheta_k\eqsp,
+$$
+where for all $1\leqslant k \leqslant d$, the $k$-th principal component is defined as $c_k = \mathbf{X}\vartheta_k$. Prove that $(c_1,\ldots,c_d)$ are orthogonal vectors.
+%\item Let $W_d$ be the vector subspace of $\rset^n$ generated by $\{c_1,\ldots,c_d\}$. Prove that
+%$$
+%\pi_{W_d}(X_i) = \sum_{j=1}^d \vartheta_{j}(i)c_{j}\eqsp.
+%$$
+%\begin{comment}
+%Since $(c_j)_{1 \leqslant j\leqslant d}$ form an orthogonal basis of $W_d$, for all $1\leqslant i\leqslant n$,
+%$$
+%\pi_{W_d}(X_i) = \sum_{j=1}^d \frac{\langle c_{j}, X_i\rangle }{\|c_{j}\|^2 }c_{j}\eqsp.
+%$$
+%For all $1\leqslant j\leqslant d$, $\|c_{j}\|^2 = n \lambda_{j}$ and
+%$$
+%\langle c_{j}, X_i \rangle  = \langle \bfX \vartheta_{j} , X_i \rangle  = \bfX^T_i\bfX\vartheta_{j} = (\bfX^T\bfX\vartheta_{j})_i = (n \bfs_n \vartheta_{j})_i = n \lambda_{j} \vartheta_{j}(i)\eqsp.
+%$$
+%This yields, for all $1\leqslant i\leqslant n$,
+%$$
+%\pi_{W_d}(X_i) = \sum_{j=1}^d \vartheta_{j}(i)c_{j}\eqsp.
+%$$
+%\end{comment}
+\end{enumerate}
+
+
+\subsection*{Application to RKHS}
+Let $(X_i)_{1\le i \le n}$ be $n$ observations in a general space $\X$ and $k: \X\times \X \to \rset$ a positive function. We assume that $k$ is symmetric and that for all $n\geqslant 1$, $(a_i)_{1\leqslant i \leqslant n}\in\rset^n$ and $(x_i)_{1\leqslant i \leqslant n}\in\X^n$, $\sum_{1\leqslant i,j \leqslant n}a_ia_j k(x_i,x_j)\geqslant 0$.  For all $x\in\X$, $\phi(x)$ denotes the function $\phi(x): y\to k(x,y)$.
+
+Let $\W$ be a Hilbert space of real-valued functions defined on $\X$ such that for all $x\in\X$, $\phi(x)\in\W$ and for all $f\in \W$ and all $x\in\X$, $f(x) = \langle f,\phi(x) \rangle_{\W}$. The aim is now to perform a PCA on $(\phi(X_1),\ldots,\phi(X_n))$. It is assumed that
+$$
+\sum_{i=1}^n \phi(X_i) = 0\eqsp.
+$$
+Define
+$$
+\bfK = \left(k(X_i,X_j)\right)_{1\leqslant i,j \leqslant n}\;.
+$$
+\begin{enumerate}
+\item Prove that
+$$
+f_1 =  \underset{f\in \W\,;\,\|f\|_\W=1}{\mathrm{argmax}} \sum_{i=1}^n\langle \phi(X_i),f\rangle_\W^2
+$$
+may be written
+$$
+f_1 = \sum_{i=1}^n \alpha_1(i) \phi(X_i)\;,\quad\mbox{where}\quad \alpha_1 =  \underset{\alpha\in \rset^n\,;\, \alpha^T \bfK\alpha=1}{\mathrm{argmax}}\alpha^\top\bfK^2\alpha\;.
+$$
+\item Prove that $\alpha_1 = \lambda_1^{-1/2}b_1$ where $b_1$ is the unit eigenvector associated with the largest eigenvalue $\lambda_1$ of $\bfK$.
+\item Write $H_d = \mathrm{span}\{f_1,\ldots,f_d\}$. Prove that, for all $1\leqslant i\leqslant n$,
+$$
+\pi_{H_d}(\phi(X_i)) = \sum_{j=1}^d \lambda_{j}\alpha_j(i)f_j\;.
+$$
+\end{enumerate}
+
+%Let $X$ be a standard Gaussian random variable in $\rset^d$ and assume that conditionally on $X$, $Z$ has a Gaussian distribution with mean $WX + \mu$ and variance $\sigma^2 I_d$.
+%\begin{enumerate}
+%\item Prove that $Z$ has a Gaussian distribution with mean $\mu$ and variance $C = WW^\top + \sigma^2 I_d$.
+%
+%\vspace{.2cm}
+%
+%{\em
+%It is enough to write
+%$$
+%Z = WX + \mu + \sigma \varepsilon\,,
+%$$
+%where $X$ and $\varepsilon$ are independent Gaussian random variables. Therefore, $Z \sim \mathcal{N}(\mu,C)$.
+%}
+%
+%\item Prove that conditionally on $Z$, $X$ has a Gaussian distribution with mean $m= C^{-1}W^\top (Z-\mu)$ and variance $\Sigma = \sigma^2 C^{-1}$.
+%
+%\vspace{.2cm}
+%
+%{\em
+%The joint distribution of $Z$ and $X$ can be written, for all $(x,z)\in\rset^d\times\rset^d$,
+%\begin{align*}
+%p(z,x) \propto \exp(-\frac{1}{2}x^\top x)\exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,.
+%\end{align*}
+%Therefore,
+%\begin{align*}
+%p(x|z) &\propto  p(z,x)\\
+%&\propto \exp(-\frac{1}{2}x^\top x)\exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,,\\
+%&\propto \exp(-\frac{1}{2\sigma^2}(z- Wx - \mu)^\top (z- Wx - \mu))\,,\\
+%&\propto \exp(-\frac{1}{2\sigma^2}(x - m)^\top \Sigma^{-1} (x-m))\,,
+%\end{align*}
+%where $\Sigma = \sigma^2 C^{-1}$ and $m = C^{-1}W^\top (Z-\mu)$ which concludes the proof.
+%}
+%\item Assume that $\{Z_i\}_{1\leq i\leq n}$ are $n$ i.i.d. observations with the same distribution has $Z$. Write the loglikelihood of $(Z_1,\ldots,Z_n)$.
+%
+%\vspace{.2cm}
+%
+%{\em
+%By definition,
+%\begin{align*}
+%\log p_C(Z_1,\ldots,Z_n) &= \sum_{i=1}^n \log p_C(Z_i)  \,,\\
+%&=\sum_{i=1}^n \left(-\frac{1}{2}\log \mathrm{det}(2\pi C) - \frac{1}{2}(Z_i-m)^\top \Sigma^{-1}(Z_i-m)\right)\,,\\
+%&= -\frac{n}{2}\log \mathrm{det}(2\pi C) -\frac{1}{2}\sum_{i=1}^n (Z_i-m)^\top \Sigma^{-1}(Z_i-m)\,,\\
+%&= -\frac{n}{2}\log \mathrm{det}(2\pi C) -\frac{n}{2}\mathrm{Trace}(C^{-1}S_n)\,,
+%\end{align*} 
+%where
+%$$
+%S_n = \frac{1}{n}\sum_{i=1}^n(Z_i-\mu)^\top(Z_i-\mu)\,.
+%$$
+%}
+%\item Assuming that $C = WW^\top + \sigma^2 I_d$, show that $\widehat C= \widehat{W}\widehat{W}^\top + \sigma^2 I_d$ with $\widehat{W} = U_q(\Lambda_q-\sigma^2I_q)^{1/2}R$ is a stationary point of the loglikelihood (and therefore maximizes the loglikelihood).
+%
+%\vspace{.2cm}
+%
+%{\em
+%
+%}
+%\item 
+%
+%\vspace{.2cm}
+%
+%{\em
+%
+%}
+%\item
+%
+%\vspace{.2cm}
+%
+%{\em
+%
+%}
+%\end{enumerate}
+\end{document}
+
+
+
+
+
+	
