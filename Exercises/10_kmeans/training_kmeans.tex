@@ -86,22 +86,22 @@
 
 
 \subsection*{K means algorithm}
-Let $n\geqslant 1$ and  $X_{1},\ldots,X_{n}$ in $\R^p$.
+Let $n\geqslant 1$ and  $X_{1},\ldots,X_{n}$ in $\R^d$.
 The $K$-means algorithm aims at minimizing over all partitions $G=(G_{1},\ldots,G_{K})$ of $\{1,\ldots,p\}$ the criterion
 $$
-\crit(G)=\sum_{k=1}^K\sum_{a\in G_{k}}\|X_{a}-\bar{X}_{G_{k}}\|^2\quad \textrm{with}\quad \bar{X}_{G_{k}}={1\over |G_{k}|}\sum_{b\in G_{k}} X_{b}\;.
+\crit(G)=\sum_{k=1}^K\sum_{a\in G_{k}}\|X_{a}-\bar{X}_{G_{k}}\|^2\quad \textrm{with}\quad \bar{X}_{G_{k}}={1\over |G_{k}|}\sum_{a\in G_{k}} X_{a}\;.
 $$
 \begin{enumerate}
 \item Prove that
 $$
 \crit(G)=\sum_{k=1}^K{1\over |G_{k}|}\sum_{a,b\in G_{k}} \langle X_{a},X_{a}-X_{b}\rangle ={1\over 2}\sum_{k=1}^K{1\over |G_{k}|}\sum_{a,b\in G_{k}} \|X_{a}-X_{b}\|^2\;.
 $$
-\item Assume now that the observations are independent. Write $\E[X_a] = \mu_{a}\in\R^p$ so that $X_{a}=\mu_{a}+\eps_{a}$ with $\eps_{1},\ldots,\eps_{n}$ centered and independent. Define $v_{a}=\textrm{trace}(\V[X_{a}])$. Prove that
+\item Assume now that the observations are independent. Write $\E[X_a] = \mu_{a}\in\R^d$ so that $X_{a}=\mu_{a}+\eps_{a}$ with $\eps_{1},\ldots,\eps_{n}$ centered and independent. Define $v_{a}=\textrm{trace}(\V[X_{a}])$. Prove that
 $$
 \E[\crit(G)]={1\over 2}\sum_{k=1}^K{1\over |G_{k}|}\sum_{a,b\in G_{k}} \left(\|\mu_{a}-\mu_{b}\|^2+v_{a}+v_{b}\right){\bf 1}_{a\neq b}\;.
 $$
 What is the value of $\E[\crit(G)]$ when all the within-group variables have the same mean?
-\item We assume now that there exists a partition $G^*=(G^*_{1},\ldots,G^*_{K})$ such that within-group variables have the same mean and the same volume. More precisely, we assume that there exists $m_{1},\ldots,m_{K}\in\R^p$ and $\gamma_{1},\ldots,\gamma_{K}>0$ such that
+\item We assume now that there exists a partition $G^*=(G^*_{1},\ldots,G^*_{K})$ such  that there exist $m_{1},\ldots,m_{K}\in\R^d$ and $\gamma_{1},\ldots,\gamma_{K}>0$ satisfying
 $\mu_{a}=m_{k}$ and $v_{a}=\gamma_{k}$ for all $a\in G^*_{k}$ and $k=1,\ldots,K$. Compute $\E[\crit(G^*)]$.
 \item In the special case where $\gamma_{1}=\ldots=\gamma_{K}=\gamma$, which partition $G=(G_{1},\ldots,G_{K})$ minimizes $\E[\crit(G)]$?
 \end{enumerate}

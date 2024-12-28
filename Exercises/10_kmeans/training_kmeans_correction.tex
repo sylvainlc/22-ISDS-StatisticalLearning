@@ -86,10 +86,10 @@
 
 
 \subsection*{K means algorithm}
-Let $n\geqslant 1$ and  $X_{1},\ldots,X_{n}$ in $\R^p$.
+Let $n\geqslant 1$ and  $X_{1},\ldots,X_{n}$ in $\R^d$.
 The $K$-means algorithm aims at minimizing over all partitions $G=(G_{1},\ldots,G_{K})$ of $\{1,\ldots,p\}$ the criterion
 $$
-\crit(G)=\sum_{k=1}^K\sum_{a\in G_{k}}\|X_{a}-\bar{X}_{G_{k}}\|^2\quad \textrm{with}\quad \bar{X}_{G_{k}}={1\over |G_{k}|}\sum_{b\in G_{k}} X_{b}\;.
+\crit(G)=\sum_{k=1}^K\sum_{i\in G_{k}}\|X_{i}-\bar{X}_{G_{i}}\|^2\quad \textrm{with}\quad \bar{X}_{G_{k}}={1\over |G_{k}|}\sum_{a\in G_{k}} X_{a}\;.
 $$
 \begin{enumerate}
 \item Prove that
@@ -123,7 +123,7 @@ For the second equality, note that
 \end{align*}
 which concludes the proof. 
 }
-\item Assume now that the observations are independent. Write $\E[X_a] = \mu_{a}\in\R^p$ so that $X_{a}=\mu_{a}+\eps_{a}$ with $\eps_{1},\ldots,\eps_{n}$ centered and independent. Define $v_{a}=\textrm{trace}(\V[X_{a}])$. Prove that
+\item Assume now that the observations are independent. Write $\E[X_a] = \mu_{a}\in\R^d$ so that $X_{a}=\mu_{a}+\eps_{a}$ with $\eps_{1},\ldots,\eps_{n}$ centered and independent. Define $v_{a}=\textrm{trace}(\V[X_{a}])$. Prove that
 $$
 \E[\crit(G)]={1\over 2}\sum_{k=1}^K{1\over |G_{k}|}\sum_{a,b\in G_{k}} \left(\|\mu_{a}-\mu_{b}\|^2+v_{a}+v_{b}\right){\bf 1}_{a\neq b}\;.
 $$
@@ -164,8 +164,7 @@ $$
 \E \left[ \crit(G) \right]  =\sum_{k=1}^K \frac{|G_k|-1}{|G_k|} \sum_{a \in G_{k}} v_a.
 $$
 }
-\item We assume now that there exists a partition $G^*=(G^*_{1},\ldots,G^*_{K})$ such that within-group variables have the same mean and the same volume. More precisely, we assume that there exists $m_{1},\ldots,m_{K}\in\R^p$ and $\gamma_{1},\ldots,\gamma_{K}>0$ such that
-$\mu_{a}=m_{k}$ and $v_{a}=\gamma_{k}$ for all $a\in G^*_{k}$ and $k=1,\ldots,K$. Compute $\E[\crit(G^*)]$.
+\item We assume now that there exists a partition $G^*=(G^*_{1},\ldots,G^*_{K})$ such that there exist $m_{1},\ldots,m_{K}\in\R^d$ and $\gamma_{1},\ldots,\gamma_{K}>0$ satisfying $\mu_{a}=m_{k}$ and $v_{a}=\gamma_{k}$ for all $a\in G^*_{k}$ and $k=1,\ldots,K$. Compute $\E[\crit(G^*)]$.
 
 \vspace{.2cm}
 
@@ -197,7 +196,7 @@ Assume that $\gamma_1 = \hdots = \gamma_K = \gamma$. Then, for any partition $G$
 	\begin{align*}
 	\E \left[ \crit(G) \right] - \E \left[ \crit(G^*) \right] = \frac{1}{2}  \sum_{k=1}^K \frac{1}{|G_k|}\sum_{a, b\in G_{k}} \left( \| \mu_a - \mu_b\|^2 \right) \geq 0\;.
 	\end{align*}
-	The minimum of $\E \left[ \crit(G) \right]$ is reached at$G = G^*$. To prove that this minimum is unique, choose $G$ such that $\E \left[ \crit(G) \right] = \E \left[ \crit(G^*) \right]$. Then, for all $k$, and for all $a,b \in G_k$,  $\mu_a = \mu_b$ which implies that $G = G^*$ (if all $\mu_k$ are different).
+	The minimum of $\E \left[ \crit(G) \right]$ is reached at $G = G^*$. To prove that this minimum is unique, choose $G$ such that $\E \left[ \crit(G) \right] = \E \left[ \crit(G^*) \right]$. Then, for all $k$, and for all $a,b \in G_k$,  $\mu_a = \mu_b$ which implies that $G = G^*$ (if all $\mu_k$ are different).
 }
 \end{enumerate}
 	
