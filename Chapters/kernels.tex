@@ -1,9 +1,7 @@
 \chapter{Kernel-based regression}
 \minitoc
 
-\section{Regression with infinite-dimensional models}
-
-\subsection{Nonparametric regression}
+\section{Nonparametric regression}
 In a nonparametric regression framework, it is not assumed that the observations depend linearly on the covariates and a more general model is introduced. For all $1\leqslant i\leqslant n$, the observation model is given by
 \[
 Y_{i}=f^*(X_{i})+\xi_{i}\eqsp,
@@ -18,7 +16,7 @@ Then, the least squares estimator of $f^*$ on $\calF_\varphi$ is defined as
 \]
 Let $\Psi$ be the $\rset^{n\times M}$ matrix such as, for all $1\leqslant i\leqslant n$ and $1\leqslant j\leqslant M$, $\Psi_{i,j} = \varphi_j(X_i)$. Then, for all $f \in \calF_\varphi$, there exists $\alpha = (\alpha_1,\ldots,\alpha_M)\in\rset^M$ such that,
 \[
- \sum_{i=1}^n(Y_i - f(X_i))^2 = \|Y - \Psi \alpha\|^2\eqsp.
+ \sum_{i=1}^n(Y_i - f(X_i))^2 = \|Y - \Psi \alpha\|_2^2\eqsp.
 \]
 Then, following the same steps as in Section~\ref{sec:full:rank:reg}, in the case where $\Psi^\top \Psi$ is nonsingular, the least squares estimate is
 \begin{equation}
@@ -51,7 +49,7 @@ where $\widehat f^\varphi_n$  is defined by \eqref{eq:def:nonparam:reg}.
 See the exercises.
 \end{proof}
 
-\subsection{Introduction to kernel regression}
+\section{Introduction to kernel regression}
 %Nonparametric classification based on the empirical risk minimization may seem appealing  
 %since its statistical properties, such as oracle inequalities, can be obtained simply. However, these properties cannot be used to
 %derive efficient practical classifiers due to the computational cost of the optimization problem defined by \eqref{eq:empirical:classif}. One of the most popular approach to design efficient algorithm for classification follows from a convexification of the original problem \eqref{eq:empirical:classif}.  The target loss function $\widehat L^n_{\mathrm{miss}}$ is replaced by a convex surrogate and its minimization is constrained to a convex set of classifiers.
@@ -74,7 +72,7 @@ Let $\calF$ be a set of functions from $\xset=\rset^d$ to $\rset$. The multivari
 \label{eq:erm:rkhs}
 \widehat f^n_{\calF} \in \underset{f\in\calF}{\argmin}\; \frac{1}{n}\sum_{i=1}^n \ell(Y_i,f(X_i)) + \lambda\|f\|^2\eqsp,
 \end{equation}
-where $\lambda>0$ and $\|\cdot\|$ is a norm on the space $\calF$.  In the case of the Ridge regression $\ell:(y,y'): \mapsto \|y-y'\|_2^2$, $ \{f: \rset^d\to\rset\eqsp;\eqsp \exists \param\in\rset^d \eqsp\forall x\in \rset^d\eqsp, \eqsp f(x) =f_\param(x)= \param^\top x\}$ and $\|f_\param\|^2 = \|\param\|_2^2$.
+where $\lambda>0$ and $\|\cdot\|$ is a norm on the space $\calF$.  In the case of the Ridge regression $\ell:(y,y'): \mapsto \|y-y'\|_2^2$, $\calF = \{f: \rset^d\to\rset\eqsp;\eqsp \exists \param\in\rset^d \eqsp\forall x\in \rset^d\eqsp, \eqsp f(x) =f_\param(x)= \param^\top x\}$ and, for $\param\in\rset^d$ and $f_\param\in\calF$,  $\|f_\param\|^2 = \|\param\|_2^2$.
 
 A useful case in practice consists in choosing $\calF$ as a Reproducing Kernel Hilbert Space with positive definite reproducing kernel $k$ on $\xset\times \xset$.
 

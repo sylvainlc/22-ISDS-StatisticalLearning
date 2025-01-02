@@ -23,9 +23,9 @@ f: x\mapsto \1_{\sum_{j=1}^d\omega_jx_j + b \geqslant 0}\eqsp.
 $$
 In this case, the nonlinear activation function is $\sigma: x \mapsto \1_{x\geqslant 0}$ and the ouput in $\{0,1\}$ defined as:
 \[
-f:x \mapsto \sigma(\omega^Tx + b)\eqsp.
+f:x \mapsto \sigma(\omega^\top x + b)\eqsp.
 \]
-Linear discriminant analysis and logistic regression are other instances with the sigmoid activation function $\sigma: x\mapsto \rme^x/(1+\rme^x)$ and the output $ \sigma(\omega^TX + b)$ in $(0,1)$ is $\mathbb{P}(Y=1 | X)$.
+Linear discriminant analysis and logistic regression are other instances with the sigmoid activation function $\sigma: x\mapsto \rme^x/(1+\rme^x)$ and the output $ \sigma(\omega^\top X + b)$ in $(0,1)$ is $\mathbb{P}(Y=1 | X)$.
 %\begin{figure}
 %\begin{center}
 %\includegraphics[scale = .5]{./Data/onelayer.png}
@@ -86,13 +86,13 @@ Therefore, the gradient with respect to all parameters can be computed as follow
 \end{align*}
 where $\1_Y$ is the vector where all entries equal to 0 except the entry with index $Y$ which equals 1. Then, for all $1\leqslant m\leqslant L-1$,
 \begin{align*}
-\nabla_{W^m} \ell_{\theta}(\bX,Y) &= \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)(h_{\theta}^{m-1}(\bX))^T\eqsp,\\
+\nabla_{W^m} \ell_{\theta}(\bX,Y) &= \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)(h_{\theta}^{m-1}(\bX))^\top\eqsp,\\
 \nabla_{b^m} \ell_{\theta}(\bX,Y) &=  \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)\eqsp,
 \end{align*}
 where $\nabla_{z_{\theta}^m(\bX)}$ is computed recursively as follows.
 \begin{align*}
 \nabla_{z^L(\bX)} \ell_{\theta}(\bX,Y) &= f_{\theta}(\bX) - \1_Y\eqsp,\\
-\nabla_{h_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) &= (W^{m+1})^T\nabla_{z_{\theta}^{m+1}(\bX)} \ell_{\theta}(\bX,Y) \eqsp,\\
+\nabla_{h_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) &= (W^{m+1})^\top\nabla_{z_{\theta}^{m+1}(\bX)} \ell_{\theta}(\bX,Y) \eqsp,\\
 \nabla_{z_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) &= \nabla_{h_{\theta}^m(\bX)}\ell_{\theta}(X,Y) \odot \varphi_m'(z_{\theta}^{m}(\bX))\eqsp,
 \end{align*}
 where $\odot$ is the elementwise multiplication.
@@ -118,7 +118,7 @@ Then, for all $1\leqslant i\leqslant M$ and all $1\leqslant j \leqslant d_{L-1}$
 \end{align*}
 Therefore,
 $$
-\nabla_{W^L} \ell_{\theta}(\bX,Y) = (f_{\theta}(\bX) - \1_Y)(h_{\theta}^{L-1}(\bX))^T\eqsp.
+\nabla_{W^L} \ell_{\theta}(\bX,Y) = (f_{\theta}(\bX) - \1_Y)(h_{\theta}^{L-1}(\bX))^\top\eqsp.
 $$
 Similarly, for all $1\leqslant i\leqslant M$,  using that $z_{\theta}^L(\bX) = b^L + W^Lh_{\theta}^{L-1}(\bX)$,
 \begin{align*}
@@ -137,7 +137,7 @@ To obtain the recursive formulation of the gradient computations, known as the {
 \end{align*}
 Therefore,
 $$
-\nabla_{h_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) = (W^{m+1})^T\nabla_{z_{\theta}^{m+1}(\bX)} \ell_{\theta}(\bX,Y) \eqsp.
+\nabla_{h_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) = (W^{m+1})^\top\nabla_{z_{\theta}^{m+1}(\bX)} \ell_{\theta}(\bX,Y) \eqsp.
 $$
 Then, for all $1\leqslant m \leqslant L-1$ and all $1\leqslant j \leqslant d_m$, ,  using that $h_{\theta}^{m}(\bX)_j =\varphi_m(z_{\theta}^{m}(\bX)_j)$,
 \begin{align*}
@@ -157,7 +157,7 @@ Then, for all $1\leqslant i\leqslant d_m$ and all $1\leqslant j \leqslant d_{m-1
 \end{align*}
 Therefore,
 $$
-\nabla_{W^m} \ell_{\theta}(\bX,Y) = \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)(h_{\theta}^{m-1}(\bX))^T\eqsp.
+\nabla_{W^m} \ell_{\theta}(\bX,Y) = \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)(h_{\theta}^{m-1}(\bX))^\top\eqsp.
 $$
 Similarly, for all $1\leqslant i\leqslant d_m$,  using that $z_{\theta}^m(\bX) = b^m + W^mh_{\theta}^{m-1}(\bX)$,
 \begin{align*}
@@ -267,17 +267,17 @@ $$
 $$
 Therefore, the gradient with respect to all parameters can be computed as follows.
 \begin{align*}
-\nabla_{W^L} \ell_{\theta}(\bX,Y) &= -2(Y - f_{\theta}(\bX))(h^{L-1}_{\theta}(\bX))^T\eqsp,\\
+\nabla_{W^L} \ell_{\theta}(\bX,Y) &= -2(Y - f_{\theta}(\bX))(h^{L-1}_{\theta}(\bX))^\top\eqsp,\\
 \nabla_{b^L} \ell_{\theta}(\bX,Y) &=-2(Y - f_{\theta}(\bX))\eqsp.
 \end{align*}
 Then, for all $1\leqslant m\leqslant L-1$,
 \begin{align*}
-\nabla_{W^m} \ell_{\theta}(\bX,Y) &= \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)(h_{\theta}^{m-1}(\bX))^T\eqsp,\\
+\nabla_{W^m} \ell_{\theta}(\bX,Y) &= \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)(h_{\theta}^{m-1}(\bX))^\top\eqsp,\\
 \nabla_{b^m} \ell_{\theta}(\bX,Y) &=  \nabla_{z_{\theta}^m(\bX)}\ell_{\theta}(X,Y)\eqsp,
 \end{align*}
 where $\nabla_{z_{\theta}^m(\bX)}$ is computed recursively as follows.
 \begin{align*}
-\nabla_{h_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) &= (W^{m+1})^T\nabla_{z_{\theta}^{m+1}(\bX)} \ell_{\theta}(\bX,Y) \eqsp,\\
+\nabla_{h_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) &= (W^{m+1})^\top\nabla_{z_{\theta}^{m+1}(\bX)} \ell_{\theta}(\bX,Y) \eqsp,\\
 \nabla_{z_{\theta}^m(\bX)} \ell_{\theta}(\bX,Y) &= \nabla_{h_{\theta}^m(\bX)}\ell_{\theta}(X,Y) \odot \varphi_m'(z_{\theta}^{m}(\bX))\eqsp,
 \end{align*}
 where $\odot$ is the elementwise multiplication.
@@ -291,7 +291,7 @@ $$
 $$
 where $Y_i$ is the $i$-th coordinate of $Y$. Therefore,
 $$
-\nabla_{W^L} \ell_{\theta}(\bX,Y) = -2(Y - f_{\theta}(\bX))(h^{L-1}_{\theta}(\bX))^T\eqsp.
+\nabla_{W^L} \ell_{\theta}(\bX,Y) = -2(Y - f_{\theta}(\bX))(h^{L-1}_{\theta}(\bX))^\top\eqsp.
 $$
 Similarly, 
 $$

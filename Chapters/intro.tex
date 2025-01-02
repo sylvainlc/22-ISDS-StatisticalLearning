@@ -5,7 +5,7 @@ Bayes classifier, empirical risk, oracle inequality, linear discriminant analysi
 \end{kwd}
 
 
-In a supervised learning framework, a set $\{(X_i,Y_i)\}_{1\leqslant i \leqslant n}$  of input data (also referred to as {\em features}) $X_i\in\xset$ and output data $Y_i\in\yset$ (also referred to as {\em observations}), for $1\leqslant i \leqslant n$, is available, where $\xset$ is a general feture space and $\yset$ is a general observation space. In a supervised classification setting, the problem is to learn wether an individual from a given state space $\xset$ belongs to some class, so that $\yset = \{1,\ldots,M\}$ for some $M\geqslant 1$. In a regression framework, the observation set $\yset$ is usually a subset of $\rset^m$. The state space $\xset$ is usually a subset of $\rset^d$ and an element of $\xset$ contains all the features the observation prediction is  based on.
+In a supervised learning framework, a set $\{(X_i,Y_i)\}_{1\leqslant i \leqslant n}$  of input data (also referred to as {\em features}) $X_i\in\xset$ and output data $Y_i\in\yset$ (also referred to as {\em observations}), for $1\leqslant i \leqslant n$, is available, where $\xset$ is a general feature space and $\yset$ is a general observation space. In a supervised classification setting, the problem is to learn wether an individual from a given state space $\xset$ belongs to some class, so that $\yset = \{1,\ldots,M\}$ for some $M\geqslant 1$. In a regression framework, the observation set $\yset$ is usually a subset of $\rset^m$. The state space $\xset$ is usually a subset of $\rset^d$ and an element of $\xset$ contains all the features the observation prediction is  based on.
 
 One of the main goals of supervised learning is to design an automatic procedure, based on  the {\em training dataset} $\{(X_i,Y_i)\}_{1\leqslant i \leqslant n}$,  to predict the observation $y\in\yset$ associated with an input $x\in\xset$ which is not in the training dataset.
 
@@ -76,7 +76,7 @@ For all $u,v \in \{-1,1\}$, $\indin{u \neq v}=\indin{u v=-1}=(1-uv)/2$. Since $Y
 \end{equation}
 Using sucessively the tower property, the equality $|u|= u\times \sgn(u)$, and the tower property again yields
 $$
-\PE[Y h(X)] =\PE[\CPE{Y}{X} h(X)] \leq \PEs{|\CPE{Y}{X}| \underbrace{|h(X)|}_{=1}}=  \PEs{\CPE{Y}{X} \underbrace{\sgn(\CPE{Y}{X})}_{h_\star(X)}}=\PE[Y h_\star(X)]\eqsp.
+\PE[Y h(X)] =\PE[\CPE{Y}{X} h(X)] \leq \PEs{|\CPE{Y}{X}| |h(X)|}=  \PEs{\CPE{Y}{X} \sgn(\CPE{Y}{X})}=\PE[Y h_\star(X)]\eqsp.
 $$
 Plugging this into \eqref{eq:miss} yields $\Lmiss(h) \geq \Lmiss(h_\star)$, which concludes the proof.
 \end{proof}
